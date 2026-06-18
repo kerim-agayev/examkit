@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../../auth/providers/auth_provider.dart';
+import '../../groups/providers/group_provider.dart';
+import '../../exams/providers/exam_provider.dart';
 
 class HomeScreen extends ConsumerWidget {
   const HomeScreen({super.key});
@@ -9,7 +11,13 @@ class HomeScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final user = ref.watch(authStateProvider).value;
+    final groupsAsync = ref.watch(watchGroupsProvider);
+    final examsAsync = ref.watch(watchExamsProvider);
     final theme = Theme.of(context);
+
+    final groupCount = groupsAsync.valueOrNull?.length ?? 0;
+    final examCount = examsAsync.valueOrNull?.length ?? 0;
+    final recentExams = examsAsync.valueOrNull?.take(3).toList() ?? [];
     return Scaffold(
       backgroundColor: const Color(0xFFF1F5F9),
       appBar: AppBar(
@@ -31,11 +39,11 @@ class HomeScreen extends ConsumerWidget {
             // Stats Row
             Row(
               children: [
-                _StatCard(icon: Icons.people, color: const Color(0xFF2563EB), value: '12', label: 'Grup'),
+                _StatCard(icon: Icons.people, color: const Color(0xFF2563EB), value: '$groupCount', label: 'Grup'),
                 const SizedBox(width: 8),
-                _StatCard(icon: Icons.assignment, color: const Color(0xFF059669), value: '47', label: 'Sınav'),
+                _StatCard(icon: Icons.assignment, color: const Color(0xFF059669), value: '$examCount', label: 'Sınav'),
                 const SizedBox(width: 8),
-                _StatCard(icon: Icons.person, color: const Color(0xFFD97706), value: '128', label: 'Bugün'),
+                _StatCard(icon: Icons.person, color: const Color(0xFFD97706), value: '—', label: 'Bugün'),
               ],
             ),
             const SizedBox(height: 16),

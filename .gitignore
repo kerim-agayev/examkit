@@ -109,3 +109,4 @@ firestore-debug.log
 .env.local
 .env.*.local
 secrets.local.*
+.github/workflows/
