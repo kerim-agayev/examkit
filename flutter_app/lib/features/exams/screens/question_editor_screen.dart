@@ -3,7 +3,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../providers/question_provider.dart';
 
 class QuestionEditorScreen extends ConsumerStatefulWidget {
-  const QuestionEditorScreen({super.key});
+  final String examId;
+  const QuestionEditorScreen({super.key, this.examId = 'mock_exam_id'});
 
   @override
   ConsumerState<QuestionEditorScreen> createState() => _QuestionEditorScreenState();
@@ -26,7 +27,16 @@ class _QuestionEditorScreenState extends ConsumerState<QuestionEditorScreen> wit
         title: const Text('Soru Editörü'),
         actions: [TextButton(onPressed: () async {
           try {
-            await ref.read(createQuestionProvider((examId: 'mock_exam_id', text: 'Yeni Soru', type: 'mcq', options: ['A', 'B', 'C', 'D'], points: _points, orderIndex: 0, correctAnswer: 'A')).future);
+            final types = ['mcq', 'true_false', 'short_answer'];
+            await ref.read(createQuestionProvider((
+              examId: widget.examId,
+              text: 'Yeni Soru',
+              type: types[_tabCtrl.index],
+              options: ['A', 'B', 'C', 'D'],
+              points: _points,
+              orderIndex: 0,
+              correctAnswer: 'A',
+            )).future);
             if (mounted) ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Soru kaydedildi')));
           } catch (e) {
             if (mounted) ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Hata: $e')));

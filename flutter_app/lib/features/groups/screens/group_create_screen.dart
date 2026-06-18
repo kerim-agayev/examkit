@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import '../providers/group_provider.dart';
+import '../../../core/firebase/firebase_providers.dart';
+import '../../auth/providers/auth_provider.dart';
 
 class GroupCreateScreen extends ConsumerStatefulWidget {
   final String? groupId;
@@ -22,10 +25,16 @@ class _GroupCreateScreenState extends ConsumerState<GroupCreateScreen> {
     if (!_canSave || _saving) return;
     setState(() => _saving = true);
     try {
-      final createGroup = ref.read(createGroupProvider(
-        (name: _nameCtrl.text.trim(), description: _descCtrl.text.trim().isEmpty ? null : _descCtrl.text.trim()),
-      ).future);
-      await createGroup;
+      // Direkt Firestore'a yaz (FutureProvider yerine, daha güvenilir)
+      final firestore = ref.read(firestoreProvider);
+      final user = ref.read(authStateProvider).value;
+      await firestore.collection('groups').add({
+        'name': _nameCtrl.text.trim(),
+        'teacherId': user?.uid ?? '',
+        'description': _descCtrl.text.trim().isEmpty ? null : _descCtrl.text.trim(),
+        'examCount': 0,
+        'createdAt': FieldValue.serverTimestamp(),
+      });
       if (mounted) context.pop();
     } catch (e) {
       if (mounted) ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Kaydedilemedi: $e')));

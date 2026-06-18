@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import '../providers/create_exam_provider.dart';
-import '../providers/exam_provider.dart';
-import '../../../../core/utils/exam_code_generator.dart';
+import '../../../../core/firebase/firebase_providers.dart';
+import '../../auth/providers/auth_provider.dart';
 
 class ExamPreviewScreen extends ConsumerWidget {
   const ExamPreviewScreen({super.key});
@@ -14,10 +15,27 @@ class ExamPreviewScreen extends ConsumerWidget {
 
     Future<void> publish() async {
       try {
-        final examId = await ref.read(createExamProvider(
-          (title: state.title, groupId: state.groupId ?? '', groupName: state.groupName),
-        ).future);
-        if (context.mounted) context.push('/exams/$examId/share');
+        final firestore = ref.read(firestoreProvider);
+        final user = ref.read(authStateProvider).value;
+        final docRef = await firestore.collection('exams').add({
+          'title': state.title,
+          'groupId': state.groupId ?? '',
+          'groupName': state.groupName ?? state.groupId ?? '',
+          'ownerTeacherId': user?.uid ?? '',
+          'status': 'draft',
+          'mode': state.mode,
+          'questionCount': 0,
+          'settings': {
+            'globalTimerMinutes': state.globalTimer ? state.globalTimerMinutes : null,
+            'shuffleQuestions': state.shuffleQuestions,
+            'shuffleOptions': state.shuffleOptions,
+            'showScore': state.showScore,
+            'showCorrectAnswers': state.showCorrect,
+            'showLeaderboard': state.showLeaderboard,
+          },
+          'createdAt': FieldValue.serverTimestamp(),
+        });
+        if (context.mounted) context.push('/exams/${docRef.id}/share');
       } catch (e) {
         if (context.mounted) {
           ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Yayınlanamadı: $e')));
