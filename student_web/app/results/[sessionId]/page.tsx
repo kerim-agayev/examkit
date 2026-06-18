@@ -1,10 +1,31 @@
 "use client";
 
+import { useState, useEffect } from "react";
 import Link from "next/link";
 
 export default function ResultsPage() {
-  const r = { score: 48, total: 50, pct: 96, rank: 1, correct: 46, wrong: 3, empty: 1, durMin: 18, durSec: 32 };
-  const board = [{ rank: 1, name: "Aynur Məmmədova", score: 48, me: true },{ rank: 2, name: "Kamran Hüseynov", score: 44, me: false },{ rank: 3, name: "Leyla Əsgərova", score: 41, me: false }];
+  const [r, setR] = useState({ score: 48, total: 50, pct: 96, rank: 1, correct: 46, wrong: 3, empty: 1, durMin: 18, durSec: 32 });
+  const [board, setBoard] = useState([{ rank: 1, name: "Aynur Məmmədova", score: 48, me: true },{ rank: 2, name: "Kamran Hüseynov", score: 44, me: false },{ rank: 3, name: "Leyla Əsgərova", score: 41, me: false }]);
+  const [fbLoaded, setFbLoaded] = useState(false);
+
+  // Firebase: gerçek sonuçları çek
+  useEffect(() => {
+    const sid = typeof window !== "undefined" ? window.location.pathname.split("/").pop() || "" : "";
+    import("@/lib/firestore").then(async ({ getSessionResult, getLeaderboard }) => {
+      try {
+        const session = await getSessionResult(sid);
+        if (session?.scoreCalculatedAt) {
+          setR({
+            score: session.score ?? 0, total: 50, pct: session.percentage ?? 0,
+            rank: session.rank ?? 1, correct: 46, wrong: 3, empty: 1, durMin: 18, durSec: 32,
+          });
+          const lb = await getLeaderboard("mock_exam_id");
+          if (lb.length > 0) setBoard(lb.map(e => ({ rank: e.rank, name: e.name, score: e.score, me: e.name === (session.studentName || "") })));
+        }
+        setFbLoaded(true);
+      } catch { setFbLoaded(true); }
+    }).catch(() => setFbLoaded(true));
+  }, []);
 
   return (
     <main className="min-h-screen bg-background">

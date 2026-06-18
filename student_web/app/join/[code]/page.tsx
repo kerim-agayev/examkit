@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useCallback, type FormEvent } from "react";
+import { useState, useCallback, useEffect, type FormEvent } from "react";
 import { useParams } from "next/navigation";
 import Link from "next/link";
 
@@ -14,9 +14,27 @@ export default function JoinPage() {
 
   const handleSubmit = useCallback(async (e: FormEvent) => {
     e.preventDefault(); if (!canSubmit) return; setLoading(true);
-    const sid = "mock_" + Date.now();
+    const name = `${firstName} ${lastName}`;
+    let sid = "mock_" + Date.now();
+
+    // Firebase: gerçek session oluştur
+    try {
+      const { createSession } = await import("@/lib/firestore");
+      const result = await createSession({
+        examId: "mock_exam_id", studentName: name,
+        questionIds: ["q1","q2","q3","q4","q5"],
+        shuffleQuestions: false, shuffleOptions: false,
+        optionsMap: { q1: ["A","B","C","D"], q4: ["A","B","C","D"] },
+      });
+      sid = result.sessionId;
+      try {
+        const { joinWaitingRoom } = await import("@/lib/realtime");
+        await joinWaitingRoom("mock_exam_id", sid, name);
+      } catch {}
+    } catch {}
+
     localStorage.setItem("examkit_session", sid);
-    localStorage.setItem("examkit_name", `${firstName} ${lastName}`);
+    localStorage.setItem("examkit_name", name);
     setTimeout(() => { setLoading(false); window.location.href = `/waiting/${sid}`; }, 500);
   }, [canSubmit, firstName, lastName]);
 

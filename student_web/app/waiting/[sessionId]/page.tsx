@@ -6,8 +6,24 @@ import Link from "next/link";
 
 export default function WaitingPage() {
   const params = useParams<{ sessionId: string }>();
+  const sid = params.sessionId || "";
   const [name] = useState(() => typeof window !== "undefined" ? localStorage.getItem("examkit_name") || "..." : "...");
-  const [count] = useState(8);
+  const [count, setCount] = useState(8);
+  const [fbStatus, setFbStatus] = useState<string | null>(null);
+
+  // Firebase RTDB: sınav başlayınca otomatik yönlen
+  useEffect(() => {
+    let unsub: (() => void) | undefined;
+    import("@/lib/realtime").then(({ subscribeToExamStatus }) => {
+      unsub = subscribeToExamStatus("mock_exam_id", (status) => {
+        setFbStatus(status);
+        if (status === "active") window.location.href = `/exam/${sid}`;
+      });
+    }).catch(() => {});
+    // Mock sayı animasyonu
+    const i = setInterval(() => setCount(c => c + (Math.random() > 0.7 ? 0 : 0)), 10000);
+    return () => { clearInterval(i); unsub?.(); };
+  }, [sid]);
 
   return (
     <main className="min-h-screen flex flex-col items-center justify-center bg-background p-4">
