@@ -22,7 +22,7 @@ class GroupModel {
       teacherId: d['teacherId'] ?? '',
       description: d['description'],
       examCount: d['examCount'] ?? 0,
-      createdAt: (d['createdAt'] as Timestamp).toDate(),
+      createdAt: d['createdAt'] != null ? (d['createdAt'] as Timestamp).toDate() : DateTime.now(),
     );
   }
 }

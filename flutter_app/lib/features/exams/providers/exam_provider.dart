@@ -29,7 +29,7 @@ class ExamModel {
       mode: d['mode'] ?? 'scroll',
       questionCount: d['questionCount'] ?? 0,
       settings: d['settings'] as Map<String, dynamic>?,
-      createdAt: (d['createdAt'] as Timestamp).toDate(),
+      createdAt: d['createdAt'] != null ? (d['createdAt'] as Timestamp).toDate() : DateTime.now(),
     );
   }
 }

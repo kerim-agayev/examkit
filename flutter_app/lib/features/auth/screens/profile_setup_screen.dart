@@ -58,18 +58,19 @@ class _ProfileSetupScreenState extends State<ProfileSetupScreen> {
             SizedBox(
               width: double.infinity, height: 56,
               child: ElevatedButton(
-                onPressed: _canSave ? () async {
-                final user = FirebaseAuth.instance.currentUser;
-                if (user != null) {
-                  await FirebaseFirestore.instance.collection('users').doc(user.uid).set({
-                    'name': _nameCtrl.text.trim(),
-                    'school': _schoolCtrl.text.trim(),
-                    'lang': _lang,
-                    'updatedAt': FieldValue.serverTimestamp(),
-                  }, SetOptions(merge: true));
-                }
-                if (mounted) context.go('/home');
-              } : null,
+                onPressed: _canSave ? () {
+                  // Firestore'a profil kaydet (ateşle ve unut)
+                  final user = FirebaseAuth.instance.currentUser;
+                  if (user != null) {
+                    FirebaseFirestore.instance.collection('users').doc(user.uid).set({
+                      'name': _nameCtrl.text.trim(),
+                      'school': _schoolCtrl.text.trim(),
+                      'lang': _lang,
+                      'updatedAt': FieldValue.serverTimestamp(),
+                    }, SetOptions(merge: true));
+                  }
+                  context.go('/home');
+                } : null,
                 child: const Text('Tamamla ve Başla'),
               ),
             ),
