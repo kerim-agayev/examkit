@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../providers/create_exam_provider.dart';
+import '../../groups/providers/group_provider.dart';
 
 class ExamCreateScreen extends ConsumerStatefulWidget {
   const ExamCreateScreen({super.key});
@@ -19,7 +20,14 @@ class _ExamCreateScreenState extends ConsumerState<ExamCreateScreen> {
   @override
   Widget build(BuildContext context) {
     final state = ref.watch(createExamStateProvider);
+    final groupsAsync = ref.watch(watchGroupsProvider);
     final theme = Theme.of(context);
+
+    // Pre-fill from group detail navigation
+    if (state.groupId != null && _selectedGroup == null) {
+      _selectedGroup = state.groupId;
+      _titleCtrl.text = state.title;
+    }
 
     return Scaffold(
       appBar: AppBar(
@@ -48,14 +56,18 @@ class _ExamCreateScreenState extends ConsumerState<ExamCreateScreen> {
                     const SizedBox(height: 20),
                     InkWell(
                       onTap: () async {
+                        final groups = groupsAsync.valueOrNull ?? [];
+                        if (!context.mounted) return;
                         await showModalBottomSheet(
                           context: context,
                           shape: const RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(24))),
-                          builder: (_) => SizedBox(height: 300, child: ListView(
-                            children: ['9-A Sinifi', '10-B Matematik', '11-A Fizik', '12-C Kimya'].map((g) => ListTile(
-                              title: Text(g),
-                              trailing: _selectedGroup == g ? const Icon(Icons.check, color: Color(0xFF2563EB)) : null,
-                              onTap: () { setState(() => _selectedGroup = g); Navigator.pop(context); },
+                          builder: (_) => SizedBox(height: 300, child: groups.isEmpty
+                            ? const Center(child: Text('Henüz grup yok'))
+                            : ListView(
+                            children: groups.map((g) => ListTile(
+                              title: Text(g.name),
+                              trailing: _selectedGroup == g.id ? const Icon(Icons.check, color: Color(0xFF2563EB)) : null,
+                              onTap: () { setState(() => _selectedGroup = g.id); Navigator.pop(context); },
                             )).toList(),
                           )),
                         );

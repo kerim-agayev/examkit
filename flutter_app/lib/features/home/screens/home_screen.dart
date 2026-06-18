@@ -60,11 +60,10 @@ class HomeScreen extends ConsumerWidget {
                 TextButton(onPressed: () => context.push('/exams'), child: const Text('Tümünü Gör')),
               ],
             ),
-            _ExamCard(title: 'Riyaziyyat Fənn Sınavı', subtitle: '9-A Sinifi', status: 'Taslak', color: const Color(0xFFD97706)),
-            const SizedBox(height: 8),
-            _ExamCard(title: 'Türk Dili Yazılı', subtitle: '11-B Sinifi', status: '● Canlı', color: const Color(0xFF059669)),
-            const SizedBox(height: 8),
-            _ExamCard(title: 'Kimya Bölüm 2', subtitle: '10-A Sinifi', status: 'Tamamlandı', color: const Color(0xFF94A3B8)),
+            if (recentExams.isEmpty)
+              const Padding(padding: EdgeInsets.all(16), child: Text('Henüz sınav yok', style: TextStyle(color: Color(0xFF94A3B8))))
+            else
+              ...recentExams.map((e) => Padding(padding: const EdgeInsets.only(bottom: 8), child: _ExamCard(title: e.title, subtitle: e.groupName ?? '', status: e.status == 'active' ? '● Canlı' : e.status == 'draft' ? 'Taslak' : 'Tamamlandı', color: e.status == 'active' ? const Color(0xFF059669) : e.status == 'draft' ? const Color(0xFFD97706) : const Color(0xFF94A3B8)))),
           ],
         ),
       ),

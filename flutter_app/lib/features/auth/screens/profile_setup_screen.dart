@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class ProfileSetupScreen extends StatefulWidget {
   const ProfileSetupScreen({super.key});
@@ -55,7 +58,18 @@ class _ProfileSetupScreenState extends State<ProfileSetupScreen> {
             SizedBox(
               width: double.infinity, height: 56,
               child: ElevatedButton(
-                onPressed: _canSave ? () => context.go('/home') : null,
+                onPressed: _canSave ? () async {
+                final user = FirebaseAuth.instance.currentUser;
+                if (user != null) {
+                  await FirebaseFirestore.instance.collection('users').doc(user.uid).set({
+                    'name': _nameCtrl.text.trim(),
+                    'school': _schoolCtrl.text.trim(),
+                    'lang': _lang,
+                    'updatedAt': FieldValue.serverTimestamp(),
+                  }, SetOptions(merge: true));
+                }
+                if (mounted) context.go('/home');
+              } : null,
                 child: const Text('Tamamla ve Başla'),
               ),
             ),
