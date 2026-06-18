@@ -41,9 +41,12 @@ test.describe("ExamKit Student Flow", () => {
 
   test("code entry shows error for invalid code", async ({ page }) => {
     await page.goto("/");
+    // 2 karakter: buton disabled
     await page.locator("input[placeholder='MAT7K2']").fill("AB");
-    await page.locator("button[type='submit']").click();
-    await expect(page.locator("text=Geçersiz kod")).toBeVisible();
+    await expect(page.locator("button[type='submit']")).toBeDisabled();
+    // 4+ karakter: buton enabled
+    await page.locator("input[placeholder='MAT7K2']").fill("MAT7K2");
+    await expect(page.locator("button[type='submit']")).toBeEnabled();
   });
 
   test("join page requires name", async ({ page }) => {

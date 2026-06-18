@@ -71,6 +71,7 @@ function ExamContent() {
   }, [sid, fbLoaded]);
 
   const advance = () => { if (isLast) finish(); else setIdx(i => i + 1); };
+  const submitExam = () => finish();
 
   if (loading) return <div className="min-h-screen flex items-center justify-center bg-background"><div className="text-center space-y-3"><div className="inline-block w-8 h-8 border-[3px] border-primary border-t-transparent rounded-full animate-spin"/><p className="text-text-secondary text-sm">Sınav yükleniyor...</p></div></div>;
 
@@ -105,7 +106,7 @@ function ExamContent() {
         </div>
       </div>
       {mode === "sequential" && <div className="sticky bottom-0 bg-surface border-t border-border p-4"><button className={`w-full h-[56px] rounded-xl font-semibold text-lg ${hasAnswer ? "bg-primary text-on-primary" : "bg-text-disabled text-on-primary cursor-not-allowed"}`} disabled={!hasAnswer} onClick={advance}>{isLast ? "✓ Sınavı Tamamla" : "İlerle →"}</button></div>}
-      {mode === "scroll" && <div className="sticky bottom-0 bg-surface border-t border-border p-4"><button className="w-full h-[56px] rounded-xl bg-success text-on-primary font-semibold text-lg" onClick={advance}>Sınavı Gönder</button></div>}
+      {mode === "scroll" && <div className="sticky bottom-0 bg-surface border-t border-border p-4"><button className="w-full h-[56px] rounded-xl bg-success text-on-primary font-semibold text-lg" onClick={submitExam}>Sınavı Gönder</button></div>}
     </main>
   );
 }
