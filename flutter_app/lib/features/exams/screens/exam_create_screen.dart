@@ -99,10 +99,12 @@ class _ExamCreateScreenState extends ConsumerState<ExamCreateScreen> {
             child: ElevatedButton(
               onPressed: _canNext
                 ? () {
+                    final groups = groupsAsync.valueOrNull ?? [];
+                    final selectedGroup = groups.where((g) => g.id == _selectedGroup).firstOrNull;
                     ref.read(createExamStateProvider.notifier).state = state.copyWith(
                       title: _titleCtrl.text.trim(),
                       groupId: _selectedGroup,
-                      groupName: _selectedGroup,
+                      groupName: selectedGroup?.name ?? _selectedGroup ?? '',
                     );
                     context.push('/exams/create/settings');
                   }
