@@ -1,7 +1,11 @@
 {
   "common": {
     "appName": "ExamKit",
-    "loading": "Yüklənir..."
+    "loading": "Yüklənir...",
+    "back": "Geri",
+    "cancel": "İmtina et və çıx",
+    "examCode": "İmtahan Kodu",
+    "retry": "Təkrar Yoxla"
   },
   "home": {
     "title": "İmtahana Qoşul",

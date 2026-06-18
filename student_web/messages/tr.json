@@ -1,7 +1,11 @@
 {
   "common": {
     "appName": "ExamKit",
-    "loading": "Yükleniyor..."
+    "loading": "Yükleniyor...",
+    "back": "Geri",
+    "cancel": "Vazgeç ve çık",
+    "examCode": "Sınav Kodu",
+    "retry": "Tekrar Dene"
   },
   "home": {
     "title": "Sınava Katıl",
