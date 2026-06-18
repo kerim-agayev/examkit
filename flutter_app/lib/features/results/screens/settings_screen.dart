@@ -3,6 +3,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../../auth/providers/auth_provider.dart';
 
+final appLanguageProvider = StateProvider<String>((ref) => 'az');
+
 class SettingsScreen extends ConsumerWidget {
   const SettingsScreen({super.key});
 
@@ -27,9 +29,14 @@ class SettingsScreen extends ConsumerWidget {
           Card(
             child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
               const Padding(padding: EdgeInsets.fromLTRB(16, 16, 16, 8), child: Text('Uygulama Dili', style: TextStyle(fontSize: 15, fontWeight: FontWeight.w600, color: Color(0xFF475569)))),
-              ListTile(title: const Text('🇦🇿 Azərbaycan dili'), trailing: const Icon(Icons.check, color: Color(0xFF2563EB)), onTap: () {}),
-              const Divider(height: 1),
-              ListTile(title: const Text('🇹🇷 Türkçe'), onTap: () {}),
+              Consumer(builder: (_, ref, __) {
+                final lang = ref.watch(appLanguageProvider);
+                return Column(children: [
+                  ListTile(title: const Text('🇦🇿 Azərbaycan dili'), trailing: lang == 'az' ? const Icon(Icons.check, color: Color(0xFF2563EB)) : null, onTap: () => ref.read(appLanguageProvider.notifier).state = 'az'),
+                  const Divider(height: 1),
+                  ListTile(title: const Text('🇹🇷 Türkçe'), trailing: lang == 'tr' ? const Icon(Icons.check, color: Color(0xFF2563EB)) : null, onTap: () => ref.read(appLanguageProvider.notifier).state = 'tr'),
+                ]);
+              }),
             ]),
           ),
           const SizedBox(height: 12),

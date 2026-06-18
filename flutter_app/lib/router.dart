@@ -36,7 +36,7 @@ final routerProvider = Provider<GoRouter>((ref) {
       // Groups
       GoRoute(path: '/groups', builder: (_, __) => const GroupListScreen()),
       GoRoute(path: '/groups/create', builder: (_, __) => const GroupCreateScreen()),
-      GoRoute(path: '/groups/:id', builder: (_, s) => GroupCreateScreen(groupId: s.pathParameters['id'])),
+      GoRoute(path: '/groups/:id', builder: (_, s) => GroupDetailScreen(groupId: s.pathParameters['id'] ?? '', groupName: s.pathParameters['id'] ?? 'Grup')),
       GoRoute(path: '/groups/:id/edit', builder: (_, s) => GroupCreateScreen(groupId: s.pathParameters['id'])),
 
       // Exams
