@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -36,16 +37,16 @@ class HomeScreen extends StatelessWidget {
             ),
             const SizedBox(height: 16),
             // Quick Actions
-            SizedBox(width: double.infinity, height: 64, child: ElevatedButton.icon(onPressed: () {}, icon: const Icon(Icons.group_add), label: const Text('Yeni Grup Oluştur'), style: ElevatedButton.styleFrom(backgroundColor: const Color(0xFF2563EB), foregroundColor: Colors.white))),
+            SizedBox(width: double.infinity, height: 64, child: ElevatedButton.icon(onPressed: () => context.push('/groups/create'), icon: const Icon(Icons.group_add), label: const Text('Yeni Grup Oluştur'), style: ElevatedButton.styleFrom(backgroundColor: const Color(0xFF2563EB), foregroundColor: Colors.white))),
             const SizedBox(height: 8),
-            SizedBox(width: double.infinity, height: 64, child: ElevatedButton.icon(onPressed: () {}, icon: const Icon(Icons.add_circle), label: const Text('Yeni Sınav Oluştur'), style: ElevatedButton.styleFrom(backgroundColor: const Color(0xFF059669), foregroundColor: Colors.white))),
+            SizedBox(width: double.infinity, height: 64, child: ElevatedButton.icon(onPressed: () => context.push('/exams/create'), icon: const Icon(Icons.add_circle), label: const Text('Yeni Sınav Oluştur'), style: ElevatedButton.styleFrom(backgroundColor: const Color(0xFF059669), foregroundColor: Colors.white))),
             const SizedBox(height: 24),
             // Recent Exams
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text('Son Sınavlar', style: theme.textTheme.titleMedium?.copyWith(fontWeight: FontWeight.w600)),
-                TextButton(onPressed: () {}, child: const Text('Tümünü Gör')),
+                TextButton(onPressed: () => context.push('/exams'), child: const Text('Tümünü Gör')),
               ],
             ),
             _ExamCard(title: 'Riyaziyyat Fənn Sınavı', subtitle: '9-A Sinifi', status: 'Taslak', color: const Color(0xFFD97706)),
@@ -58,6 +59,14 @@ class HomeScreen extends StatelessWidget {
       ),
       bottomNavigationBar: NavigationBar(
         selectedIndex: 0,
+        onDestinationSelected: (i) {
+          switch (i) {
+            case 0: context.go('/home');
+            case 1: context.push('/groups');
+            case 2: context.push('/exams');
+            case 3: context.push('/settings');
+          }
+        },
         destinations: const [
           NavigationDestination(icon: Icon(Icons.home), label: 'Ana Sayfa'),
           NavigationDestination(icon: Icon(Icons.group), label: 'Gruplar'),
