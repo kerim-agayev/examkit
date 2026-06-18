@@ -1,0 +1,37 @@
+// =============================================================================
+// ExamKit — Realtime Database Security Rules
+// Canlı sınav senkronizasyonu: öğrenci varlığı, ilerleme, global timer.
+//
+// ÖNEMLİ: students node'u write kısıtlanmıştır — her öğrenci SADECE
+//         kendi sessionId altındaki node'a yazabilir.
+//         (Önceki versiyonda ".write": true idi — bu ciddi bir açıktı.)
+// =============================================================================
+
+{
+  "rules": {
+    "live_exams": {
+      "$examId": {
+        // Sınav meta verisi: sadece öğretmen yazabilir
+        "teacherId": { ".write": "auth != null" },
+        "status": { ".write": "auth != null" },
+        "startedAt": { ".write": "auth != null" },
+        "globalTimerEndsAt": { ".write": "auth != null" },
+        ".read": true,  // Tüm öğrenciler sınav durumunu görebilir
+
+        "students": {
+          ".read": true,  // Öğretmen + diğer öğrenciler sayıyı görebilir
+
+          "$sessionId": {
+            // Her öğrenci SADECE kendi session'ına yazabilir
+            ".write": "!data.exists() || data.child('name').val() === newData.child('name').val()",
+            ".validate": "newData.hasChildren(['name', 'joinedAt', 'progress', 'status'])",
+            "name": { ".validate": "newData.isString() && newData.val().length <= 100" },
+            "progress": { ".validate": "newData.isNumber() && newData.val() >= 0" },
+            "status": { ".validate": "newData.isString() && newData.val().matches(/^(waiting|active|completed)$/)" },
+            "$other": { ".validate": false }
+          }
+        }
+      }
+    }
+  }
+}

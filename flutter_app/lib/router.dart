@@ -12,6 +12,7 @@ import 'features/exams/screens/exam_list_screen.dart';
 import 'features/exams/screens/exam_create_screen.dart';
 import 'features/exams/screens/exam_settings_screen.dart';
 import 'features/exams/screens/question_editor_screen.dart';
+import 'features/exams/screens/question_list_screen.dart';
 import 'features/exams/screens/exam_preview_screen.dart';
 import 'features/exams/screens/share_screen.dart';
 import 'features/exams/screens/live_control_screen.dart';
@@ -42,7 +43,8 @@ final routerProvider = Provider<GoRouter>((ref) {
       GoRoute(path: '/exams', builder: (_, __) => const ExamListScreen()),
       GoRoute(path: '/exams/create', builder: (_, __) => const ExamCreateScreen()),
       GoRoute(path: '/exams/create/settings', builder: (_, __) => const ExamSettingsScreen()),
-      GoRoute(path: '/exams/create/questions', builder: (_, __) => const QuestionEditorScreen()),
+      GoRoute(path: '/exams/create/questions', builder: (_, __) => const QuestionListScreen()),
+      GoRoute(path: '/exams/create/questions/edit', builder: (_, __) => const QuestionEditorScreen()),
       GoRoute(path: '/exams/create/preview', builder: (_, __) => const ExamPreviewScreen()),
       GoRoute(path: '/exams/:id/share', builder: (_, __) => const ShareScreen()),
       GoRoute(path: '/exams/:id/live', builder: (_, __) => const LiveControlScreen()),

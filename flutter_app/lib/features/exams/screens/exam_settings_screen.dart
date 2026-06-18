@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 class ExamSettingsScreen extends StatefulWidget {
   const ExamSettingsScreen({super.key});
@@ -68,7 +69,7 @@ class _ExamSettingsScreenState extends State<ExamSettingsScreen> {
       bottomNavigationBar: SafeArea(
         child: Padding(
           padding: const EdgeInsets.all(16),
-          child: SizedBox(width: double.infinity, height: 56, child: ElevatedButton(onPressed: () {}, child: const Text('Devam Et →'))),
+          child: SizedBox(width: double.infinity, height: 56, child: ElevatedButton(onPressed: () => context.push('/exams/create/questions'), child: const Text('Devam Et →'))),
         ),
       ),
     );
