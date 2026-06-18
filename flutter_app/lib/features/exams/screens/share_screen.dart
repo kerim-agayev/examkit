@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../../../../core/utils/exam_code_generator.dart';
 
-class ShareScreen extends StatelessWidget {
+class ShareScreen extends ConsumerWidget {
   const ShareScreen({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    const code = 'MAT7K2';
+  Widget build(BuildContext context, WidgetRef ref) {
+    final code = ExamCodeGenerator.generate();
     return Scaffold(
       appBar: AppBar(title: const Text('Sınavı Paylaş'), leading: IconButton(icon: const Icon(Icons.close), onPressed: () => Navigator.pop(context)), bottom: PreferredSize(preferredSize: const Size.fromHeight(32), child: Padding(padding: const EdgeInsets.only(bottom: 8), child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [_SC(1, false), _SL(), _SC(2, false), _SL(), _SC(3, false), _SL(), _SC(4, false), _SL(), _SC(5, true)])))),
       body: SingleChildScrollView(
@@ -31,7 +33,7 @@ class ShareScreen extends StatelessWidget {
                       )).toList(),
                     ),
                     const SizedBox(height: 12),
-                    InkWell(onTap: () => Clipboard.setData(const ClipboardData(text: 'stitch.examkit.app/join/$code')), child: const Text('stitch.examkit.app/join/$code', style: TextStyle(fontSize: 13, color: Color(0xFF475569)))),
+                    InkWell(onTap: () => Clipboard.setData(ClipboardData(text: 'stitch.examkit.app/join/$code')), child: Text('stitch.examkit.app/join/$code', style: TextStyle(fontSize: 13, color: Color(0xFF475569)))),
                   ],
                 ),
               ),
