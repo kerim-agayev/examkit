@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../providers/question_provider.dart';
 
-class QuestionEditorScreen extends StatefulWidget {
+class QuestionEditorScreen extends ConsumerStatefulWidget {
   const QuestionEditorScreen({super.key});
 
   @override
-  State<QuestionEditorScreen> createState() => _QuestionEditorScreenState();
+  ConsumerState<QuestionEditorScreen> createState() => _QuestionEditorScreenState();
 }
 
-class _QuestionEditorScreenState extends State<QuestionEditorScreen> with SingleTickerProviderStateMixin {
+class _QuestionEditorScreenState extends ConsumerState<QuestionEditorScreen> with SingleTickerProviderStateMixin {
   late TabController _tabCtrl;
   int _points = 3;
 
@@ -22,7 +24,14 @@ class _QuestionEditorScreenState extends State<QuestionEditorScreen> with Single
     return Scaffold(
       appBar: AppBar(
         title: const Text('Soru Editörü'),
-        actions: [TextButton(onPressed: () {}, child: const Text('Kaydet'))],
+        actions: [TextButton(onPressed: () async {
+          try {
+            await ref.read(createQuestionProvider((examId: 'mock_exam_id', text: 'Yeni Soru', type: 'mcq', options: ['A', 'B', 'C', 'D'], points: _points, orderIndex: 0, correctAnswer: 'A')).future);
+            if (mounted) ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Soru kaydedildi')));
+          } catch (e) {
+            if (mounted) ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Hata: $e')));
+          }
+        }, child: const Text('Kaydet'))],
         bottom: TabBar(controller: _tabCtrl, tabs: const [Tab(text: 'ÇSM'), Tab(text: 'D/Y'), Tab(text: 'KA')]),
       ),
       body: Column(
