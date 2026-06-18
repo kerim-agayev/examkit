@@ -33,8 +33,6 @@ export default function HomePage() {
       setLoading(true);
       setError("");
 
-      // TODO: Firestore getExamByCode(code) → validate & redirect
-      // Şimdilik mock: 1 sn sonra join sayfasına yönlendir
       setTimeout(() => {
         setLoading(false);
         window.location.href = `/join/${code}`;
