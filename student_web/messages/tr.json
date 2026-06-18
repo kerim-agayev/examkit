@@ -1,0 +1,55 @@
+{
+  "common": {
+    "appName": "ExamKit",
+    "loading": "Yükleniyor..."
+  },
+  "home": {
+    "title": "Sınava Katıl",
+    "subtitle": "Öğretmenin paylaştığı kodu gir",
+    "placeholder": "MAT7K2",
+    "continue": "Devam",
+    "error": "Geçersiz kod, tekrar deneyin",
+    "noApp": "Uygulama indirmeye gerek yok"
+  },
+  "join": {
+    "title": "Sınava Katıl",
+    "firstName": "Adınız",
+    "firstNamePlaceholder": "Adınız...",
+    "lastName": "Soyadınız",
+    "lastNamePlaceholder": "Soyadınız...",
+    "join": "Sınava Katıl",
+    "privacy": "Adınız öğretmeninizde görünecek"
+  },
+  "waiting": {
+    "title": "Öğretmeni bekleyin...",
+    "students": "Bekleme odasında: {count} öğrenci",
+    "autoStart": "Öğretmen başlatınca otomatik açılacak",
+    "joined": "Katılan: {name} ✓"
+  },
+  "exam": {
+    "next": "İlerle",
+    "complete": "Sınavı Tamamla",
+    "submit": "Gönder",
+    "confirmTitle": "Sınavı tamamlamak istediğinize emin misiniz?",
+    "confirmText": "Cevaplarınız gönderilecek ve geri alınamaz.",
+    "cancel": "Geri Dön",
+    "confirm": "Evet, Tamamla",
+    "autoAdvance": "Otomatik geçiş: {count}s",
+    "question": "Soru {current} / {total}",
+    "answered": "{count} soru cevaplandı",
+    "unanswered": "{count} soru boş"
+  },
+  "results": {
+    "title": "Sonuçlar",
+    "score": "{score} / {total}",
+    "points": "puan",
+    "rank": "Sınıfta {rank}. sıradasınız",
+    "time": "{minutes} dakika {seconds} saniyede tamamladınız",
+    "correct": "Doğru",
+    "wrong": "Yanlış",
+    "empty": "Boş",
+    "leaderboard": "Sınıf Sıralaması",
+    "calculating": "Sonuçlar hesaplanıyor...",
+    "waitingTeacher": "Öğretmeninizin cihazının açık olması bekleniyor."
+  }
+}

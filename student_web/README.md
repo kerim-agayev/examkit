@@ -1,36 +1,42 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# ExamKit — Next.js Öğrenci Web
 
-## Getting Started
+Next.js 15.5 (App Router) + TypeScript + Tailwind CSS 4 + Firebase + Zustand 5
 
-First, run the development server:
+## Geliştirme
 
 ```bash
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Firebase Yapılandırması
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```bash
+# .env.local oluştur (gitignored — asla commit edilmez)
+cp .env.local.example .env.local
+# → Firebase Console'dan Web config değerlerini doldur
+# Bkz: docs/phase_1/secrets_management.md
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Mimari
 
-## Learn More
+```
+app/
+├── page.tsx                  # W1 — Kod giriş
+├── join/[code]/page.tsx      # W2 — Ad-soyad girişi
+├── waiting/[sessionId]/page.tsx  # W3 — Bekleme odası
+├── exam/[sessionId]/page.tsx     # W4/5 — Sınav (scroll/sequential)
+└── results/[sessionId]/page.tsx  # W6/7 — Sonuçlar
 
-To learn more about Next.js, take a look at the following resources:
+lib/          # Firebase, i18n, firestore helpers
+stores/       # Zustand (examStore)
+components/   # Paylaşılan UI bileşenleri
+messages/     # Çeviri dosyaları (az, tr)
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Deploy
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Cloudflare Pages:
+- Build: `npm run build`
+- Output: `.next`
+- Node: 22

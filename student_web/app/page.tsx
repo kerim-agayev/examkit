@@ -1,103 +1,125 @@
-import Image from "next/image";
+"use client";
 
-export default function Home() {
+/**
+ * W1 — Kod Giriş Sayfası (/)
+ * Öğrenci sınav kodunu girip doğrular.
+ * Stitch referans: design/stitch_screens/renci_giri/code.html
+ */
+
+import { useState, useCallback, type FormEvent } from "react";
+import { ExamKitLogo } from "@/components/ExamKitLogo";
+
+export default function HomePage() {
+  const [code, setCode] = useState("");
+  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
+
+  const handleCodeChange = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      const val = e.target.value.toUpperCase().replace(/[^A-HJ-NP-Z2-9]/g, "");
+      if (val.length <= 6) setCode(val);
+      if (error) setError("");
+    },
+    [error]
+  );
+
+  const handleSubmit = useCallback(
+    async (e: FormEvent) => {
+      e.preventDefault();
+      if (code.length < 4) {
+        setError("Geçersiz kod, tekrar deneyin");
+        return;
+      }
+      setLoading(true);
+      setError("");
+
+      // TODO: Firestore getExamByCode(code) → validate & redirect
+      // Şimdilik mock: 1 sn sonra join sayfasına yönlendir
+      setTimeout(() => {
+        setLoading(false);
+        window.location.href = `/join/${code}`;
+      }, 800);
+    },
+    [code]
+  );
+
+  const isValid = code.length >= 4;
+
   return (
-    <div className="font-sans grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="font-mono list-inside list-decimal text-sm/6 text-center sm:text-left">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] font-mono font-semibold px-1 py-0.5 rounded">
-              app/page.tsx
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
-
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+    <main className="min-h-screen flex items-center justify-center p-4 bg-background">
+      <div className="w-full max-w-[480px] bg-surface rounded-[16px] p-8 border border-border animate-fade-in-up">
+        {/* Header / Logo */}
+        <div className="flex flex-col items-center mb-8">
+          <div className="flex items-center gap-2 mb-6">
+            <ExamKitLogo size={32} />
+          </div>
+          <h1 className="text-[28px] leading-[36px] font-bold text-center text-text-primary mb-2">
+            Sınava Katıl
+          </h1>
+          <p className="text-base text-text-secondary text-center">
+            Öğretmenin paylaştığı kodu gir
+          </p>
         </div>
-      </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
-    </div>
+
+        {/* Form */}
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <div className="relative">
+            <input
+              autoComplete="off"
+              className={`w-full h-[56px] px-4 text-[22px] leading-[28px] font-semibold text-center uppercase tracking-[0.2em] bg-surface border-[1.5px] rounded-xl outline-none transition-colors placeholder:text-text-disabled placeholder:font-normal ${
+                error
+                  ? "border-error animate-shake"
+                  : "border-border focus:border-primary focus:ring-1 focus:ring-primary"
+              }`}
+              id="exam-code"
+              maxLength={6}
+              placeholder="MAT7K2"
+              type="text"
+              value={code}
+              onChange={handleCodeChange}
+              disabled={loading}
+            />
+          </div>
+
+          {error && (
+            <p className="text-error text-sm text-center font-medium">
+              {error}
+            </p>
+          )}
+
+          <button
+            className={`w-full h-[56px] rounded-xl transition-all duration-200 flex items-center justify-center gap-2 shadow-sm text-lg font-semibold ${
+              isValid && !loading
+                ? "bg-primary hover:bg-primary-dark active:bg-primary-dark text-on-primary hover:shadow-md"
+                : "bg-text-disabled text-on-primary cursor-not-allowed"
+            }`}
+            type="submit"
+            disabled={!isValid || loading}
+          >
+            {loading ? (
+              <span className="inline-block w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
+            ) : (
+              <>
+                Devam
+                <svg
+                  className="w-5 h-5"
+                  viewBox="0 0 24 24"
+                  fill="currentColor"
+                >
+                  <path d="M12 4l-1.41 1.41L16.17 11H4v2h12.17l-5.58 5.59L12 20l8-8z" />
+                </svg>
+              </>
+            )}
+          </button>
+        </form>
+
+        {/* Footer */}
+        <div className="mt-8 text-center">
+          <p className="text-xs text-text-secondary flex items-center justify-center gap-1.5">
+            ⚡ Uygulama indirmeye gerek yok
+          </p>
+        </div>
+      </div>
+    </main>
   );
 }

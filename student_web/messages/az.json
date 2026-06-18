@@ -1,0 +1,55 @@
+{
+  "common": {
+    "appName": "ExamKit",
+    "loading": "Yüklənir..."
+  },
+  "home": {
+    "title": "İmtahana Qoşul",
+    "subtitle": "Müəllimin paylaşdığı kodu daxil et",
+    "placeholder": "MAT7K2",
+    "continue": "Davam et",
+    "error": "Yanlış kod, təkrar yoxlayın",
+    "noApp": "Tətbiq yükləməyə ehtiyac yoxdur"
+  },
+  "join": {
+    "title": "İmtahana Qoşul",
+    "firstName": "Adınız",
+    "firstNamePlaceholder": "Adınız...",
+    "lastName": "Soyadınız",
+    "lastNamePlaceholder": "Soyadınız...",
+    "join": "İmtahana Qoşul",
+    "privacy": "Adınız müəlliminizdə görünəcək"
+  },
+  "waiting": {
+    "title": "Müəllimi gözləyin...",
+    "students": "Gözləmə otağında: {count} tələbə",
+    "autoStart": "Müəllim başladınca avtomatik açılacaq",
+    "joined": "Qatılan: {name} ✓"
+  },
+  "exam": {
+    "next": "İrəli",
+    "complete": "İmtahanı Tamamla",
+    "submit": "Göndər",
+    "confirmTitle": "İmtahanı tamamlamaq istədiyinizə əminsiniz?",
+    "confirmText": "Cavablarınız göndəriləcək və geri alına bilməz.",
+    "cancel": "Geri Dön",
+    "confirm": "Bəli, Tamamla",
+    "autoAdvance": "Avtomatik keçid: {count}s",
+    "question": "Sual {current} / {total}",
+    "answered": "{count} sual cavablandı",
+    "unanswered": "{count} sual boş"
+  },
+  "results": {
+    "title": "Nəticələr",
+    "score": "{score} / {total}",
+    "points": "xal",
+    "rank": "Sinifdə {rank}. sıradasınız",
+    "time": "{minutes} dəqiqə {seconds} saniyədə tamamladınız",
+    "correct": "Doğru",
+    "wrong": "Yanlış",
+    "empty": "Boş",
+    "leaderboard": "Sinif Sıralaması",
+    "calculating": "Nəticələr hesablanır...",
+    "waitingTeacher": "Müəllimin cihazının açıq olması gözlənilir."
+  }
+}
