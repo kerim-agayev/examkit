@@ -1,22 +1,25 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import '../../auth/providers/auth_provider.dart';
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends ConsumerWidget {
   const HomeScreen({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final user = ref.watch(authStateProvider).value;
     final theme = Theme.of(context);
     return Scaffold(
       backgroundColor: const Color(0xFFF1F5F9),
       appBar: AppBar(
         backgroundColor: Colors.white,
         elevation: 0,
-        title: const Text('Merhaba, Ayşə Müəllim 👋', style: TextStyle(fontSize: 18)),
+        title: Text('Merhaba, ${user?.displayName?.split(' ').first ?? 'Öğretmen'} 👋', style: const TextStyle(fontSize: 18)),
         actions: [
           Padding(
             padding: const EdgeInsets.only(right: 16),
-            child: CircleAvatar(radius: 18, backgroundColor: theme.colorScheme.primary, child: const Text('A', style: TextStyle(color: Colors.white, fontWeight: FontWeight.w600))),
+            child: CircleAvatar(radius: 18, backgroundColor: theme.colorScheme.primary, child: Text(user?.displayName?[0] ?? '?', style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w600))),
           ),
         ],
       ),
