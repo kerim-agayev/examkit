@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+
+<html lang="tr"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>ExamKit - Yeni Sınav Oluştur</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "success-light": "#D1FAE5",
+                      "inverse-surface": "#2c3134",
+                      "surface-tint": "#0053db",
+                      "secondary-fixed": "#d5e3fc",
+                      "warning-light": "#FEF3C7",
+                      "secondary-container": "#d5e3fc",
+                      "on-secondary-fixed": "#0d1c2e",
+                      "on-background": "#171c1f",
+                      "text-primary": "#0F172A",
+                      "surface-container-highest": "#dfe3e7",
+                      "on-secondary": "#ffffff",
+                      "primary": "#004ac6",
+                      "on-tertiary-fixed-variant": "#005137",
+                      "inverse-primary": "#b4c5ff",
+                      "surface-container-high": "#e4e9ed",
+                      "on-tertiary-container": "#bdffdc",
+                      "secondary": "#515f74",
+                      "background": "#f6fafe",
+                      "on-primary-fixed-variant": "#003ea8",
+                      "on-tertiary-fixed": "#002114",
+                      "on-tertiary": "#ffffff",
+                      "error": "#DC2626",
+                      "primary-fixed-dim": "#b4c5ff",
+                      "info-light": "#E0F2FE",
+                      "inverse-on-surface": "#edf1f5",
+                      "primary-light": "#DBEAFE",
+                      "tertiary-fixed-dim": "#68dba9",
+                      "tertiary": "#006243",
+                      "secondary-fixed-dim": "#b9c7df",
+                      "info": "#0284C7",
+                      "primary-container": "#2563eb",
+                      "success": "#059669",
+                      "outline-variant": "#c3c6d7",
+                      "surface-container": "#eaeef2",
+                      "surface": "#FFFFFF",
+                      "surface-dim": "#d6dade",
+                      "surface-variant": "#dfe3e7",
+                      "warning": "#D97706",
+                      "tertiary-container": "#007d57",
+                      "surface-bright": "#f6fafe",
+                      "on-error": "#ffffff",
+                      "on-surface-variant": "#434655",
+                      "surface-container-lowest": "#ffffff",
+                      "on-primary-fixed": "#00174b",
+                      "outline": "#737686",
+                      "tertiary-fixed": "#85f8c4",
+                      "on-primary": "#ffffff",
+                      "on-secondary-container": "#57657a",
+                      "on-error-container": "#93000a",
+                      "error-light": "#FEE2E2",
+                      "error-container": "#ffdad6",
+                      "surface-container-low": "#f0f4f8",
+                      "on-primary-container": "#eeefff",
+                      "primary-fixed": "#dbe1ff",
+                      "on-surface": "#171c1f",
+                      "on-secondary-fixed-variant": "#3a485b",
+                      "border": "#E2E8F0",
+                      "primary-dark": "#1E40AF"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.25rem",
+                      "lg": "0.5rem",
+                      "xl": "0.75rem",
+                      "full": "9999px"
+              },
+              "spacing": {
+                      "margin-mobile": "16px",
+                      "gutter": "16px",
+                      "margin-desktop": "24px",
+                      "unit": "8px",
+                      "container-max-student": "480px"
+              },
+              "fontFamily": {
+                      "caption": ["Inter"],
+                      "title-lg": ["Inter"],
+                      "title-md": ["Inter"],
+                      "display": ["Inter"],
+                      "headline": ["Inter"],
+                      "label-md": ["Inter"],
+                      "body-md": ["Inter"],
+                      "body-lg": ["Inter"]
+              },
+              "fontSize": {
+                      "caption": ["12px", {"lineHeight": "16px", "fontWeight": "400"}],
+                      "title-lg": ["22px", {"lineHeight": "28px", "fontWeight": "600"}],
+                      "title-md": ["18px", {"lineHeight": "24px", "fontWeight": "600"}],
+                      "display": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                      "headline": ["26px", {"lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "700"}],
+                      "label-md": ["14px", {"lineHeight": "20px", "letterSpacing": "0.01em", "fontWeight": "500"}],
+                      "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                      "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}]
+              }
+            }
+          }
+        }
+    </script>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background min-h-screen flex justify-center text-text-primary antialiased">
+<!-- Mobile Container (Max 480px) -->
+<div class="w-full max-w-container-max-student bg-background min-h-screen relative flex flex-col shadow-sm">
+<!-- TopAppBar (Simplified for Focus/Transactional) -->
+<header class="bg-surface border-b border-outline-variant w-full h-[64px] flex items-center px-margin-mobile shrink-0 z-10 sticky top-0">
+<button aria-label="Geri" class="w-12 h-12 flex items-center justify-start text-on-surface hover:bg-surface-container-low transition-colors rounded-full active:scale-95 duration-100 mr-2">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">arrow_back</span>
+</button>
+<h1 class="font-title-lg text-title-lg text-text-primary flex-1">Yeni Sınav</h1>
+<div class="w-12"></div> <!-- Spacer for centering -->
+</header>
+<!-- Main Content Canvas -->
+<main class="flex-1 overflow-y-auto px-margin-mobile py-6 pb-32">
+<!-- Progress Stepper -->
+<div class="mb-6 flex flex-col items-center">
+<span class="font-label-md text-label-md text-secondary mb-3">1/5 Temel Bilgiler</span>
+<div class="flex items-center justify-center w-full max-w-[240px] gap-2">
+<div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center text-on-primary font-label-md text-label-md shrink-0 transition-all duration-300">1</div>
+<div class="h-1 flex-1 bg-surface-variant rounded-full"></div>
+<div class="w-8 h-8 rounded-full border-2 border-outline-variant text-outline flex items-center justify-center font-label-md text-label-md shrink-0 bg-surface">2</div>
+<div class="h-1 flex-1 bg-surface-variant rounded-full"></div>
+<div class="w-8 h-8 rounded-full border-2 border-outline-variant text-outline flex items-center justify-center font-label-md text-label-md shrink-0 bg-surface">3</div>
+<div class="h-1 flex-1 bg-surface-variant rounded-full"></div>
+<div class="w-8 h-8 rounded-full border-2 border-outline-variant text-outline flex items-center justify-center font-label-md text-label-md shrink-0 bg-surface">4</div>
+<div class="h-1 flex-1 bg-surface-variant rounded-full"></div>
+<div class="w-8 h-8 rounded-full border-2 border-outline-variant text-outline flex items-center justify-center font-label-md text-label-md shrink-0 bg-surface">5</div>
+</div>
+</div>
+<!-- Content Card -->
+<div class="bg-surface rounded-xl p-4 shadow-[0_2px_8px_rgba(0,0,0,0.04)] border border-border">
+<!-- Exam Title Field -->
+<div class="mb-6">
+<label class="block font-label-md text-label-md text-text-primary mb-2" for="exam-title">Sınav Başlığı <span class="text-error">*</span></label>
+<div class="relative">
+<input class="w-full h-[56px] px-4 py-2 border border-outline-variant rounded-lg font-body-md text-body-md bg-surface text-text-primary placeholder:text-outline focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-colors" id="exam-title" maxlength="100" placeholder="örn: Riyaziyyat Fənn İmtahanı" type="text"/>
+</div>
+<div class="flex justify-end mt-1">
+<span class="font-caption text-caption text-secondary" id="title-counter">0/100</span>
+</div>
+</div>
+<!-- Group Selection -->
+<div>
+<label class="block font-label-md text-label-md text-text-primary mb-2">Grup Seç <span class="text-error">*</span></label>
+<button class="w-full h-[64px] bg-surface border border-outline-variant rounded-lg px-4 flex items-center justify-between hover:border-primary transition-colors focus:outline-none focus:ring-2 focus:ring-primary/20 active:bg-surface-container-low group">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-full bg-surface-variant flex items-center justify-center text-secondary group-hover:text-primary transition-colors">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">group</span>
+</div>
+<span class="font-body-md text-body-md text-outline group-hover:text-text-primary transition-colors">Grup seçin</span>
+</div>
+<span class="material-symbols-outlined text-outline group-hover:text-text-primary transition-colors">chevron_right</span>
+</button>
+<div class="mt-3">
+<button class="flex items-center gap-1.5 text-primary hover:text-primary-dark font-label-md text-label-md transition-colors active:scale-95 origin-left">
+<span class="material-symbols-outlined text-[18px]">add</span>
+                            Yeni Grup Oluştur
+                        </button>
+</div>
+</div>
+</div>
+</main>
+<!-- Bottom Sticky Action (Disabled State) -->
+<div class="fixed bottom-0 w-full max-w-container-max-student bg-surface border-t border-border p-margin-mobile z-20 pb-[env(safe-area-inset-bottom,16px)]">
+<button class="w-full h-[56px] rounded-lg font-title-md text-title-md flex items-center justify-center gap-2 bg-surface-variant text-outline cursor-not-allowed transition-colors" disabled="">
+                Devam Et
+                <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">arrow_forward</span>
+</button>
+</div>
+</div>
+<script>
+        // Simple character counter script for interactivity
+        const titleInput = document.getElementById('exam-title');
+        const titleCounter = document.getElementById('title-counter');
+
+        titleInput.addEventListener('input', function() {
+            const currentLength = this.value.length;
+            titleCounter.textContent = `${currentLength}/100`;
+            
+            // Highlight counter if approaching limit (optional nice touch)
+            if (currentLength >= 90) {
+                titleCounter.classList.add('text-warning');
+                titleCounter.classList.remove('text-secondary');
+            } else {
+                titleCounter.classList.remove('text-warning');
+                titleCounter.classList.add('text-secondary');
+            }
+        });
+    </script>
+</body></html>

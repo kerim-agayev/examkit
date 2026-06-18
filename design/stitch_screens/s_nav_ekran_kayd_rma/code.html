@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+
+<html class="light" lang="tr"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport"/>
+<title>Biologiya Final - Sınav Modu</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "on-primary-fixed-variant": "#003ea8",
+                      "border": "#E2E8F0",
+                      "on-surface": "#171c1f",
+                      "on-secondary-fixed": "#0d1c2e",
+                      "primary-container": "#2563eb",
+                      "on-secondary-fixed-variant": "#3a485b",
+                      "success-light": "#D1FAE5",
+                      "on-tertiary-fixed": "#002114",
+                      "info": "#0284C7",
+                      "tertiary-container": "#007d57",
+                      "error": "#DC2626",
+                      "on-secondary": "#ffffff",
+                      "tertiary": "#006243",
+                      "secondary": "#515f74",
+                      "inverse-primary": "#b4c5ff",
+                      "surface-container-high": "#e4e9ed",
+                      "primary-dark": "#1E40AF",
+                      "info-light": "#E0F2FE",
+                      "on-surface-variant": "#434655",
+                      "inverse-surface": "#2c3134",
+                      "success": "#059669",
+                      "on-primary": "#ffffff",
+                      "on-error-container": "#93000a",
+                      "warning": "#D97706",
+                      "on-tertiary-container": "#bdffdc",
+                      "surface-dim": "#d6dade",
+                      "primary-fixed-dim": "#b4c5ff",
+                      "error-light": "#FEE2E2",
+                      "surface-container-highest": "#dfe3e7",
+                      "text-primary": "#0F172A",
+                      "surface-tint": "#0053db",
+                      "warning-light": "#FEF3C7",
+                      "surface-container-low": "#f0f4f8",
+                      "inverse-on-surface": "#edf1f5",
+                      "surface-bright": "#f6fafe",
+                      "outline": "#737686",
+                      "error-container": "#ffdad6",
+                      "secondary-fixed-dim": "#b9c7df",
+                      "background": "#f6fafe",
+                      "surface-container": "#eaeef2",
+                      "primary": "#004ac6",
+                      "on-background": "#171c1f",
+                      "tertiary-fixed-dim": "#68dba9",
+                      "primary-fixed": "#dbe1ff",
+                      "on-secondary-container": "#57657a",
+                      "on-tertiary": "#ffffff",
+                      "surface": "#FFFFFF",
+                      "surface-variant": "#dfe3e7",
+                      "on-primary-fixed": "#00174b",
+                      "primary-light": "#DBEAFE",
+                      "tertiary-fixed": "#85f8c4",
+                      "on-tertiary-fixed-variant": "#005137",
+                      "secondary-fixed": "#d5e3fc",
+                      "on-primary-container": "#eeefff",
+                      "on-error": "#ffffff",
+                      "surface-container-lowest": "#ffffff",
+                      "secondary-container": "#d5e3fc",
+                      "outline-variant": "#c3c6d7"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.25rem",
+                      "lg": "0.5rem",
+                      "xl": "0.75rem",
+                      "full": "9999px"
+              },
+              "spacing": {
+                      "margin-mobile": "16px",
+                      "unit": "8px",
+                      "gutter": "16px",
+                      "container-max-student": "480px",
+                      "margin-desktop": "24px"
+              },
+              "fontFamily": {
+                      "display": ["Inter"],
+                      "caption": ["Inter"],
+                      "title-lg": ["Inter"],
+                      "headline": ["Inter"],
+                      "body-lg": ["Inter"],
+                      "title-md": ["Inter"],
+                      "body-md": ["Inter"],
+                      "label-md": ["Inter"]
+              },
+              "fontSize": {
+                      "display": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                      "caption": ["12px", {"lineHeight": "16px", "fontWeight": "400"}],
+                      "title-lg": ["22px", {"lineHeight": "28px", "fontWeight": "600"}],
+                      "headline": ["26px", {"lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "700"}],
+                      "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                      "title-md": ["18px", {"lineHeight": "24px", "fontWeight": "600"}],
+                      "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                      "label-md": ["14px", {"lineHeight": "20px", "letterSpacing": "0.01em", "fontWeight": "500"}]
+              }
+            }
+          }
+        }
+    </script>
+<style>
+        body {
+            -webkit-tap-highlight-color: transparent;
+        }
+        /* Custom radio button styles to match design system */
+        .exam-radio:checked + div {
+            border-color: #2563eb;
+            background-color: #DBEAFE;
+        }
+        .exam-radio:checked + div .radio-inner {
+            background-color: #2563eb;
+            border-color: #2563eb;
+        }
+        .exam-radio:focus-visible + div {
+            outline: 2px solid #2563eb;
+            outline-offset: 2px;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-background font-body-md min-h-screen flex flex-col items-center">
+<!-- Centralized Container for Student Web (Fixed-width mobile-first on desktop) -->
+<div class="w-full max-w-container-max-student bg-background min-h-screen relative flex flex-col shadow-sm border-x border-border">
+<!-- Sticky Header (TopAppBar adaptation for Exam Mode) -->
+<header class="sticky top-0 z-40 bg-surface border-b border-border shadow-sm flex flex-col">
+<div class="h-[64px] flex justify-between items-center px-margin-mobile w-full">
+<div class="flex items-center gap-2">
+<!-- Intentionally no back button during exam to maintain focus, or a subtle one if needed -->
+<button aria-label="Geri" class="w-12 h-12 flex items-center justify-center text-on-surface-variant hover:bg-surface-container-low rounded-full transition-colors active:scale-95 duration-100">
+<span class="material-symbols-outlined">close</span>
+</button>
+<h1 class="font-title-lg text-title-lg text-primary">Biologiya Final</h1>
+</div>
+<!-- Timer Badge (Red/Error color to indicate urgency) -->
+<div class="flex items-center gap-1.5 bg-error-light px-3 py-1.5 rounded-full text-error">
+<span class="material-symbols-outlined text-[18px]">timer</span>
+<span class="font-title-md text-title-md">18:42</span>
+</div>
+</div>
+<!-- Progress Bar Section -->
+<div class="px-margin-mobile pb-3 pt-1 bg-surface">
+<div class="flex justify-between items-center mb-1">
+<span class="font-caption text-caption text-on-surface-variant">12 / 20 soru cevaplandı</span>
+<span class="font-caption text-caption text-on-surface-variant font-medium">60%</span>
+</div>
+<div class="h-2 w-full bg-surface-variant rounded-full overflow-hidden">
+<div class="h-full bg-primary rounded-full transition-all duration-500" style="width: 60%;"></div>
+</div>
+</div>
+</header>
+<!-- Main Content (Scrollable Questions Canvas) -->
+<main class="flex-1 overflow-y-auto px-margin-mobile py-6 pb-[100px] flex flex-col gap-6">
+<!-- Card 1: Multiple Choice Question (MCQ) -->
+<div class="bg-surface rounded-[16px] p-4 border border-border shadow-sm relative">
+<!-- Status indicator (answered/unanswered) - visual cue -->
+<div class="absolute left-0 top-0 bottom-0 w-1 bg-primary rounded-l-[16px]"></div>
+<div class="flex justify-between items-center mb-3">
+<span class="font-label-md text-label-md text-on-surface-variant bg-surface-container-low px-2.5 py-1 rounded-md">Soru 1</span>
+<span class="font-caption text-caption text-outline">10 Puan</span>
+</div>
+<p class="font-body-lg text-body-lg text-on-surface mb-5 font-medium leading-relaxed">
+                    Aşağıdakilerden hangisi hücre zarının temel görevlerinden biri değildir?
+                </p>
+<div class="flex flex-col gap-3">
+<!-- Option A -->
+<label class="relative cursor-pointer group">
+<input class="exam-radio sr-only" name="q1" type="radio"/>
+<div class="w-full border border-border rounded-lg p-4 flex items-center gap-3 transition-colors group-hover:bg-surface-container-low group-active:scale-[0.99]">
+<div class="radio-inner w-5 h-5 rounded-full border-2 border-outline flex items-center justify-center transition-colors">
+<div class="w-2 h-2 bg-surface rounded-full"></div>
+</div>
+<span class="font-body-md text-body-md text-on-surface">Madde alışverişini kontrol etmek</span>
+</div>
+</label>
+<!-- Option B -->
+<label class="relative cursor-pointer group">
+<input checked="" class="exam-radio sr-only" name="q1" type="radio"/>
+<div class="w-full border border-border rounded-lg p-4 flex items-center gap-3 transition-colors group-hover:bg-surface-container-low group-active:scale-[0.99]">
+<div class="radio-inner w-5 h-5 rounded-full border-2 border-outline flex items-center justify-center transition-colors">
+<div class="w-2 h-2 bg-surface rounded-full"></div>
+</div>
+<span class="font-body-md text-body-md text-on-surface">Protein sentezini gerçekleştirmek</span>
+</div>
+</label>
+<!-- Option C -->
+<label class="relative cursor-pointer group">
+<input class="exam-radio sr-only" name="q1" type="radio"/>
+<div class="w-full border border-border rounded-lg p-4 flex items-center gap-3 transition-colors group-hover:bg-surface-container-low group-active:scale-[0.99]">
+<div class="radio-inner w-5 h-5 rounded-full border-2 border-outline flex items-center justify-center transition-colors">
+<div class="w-2 h-2 bg-surface rounded-full"></div>
+</div>
+<span class="font-body-md text-body-md text-on-surface">Hücreye şekil vermek</span>
+</div>
+</label>
+<!-- Option D -->
+<label class="relative cursor-pointer group">
+<input class="exam-radio sr-only" name="q1" type="radio"/>
+<div class="w-full border border-border rounded-lg p-4 flex items-center gap-3 transition-colors group-hover:bg-surface-container-low group-active:scale-[0.99]">
+<div class="radio-inner w-5 h-5 rounded-full border-2 border-outline flex items-center justify-center transition-colors">
+<div class="w-2 h-2 bg-surface rounded-full"></div>
+</div>
+<span class="font-body-md text-body-md text-on-surface">Dış ortamla iletişimi sağlamak</span>
+</div>
+</label>
+</div>
+</div>
+<!-- Card 2: True/False Question -->
+<div class="bg-surface rounded-[16px] p-4 border border-border shadow-sm">
+<div class="flex justify-between items-center mb-3">
+<span class="font-label-md text-label-md text-on-surface-variant bg-surface-container-low px-2.5 py-1 rounded-md">Soru 2</span>
+<span class="font-caption text-caption text-outline">5 Puan</span>
+</div>
+<p class="font-body-lg text-body-lg text-on-surface mb-5 font-medium leading-relaxed">
+                    DNA replikasyonu sadece hücre bölünmesinden önce gerçekleşir.
+                </p>
+<div class="grid grid-cols-2 gap-3">
+<label class="relative cursor-pointer group">
+<input class="peer sr-only" name="q2" type="radio" value="true"/>
+<div class="h-14 border border-border rounded-lg flex items-center justify-center gap-2 transition-all peer-checked:bg-success-light peer-checked:border-success peer-checked:text-success text-on-surface-variant hover:bg-surface-container-low active:scale-[0.98]">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">check_circle</span>
+<span class="font-title-md text-title-md">Doğru</span>
+</div>
+</label>
+<label class="relative cursor-pointer group">
+<input class="peer sr-only" name="q2" type="radio" value="false"/>
+<div class="h-14 border border-border rounded-lg flex items-center justify-center gap-2 transition-all peer-checked:bg-error-light peer-checked:border-error peer-checked:text-error text-on-surface-variant hover:bg-surface-container-low active:scale-[0.98]">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">cancel</span>
+<span class="font-title-md text-title-md">Yanlış</span>
+</div>
+</label>
+</div>
+</div>
+<!-- Card 3: Short Answer / Essay -->
+<div class="bg-surface rounded-[16px] p-4 border border-border shadow-sm">
+<div class="flex justify-between items-center mb-3">
+<span class="font-label-md text-label-md text-on-surface-variant bg-surface-container-low px-2.5 py-1 rounded-md">Soru 3</span>
+<span class="font-caption text-caption text-outline">15 Puan</span>
+</div>
+<p class="font-body-lg text-body-lg text-on-surface mb-4 font-medium leading-relaxed">
+                    Fotosentez ve hücresel solunum arasındaki temel enerji dönüşümü farklılığını kısaca açıklayınız.
+                </p>
+<div class="relative">
+<textarea class="w-full min-h-[120px] p-4 bg-surface border border-outline-variant rounded-lg font-body-md text-body-md text-on-surface focus:border-primary focus:ring-1 focus:ring-primary transition-colors resize-y" placeholder="Cevabınızı buraya yazınız..."></textarea>
+<div class="absolute bottom-3 right-3 flex items-center gap-1 text-on-surface-variant">
+<span class="material-symbols-outlined text-[16px]">edit</span>
+</div>
+</div>
+</div>
+</main>
+<!-- Sticky Bottom Action Bar -->
+<div class="fixed bottom-0 w-full max-w-container-max-student bg-surface border-t border-border shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.05)] p-margin-mobile z-50">
+<div class="flex items-center gap-3">
+<!-- Empty Questions Badge -->
+<div class="flex-shrink-0 flex items-center justify-center bg-warning-light text-warning font-label-md text-label-md px-3 h-14 rounded-lg border border-warning/20">
+                    3 soru boş
+                </div>
+<!-- Submit Button -->
+<button class="flex-1 h-14 bg-success text-on-primary font-title-md text-title-md rounded-lg flex items-center justify-center gap-2 hover:bg-success/90 active:scale-[0.98] transition-all shadow-sm">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">send</span>
+                    Sınavı Gönder
+                </button>
+</div>
+<!-- Safe area spacing for mobile devices -->
+<div class="h-safe-bottom"></div>
+</div>
+</div>
+</body></html>

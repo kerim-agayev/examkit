@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Sorular - ExamKit</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "on-background": "#171c1f",
+                    "on-primary-fixed": "#00174b",
+                    "on-primary-fixed-variant": "#003ea8",
+                    "surface-dim": "#d6dade",
+                    "background": "#f6fafe",
+                    "surface-container-lowest": "#ffffff",
+                    "primary-dark": "#1E40AF",
+                    "surface-tint": "#0053db",
+                    "secondary-fixed": "#d5e3fc",
+                    "info-light": "#E0F2FE",
+                    "warning": "#D97706",
+                    "success-light": "#D1FAE5",
+                    "success": "#059669",
+                    "on-error-container": "#93000a",
+                    "tertiary-container": "#007d57",
+                    "secondary-container": "#d5e3fc",
+                    "inverse-primary": "#b4c5ff",
+                    "info": "#0284C7",
+                    "surface-bright": "#f6fafe",
+                    "primary-fixed-dim": "#b4c5ff",
+                    "secondary": "#515f74",
+                    "on-primary": "#ffffff",
+                    "error-light": "#FEE2E2",
+                    "surface-container-highest": "#dfe3e7",
+                    "tertiary": "#006243",
+                    "secondary-fixed-dim": "#b9c7df",
+                    "outline-variant": "#c3c6d7",
+                    "tertiary-fixed": "#85f8c4",
+                    "surface-container": "#eaeef2",
+                    "primary-container": "#2563eb",
+                    "inverse-on-surface": "#edf1f5",
+                    "primary-light": "#DBEAFE",
+                    "on-secondary-fixed": "#0d1c2e",
+                    "warning-light": "#FEF3C7",
+                    "on-surface": "#171c1f",
+                    "on-tertiary-container": "#bdffdc",
+                    "on-error": "#ffffff",
+                    "on-surface-variant": "#434655",
+                    "surface": "#FFFFFF",
+                    "surface-container-high": "#e4e9ed",
+                    "outline": "#737686",
+                    "tertiary-fixed-dim": "#68dba9",
+                    "primary-fixed": "#dbe1ff",
+                    "on-secondary-fixed-variant": "#3a485b",
+                    "error-container": "#ffdad6",
+                    "primary": "#004ac6",
+                    "error": "#DC2626",
+                    "text-primary": "#0F172A",
+                    "inverse-surface": "#2c3134",
+                    "surface-container-low": "#f0f4f8",
+                    "on-tertiary-fixed-variant": "#005137",
+                    "on-primary-container": "#eeefff",
+                    "on-secondary": "#ffffff",
+                    "on-tertiary": "#ffffff",
+                    "surface-variant": "#dfe3e7",
+                    "border": "#E2E8F0",
+                    "on-tertiary-fixed": "#002114",
+                    "on-secondary-container": "#57657a"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "unit": "8px",
+                    "gutter": "16px",
+                    "container-max-student": "480px",
+                    "margin-desktop": "24px",
+                    "margin-mobile": "16px"
+            },
+            "fontFamily": {
+                    "label-md": [
+                            "Inter"
+                    ],
+                    "title-md": [
+                            "Inter"
+                    ],
+                    "headline": [
+                            "Inter"
+                    ],
+                    "body-md": [
+                            "Inter"
+                    ],
+                    "title-lg": [
+                            "Inter"
+                    ],
+                    "body-lg": [
+                            "Inter"
+                    ],
+                    "display": [
+                            "Inter"
+                    ],
+                    "caption": [
+                            "Inter"
+                    ]
+            },
+            "fontSize": {
+                    "label-md": [
+                            "14px",
+                            {
+                                    "lineHeight": "20px",
+                                    "letterSpacing": "0.01em",
+                                    "fontWeight": "500"
+                            }
+                    ],
+                    "title-md": [
+                            "18px",
+                            {
+                                    "lineHeight": "24px",
+                                    "fontWeight": "600"
+                            }
+                    ],
+                    "headline": [
+                            "26px",
+                            {
+                                    "lineHeight": "32px",
+                                    "letterSpacing": "-0.01em",
+                                    "fontWeight": "700"
+                            }
+                    ],
+                    "body-md": [
+                            "16px",
+                            {
+                                    "lineHeight": "24px",
+                                    "fontWeight": "400"
+                            }
+                    ],
+                    "title-lg": [
+                            "22px",
+                            {
+                                    "lineHeight": "28px",
+                                    "fontWeight": "600"
+                            }
+                    ],
+                    "body-lg": [
+                            "18px",
+                            {
+                                    "lineHeight": "28px",
+                                    "fontWeight": "400"
+                            }
+                    ],
+                    "display": [
+                            "32px",
+                            {
+                                    "lineHeight": "40px",
+                                    "letterSpacing": "-0.02em",
+                                    "fontWeight": "700"
+                            }
+                    ],
+                    "caption": [
+                            "12px",
+                            {
+                                    "lineHeight": "16px",
+                                    "fontWeight": "400"
+                            }
+                    ]
+            }
+    },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .material-symbols-outlined.fill {
+            font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        body {
+            background-color: #F1F5F9; /* Level 0 background as per spec */
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="font-body-md text-on-surface antialiased h-screen flex justify-center w-full">
+<!-- Mobile Container (Simulated Flutter App) -->
+<div class="w-full max-w-container-max-student bg-[#F1F5F9] h-full flex flex-col relative overflow-hidden shadow-2xl">
+<!-- App Bar -->
+<header class="w-full h-[64px] bg-surface flex justify-between items-center px-margin-mobile border-b border-border z-10 shrink-0">
+<div class="flex items-center gap-4">
+<button class="p-2 -ml-2 rounded-full hover:bg-surface-container-low transition-colors active:scale-95 text-on-surface-variant">
+<span class="material-symbols-outlined">arrow_back</span>
+</button>
+<h1 class="font-title-lg text-title-lg text-text-primary font-bold">Sorular</h1>
+</div>
+<div class="bg-primary-light text-primary-dark font-label-md text-label-md px-3 py-1.5 rounded-full flex items-center gap-1">
+<span>Toplam: 65 puan</span>
+</div>
+</header>
+<!-- Stepper -->
+<div class="w-full bg-surface px-margin-mobile py-4 border-b border-border shrink-0 z-10">
+<div class="flex justify-between items-center relative">
+<!-- Connecting Line -->
+<div class="absolute top-1/2 left-0 w-full h-[2px] bg-surface-container-high -z-0 -translate-y-1/2"></div>
+<!-- Steps -->
+<!-- Step 1 -->
+<div class="relative z-10 flex flex-col items-center gap-1">
+<div class="w-6 h-6 rounded-full bg-primary flex items-center justify-center text-on-primary">
+<span class="material-symbols-outlined text-[14px]">check</span>
+</div>
+</div>
+<!-- Step 2 -->
+<div class="relative z-10 flex flex-col items-center gap-1">
+<div class="w-6 h-6 rounded-full bg-primary flex items-center justify-center text-on-primary">
+<span class="material-symbols-outlined text-[14px]">check</span>
+</div>
+</div>
+<!-- Step 3 (Active) -->
+<div class="relative z-10 flex flex-col items-center gap-1">
+<div class="w-6 h-6 rounded-full bg-primary flex items-center justify-center text-on-primary font-label-md text-label-md">
+                        3
+                    </div>
+</div>
+<!-- Step 4 -->
+<div class="relative z-10 flex flex-col items-center gap-1">
+<div class="w-6 h-6 rounded-full bg-surface-container-high border-2 border-surface-container-high flex items-center justify-center text-on-surface-variant font-label-md text-label-md">
+                        4
+                    </div>
+</div>
+<!-- Step 5 -->
+<div class="relative z-10 flex flex-col items-center gap-1">
+<div class="w-6 h-6 rounded-full bg-surface-container-high border-2 border-surface-container-high flex items-center justify-center text-on-surface-variant font-label-md text-label-md">
+                        5
+                    </div>
+</div>
+</div>
+</div>
+<!-- Question List -->
+<main class="flex-1 overflow-y-auto px-margin-mobile py-6 flex flex-col gap-[8px] pb-32">
+<!-- Card 1 (ÇSM) -->
+<div class="bg-surface rounded-lg p-3 flex items-center gap-3 h-[80px] shadow-sm border border-border">
+<div class="text-outline cursor-grab active:cursor-grabbing hover:text-on-surface-variant transition-colors">
+<span class="material-symbols-outlined">drag_indicator</span>
+</div>
+<div class="bg-primary-light text-primary-dark font-caption text-caption px-2 py-1 rounded w-[40px] text-center shrink-0 font-medium">
+                    ÇSM
+                </div>
+<div class="flex-1 min-w-0">
+<p class="font-body-md text-body-md text-text-primary truncate font-medium">Mitoz bölünmənin əsas mərhələ...</p>
+</div>
+<div class="flex items-center gap-2 shrink-0">
+<span class="font-caption text-caption text-on-surface-variant bg-surface-container-low px-2 py-1 rounded">3 puan</span>
+<button class="text-on-surface-variant hover:text-primary transition-colors p-1 rounded-full hover:bg-surface-container-low">
+<span class="material-symbols-outlined text-[20px]">edit</span>
+</button>
+<button class="text-on-surface-variant hover:text-error transition-colors p-1 rounded-full hover:bg-error-light">
+<span class="material-symbols-outlined text-[20px]">delete</span>
+</button>
+</div>
+</div>
+<!-- Card 2 (D/Y) -->
+<div class="bg-surface rounded-lg p-3 flex items-center gap-3 h-[80px] shadow-sm border border-border">
+<div class="text-outline cursor-grab active:cursor-grabbing hover:text-on-surface-variant transition-colors">
+<span class="material-symbols-outlined">drag_indicator</span>
+</div>
+<div class="bg-success-light text-success font-caption text-caption px-2 py-1 rounded w-[40px] text-center shrink-0 font-medium">
+                    D/Y
+                </div>
+<div class="flex-1 min-w-0">
+<p class="font-body-md text-body-md text-text-primary truncate font-medium">Hüceyrə nəzəriyyəsinin əsas m...</p>
+</div>
+<div class="flex items-center gap-2 shrink-0">
+<span class="font-caption text-caption text-on-surface-variant bg-surface-container-low px-2 py-1 rounded">2 puan</span>
+<button class="text-on-surface-variant hover:text-primary transition-colors p-1 rounded-full hover:bg-surface-container-low">
+<span class="material-symbols-outlined text-[20px]">edit</span>
+</button>
+<button class="text-on-surface-variant hover:text-error transition-colors p-1 rounded-full hover:bg-error-light">
+<span class="material-symbols-outlined text-[20px]">delete</span>
+</button>
+</div>
+</div>
+<!-- Card 3 (KA) -->
+<div class="bg-surface rounded-lg p-3 flex items-center gap-3 h-[80px] shadow-sm border border-border">
+<div class="text-outline cursor-grab active:cursor-grabbing hover:text-on-surface-variant transition-colors">
+<span class="material-symbols-outlined">drag_indicator</span>
+</div>
+<div class="bg-[#F3E8FF] text-[#7E22CE] font-caption text-caption px-2 py-1 rounded w-[40px] text-center shrink-0 font-medium">
+                    KA
+                </div>
+<div class="flex-1 min-w-0">
+<p class="font-body-md text-body-md text-text-primary truncate font-medium">Fotosintez prosesinin qısa tə...</p>
+</div>
+<div class="flex items-center gap-2 shrink-0">
+<span class="font-caption text-caption text-on-surface-variant bg-surface-container-low px-2 py-1 rounded">5 puan</span>
+<button class="text-on-surface-variant hover:text-primary transition-colors p-1 rounded-full hover:bg-surface-container-low">
+<span class="material-symbols-outlined text-[20px]">edit</span>
+</button>
+<button class="text-on-surface-variant hover:text-error transition-colors p-1 rounded-full hover:bg-error-light">
+<span class="material-symbols-outlined text-[20px]">delete</span>
+</button>
+</div>
+</div>
+</main>
+<!-- Extended FAB -->
+<div class="absolute bottom-8 left-1/2 -translate-x-1/2 z-20" id="addQuestionFab">
+<button class="bg-primary-container text-on-primary h-[56px] rounded-full px-6 flex items-center gap-2 shadow-[0_4px_12px_rgba(37,99,235,0.3)] hover:bg-primary-dark transition-all active:scale-95 font-title-md text-title-md font-bold">
+<span class="material-symbols-outlined">add</span>
+                Soru Ekle
+            </button>
+</div>
+<!-- Simulated Bottom Sheet Overlay (Hidden by default, shown for demo purposes) -->
+<div class="absolute inset-0 bg-[#0F172A]/30 z-30 flex flex-col justify-end hidden opacity-0 transition-opacity duration-300" id="bottomSheetOverlay">
+<!-- Bottom Sheet Content -->
+<div class="bg-surface w-full rounded-t-xl px-margin-mobile pt-2 pb-8 shadow-[0_-4px_24px_rgba(0,0,0,0.1)] transform translate-y-full transition-transform duration-300" id="bottomSheet">
+<!-- Drag Handle -->
+<div class="w-12 h-1 bg-surface-container-highest rounded-full mx-auto mb-6"></div>
+<h2 class="font-title-lg text-title-lg font-bold text-text-primary mb-4">Soru Tipi Seçin</h2>
+<div class="flex flex-col gap-2">
+<button class="flex items-center gap-4 p-4 rounded-lg hover:bg-surface-container-low transition-colors w-full text-left">
+<div class="w-10 h-10 rounded-full bg-primary-light text-primary-dark flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined">radio_button_checked</span>
+</div>
+<div class="flex-1">
+<span class="font-title-md text-title-md text-text-primary block">Çoktan Seçmeli</span>
+<span class="font-caption text-caption text-on-surface-variant">Seçeneklerden tek doğru cevap</span>
+</div>
+</button>
+<button class="flex items-center gap-4 p-4 rounded-lg hover:bg-surface-container-low transition-colors w-full text-left">
+<div class="w-10 h-10 rounded-full bg-success-light text-success flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined">rule</span>
+</div>
+<div class="flex-1">
+<span class="font-title-md text-title-md text-text-primary block">Doğru / Yanlış</span>
+<span class="font-caption text-caption text-on-surface-variant">İki seçenekli basit değerlendirme</span>
+</div>
+</button>
+<button class="flex items-center gap-4 p-4 rounded-lg hover:bg-surface-container-low transition-colors w-full text-left">
+<div class="w-10 h-10 rounded-full bg-[#F3E8FF] text-[#7E22CE] flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined">short_text</span>
+</div>
+<div class="flex-1">
+<span class="font-title-md text-title-md text-text-primary block">Kısa Cevap</span>
+<span class="font-caption text-caption text-on-surface-variant">Öğrencinin metin girdiği format</span>
+</div>
+</button>
+</div>
+</div>
+</div>
+</div>
+<script>
+        // Simple vanilla JS to handle the bottom sheet interaction
+        document.addEventListener('DOMContentLoaded', () => {
+            const fab = document.getElementById('addQuestionFab');
+            const overlay = document.getElementById('bottomSheetOverlay');
+            const sheet = document.getElementById('bottomSheet');
+
+            function openSheet() {
+                overlay.classList.remove('hidden');
+                // Trigger reflow
+                void overlay.offsetWidth;
+                overlay.classList.remove('opacity-0');
+                sheet.classList.remove('translate-y-full');
+            }
+
+            function closeSheet() {
+                overlay.classList.add('opacity-0');
+                sheet.classList.add('translate-y-full');
+                setTimeout(() => {
+                    overlay.classList.add('hidden');
+                }, 300); // Wait for transition
+            }
+
+            // Open sheet on FAB click
+            fab.addEventListener('click', openSheet);
+
+            // Close sheet when clicking on overlay
+            overlay.addEventListener('click', (e) => {
+                if (e.target === overlay) {
+                    closeSheet();
+                }
+            });
+        });
+    </script>
+</body></html>

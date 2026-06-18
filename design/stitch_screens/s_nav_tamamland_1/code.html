@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+
+<html class="light" lang="tr"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Sınav Tamamlandı</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface-container-lowest": "#ffffff",
+                        "primary-fixed": "#dbe1ff",
+                        "on-primary-fixed": "#00174b",
+                        "secondary-container": "#d5e3fc",
+                        "on-secondary": "#ffffff",
+                        "on-primary-fixed-variant": "#003ea8",
+                        "secondary-fixed": "#d5e3fc",
+                        "on-secondary-container": "#57657a",
+                        "tertiary-container": "#007d57",
+                        "tertiary-fixed": "#85f8c4",
+                        "inverse-primary": "#b4c5ff",
+                        "on-surface-variant": "#434655",
+                        "on-primary-container": "#eeefff",
+                        "success-light": "#D1FAE5",
+                        "on-tertiary-container": "#bdffdc",
+                        "background": "#f6fafe",
+                        "on-surface": "#171c1f",
+                        "surface-dim": "#d6dade",
+                        "error": "#DC2626",
+                        "surface": "#FFFFFF",
+                        "info": "#0284C7",
+                        "surface-container-high": "#e4e9ed",
+                        "error-light": "#FEE2E2",
+                        "surface-bright": "#f6fafe",
+                        "warning-light": "#FEF3C7",
+                        "warning": "#D97706",
+                        "on-tertiary-fixed": "#002114",
+                        "surface-container-low": "#f0f4f8",
+                        "tertiary-fixed-dim": "#68dba9",
+                        "on-error": "#ffffff",
+                        "surface-container-highest": "#dfe3e7",
+                        "outline-variant": "#c3c6d7",
+                        "surface-container": "#eaeef2",
+                        "inverse-on-surface": "#edf1f5",
+                        "text-primary": "#0F172A",
+                        "border": "#E2E8F0",
+                        "secondary-fixed-dim": "#b9c7df",
+                        "on-primary": "#ffffff",
+                        "inverse-surface": "#2c3134",
+                        "on-error-container": "#93000a",
+                        "primary-container": "#2563eb",
+                        "primary-dark": "#1E40AF",
+                        "success": "#059669",
+                        "on-secondary-fixed": "#0d1c2e",
+                        "surface-tint": "#0053db",
+                        "info-light": "#E0F2FE",
+                        "tertiary": "#006243",
+                        "surface-variant": "#dfe3e7",
+                        "on-tertiary-fixed-variant": "#005137",
+                        "primary-fixed-dim": "#b4c5ff",
+                        "primary": "#004ac6",
+                        "error-container": "#ffdad6",
+                        "primary-light": "#DBEAFE",
+                        "on-tertiary": "#ffffff",
+                        "on-secondary-fixed-variant": "#3a485b",
+                        "secondary": "#515f74",
+                        "outline": "#737686",
+                        "on-background": "#171c1f"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "unit": "8px",
+                        "margin-desktop": "24px",
+                        "margin-mobile": "16px",
+                        "gutter": "16px",
+                        "container-max-student": "480px"
+                    },
+                    "fontFamily": {
+                        "headline": ["Inter"],
+                        "display": ["Inter"],
+                        "label-md": ["Inter"],
+                        "title-lg": ["Inter"],
+                        "caption": ["Inter"],
+                        "body-lg": ["Inter"],
+                        "title-md": ["Inter"],
+                        "body-md": ["Inter"]
+                    },
+                    "fontSize": {
+                        "headline": ["26px", { "lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "700" }],
+                        "display": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "label-md": ["14px", { "lineHeight": "20px", "letterSpacing": "0.01em", "fontWeight": "500" }],
+                        "title-lg": ["22px", { "lineHeight": "28px", "fontWeight": "600" }],
+                        "caption": ["12px", { "lineHeight": "16px", "fontWeight": "400" }],
+                        "body-lg": ["18px", { "lineHeight": "28px", "fontWeight": "400" }],
+                        "title-md": ["18px", { "lineHeight": "24px", "fontWeight": "600" }],
+                        "body-md": ["16px", { "lineHeight": "24px", "fontWeight": "400" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .checkmark-circle {
+            stroke-dasharray: 166;
+            stroke-dashoffset: 166;
+            stroke-width: 4;
+            stroke-miterlimit: 10;
+            stroke: #059669; /* success */
+            fill: none;
+            animation: stroke 0.6s cubic-bezier(0.65, 0, 0.45, 1) forwards;
+        }
+
+        .checkmark {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            display: block;
+            stroke-width: 4;
+            stroke: #059669; /* success */
+            stroke-miterlimit: 10;
+            margin: 10% auto;
+            box-shadow: inset 0px 0px 0px #059669;
+            animation: fill .4s ease-in-out .4s forwards, scale .3s ease-in-out .9s both;
+        }
+
+        .checkmark-check {
+            transform-origin: 50% 50%;
+            stroke-dasharray: 48;
+            stroke-dashoffset: 48;
+            animation: stroke 0.3s cubic-bezier(0.65, 0, 0.45, 1) 0.8s forwards;
+        }
+
+        @keyframes stroke {
+            100% {
+                stroke-dashoffset: 0;
+            }
+        }
+
+        @keyframes scale {
+            0%, 100% {
+                transform: none;
+            }
+            50% {
+                transform: scale3d(1.1, 1.1, 1);
+            }
+        }
+
+        @keyframes fill {
+            100% {
+                box-shadow: inset 0px 0px 0px 30px #D1FAE5; /* success-light */
+            }
+        }
+        
+        .dot-anim:after {
+            content: ' .';
+            animation: dots 1.5s steps(5, end) infinite;
+        }
+        
+        @keyframes dots {
+            0%, 20% { content: ''; }
+            40% { content: '.'; }
+            60% { content: '..'; }
+            80%, 100% { content: '...'; }
+        }
+
+        .loading-bar {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            height: 4px;
+            background-color: #2563eb; /* primary-container */
+            width: 0;
+            animation: loadProgress 2s ease-in-out infinite alternate;
+            border-radius: 0 0 0.5rem 0.5rem;
+        }
+        
+        @keyframes loadProgress {
+            0% { width: 0; }
+            100% { width: 100%; }
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+</head>
+<body class="bg-surface text-on-surface h-screen w-screen flex items-center justify-center m-0 p-0 overflow-hidden font-body-md">
+<!-- Mobile-first Container -->
+<main class="w-full max-w-container-student h-full flex flex-col items-center justify-center p-margin-mobile relative">
+<!-- Center Content Card -->
+<div aria-live="polite" class="relative bg-surface rounded-xl flex flex-col items-center justify-center p-8 w-full max-w-sm text-center focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2" role="status" tabindex="0">
+<!-- Animated Green Checkmark -->
+<div class="mb-6 flex justify-center w-full">
+<svg aria-hidden="true" class="checkmark" viewbox="0 0 52 52" xmlns="http://www.w3.org/2000/svg">
+<circle class="checkmark-circle" cx="26" cy="26" fill="none" r="25"></circle>
+<path class="checkmark-check" d="M14.1 27.2l7.1 7.2 16.7-16.8" fill="none"></path>
+</svg>
+</div>
+<!-- Headline -->
+<h1 class="font-headline text-headline text-text-primary mb-2">
+                Sınav Tamamlandı! 🎉
+            </h1>
+<!-- Subtext with Dot Animation -->
+<p class="font-body-lg text-body-lg text-on-surface-variant flex items-center justify-center">
+                Sonuçlar hesaplanıyor<span aria-hidden="true" class="dot-anim inline-block w-4 text-left"></span>
+</p>
+<!-- Loading Bar -->
+<div aria-label="Yükleniyor" aria-valuemax="100" aria-valuemin="0" class="absolute bottom-0 left-0 w-full h-1 bg-surface-container-low rounded-b-xl overflow-hidden" role="progressbar">
+<div class="h-full bg-primary-container animate-[loadProgress_2s_ease-in-out_infinite_alternate]"></div>
+</div>
+</div>
+</main>
+<!-- Contextual FAB Suppression: No FAB on this transitional screen -->
+<!-- Shell Visibility & Relevance: No TopAppBar or BottomNavBar as this is a linear/transactional success screen -->
+</body></html>

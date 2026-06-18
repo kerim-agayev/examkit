@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+
+<html lang="tr"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "tertiary-container": "#007d57",
+                    "secondary-fixed-dim": "#b9c7df",
+                    "on-secondary": "#ffffff",
+                    "on-primary-container": "#eeefff",
+                    "on-surface": "#171c1f",
+                    "surface": "#FFFFFF",
+                    "error": "#DC2626",
+                    "on-secondary-fixed-variant": "#3a485b",
+                    "primary-fixed-dim": "#b4c5ff",
+                    "error-light": "#FEE2E2",
+                    "surface-bright": "#f6fafe",
+                    "surface-variant": "#dfe3e7",
+                    "border": "#E2E8F0",
+                    "on-primary": "#ffffff",
+                    "info": "#0284C7",
+                    "secondary-fixed": "#d5e3fc",
+                    "inverse-on-surface": "#edf1f5",
+                    "text-primary": "#0F172A",
+                    "primary-fixed": "#dbe1ff",
+                    "on-tertiary-fixed-variant": "#005137",
+                    "tertiary": "#006243",
+                    "info-light": "#E0F2FE",
+                    "on-primary-fixed-variant": "#003ea8",
+                    "surface-container-lowest": "#ffffff",
+                    "error-container": "#ffdad6",
+                    "success-light": "#D1FAE5",
+                    "surface-container": "#eaeef2",
+                    "success": "#059669",
+                    "on-secondary-fixed": "#0d1c2e",
+                    "primary": "#004ac6",
+                    "on-primary-fixed": "#00174b",
+                    "background": "#f6fafe",
+                    "on-tertiary-fixed": "#002114",
+                    "warning-light": "#FEF3C7",
+                    "surface-container-highest": "#dfe3e7",
+                    "on-secondary-container": "#57657a",
+                    "warning": "#D97706",
+                    "inverse-primary": "#b4c5ff",
+                    "secondary-container": "#d5e3fc",
+                    "on-background": "#171c1f",
+                    "tertiary-fixed": "#85f8c4",
+                    "surface-container-high": "#e4e9ed",
+                    "primary-light": "#DBEAFE",
+                    "on-error-container": "#93000a",
+                    "surface-container-low": "#f0f4f8",
+                    "primary-container": "#2563eb",
+                    "tertiary-fixed-dim": "#68dba9",
+                    "secondary": "#515f74",
+                    "outline": "#737686",
+                    "on-surface-variant": "#434655",
+                    "on-tertiary-container": "#bdffdc",
+                    "surface-tint": "#0053db",
+                    "inverse-surface": "#2c3134",
+                    "on-tertiary": "#ffffff",
+                    "on-error": "#ffffff",
+                    "surface-dim": "#d6dade",
+                    "outline-variant": "#c3c6d7",
+                    "primary-dark": "#1E40AF"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "gutter": "16px",
+                    "container-max-student": "480px",
+                    "margin-desktop": "24px",
+                    "margin-mobile": "16px",
+                    "unit": "8px"
+            },
+            "fontFamily": {
+                    "body-lg": ["Inter"],
+                    "caption": ["Inter"],
+                    "label-md": ["Inter"],
+                    "body-md": ["Inter"],
+                    "title-lg": ["Inter"],
+                    "display": ["Inter"],
+                    "title-md": ["Inter"],
+                    "headline": ["Inter"]
+            },
+            "fontSize": {
+                    "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                    "caption": ["12px", {"lineHeight": "16px", "fontWeight": "400"}],
+                    "label-md": ["14px", {"lineHeight": "20px", "letterSpacing": "0.01em", "fontWeight": "500"}],
+                    "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                    "title-lg": ["22px", {"lineHeight": "28px", "fontWeight": "600"}],
+                    "display": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "title-md": ["18px", {"lineHeight": "24px", "fontWeight": "600"}],
+                    "headline": ["26px", {"lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "700"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        body {
+            font-family: 'Inter', sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        /* Mobile-first centered container for desktop preview */
+        @media (min-width: 600px) {
+            .app-container {
+                max-width: 480px;
+                margin: 0 auto;
+                box-shadow: 0 4px 64px rgba(0,0,0,0.1);
+                min-height: 100vh;
+            }
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-surface text-on-surface">
+<div class="app-container flex flex-col min-h-screen bg-surface">
+<!-- Illustration Section -->
+<div class="flex-grow flex flex-col items-center justify-center px-gutter">
+<div class="w-full aspect-square max-w-[320px] mb-12 relative">
+<!-- Decorative Geometric Elements (Material 3 Style) -->
+<div class="absolute inset-0 bg-primary-container/5 rounded-[48px] rotate-6 transform transition-transform duration-700 hover:rotate-12"></div>
+<div class="absolute inset-0 bg-primary-container/10 rounded-[48px] -rotate-3 transform transition-transform duration-700 hover:-rotate-6"></div>
+<div class="relative w-full h-full flex items-center justify-center p-8">
+<img alt="Onboarding Illustration" class="w-full h-full object-contain drop-shadow-xl" data-alt="A minimalist abstract education illustration for a teacher app featuring geometric shapes like cubes and spheres connected by lines representing a digital network of information. The entire composition uses shades of royal blue #2563EB on a clean white background, maintaining a high-end corporate tech aesthetic with soft shadows and clean lines. The lighting is soft and even, highlighting the precision and academic rigor of the ExamKit brand." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDVA32_TPeDG-ZqMwmyS096w2fyTh0dAmhMDn_IijYG1BMJdEMqpb_waty6atUJbJMoNIQmrO8DRd-90ZpuNpvyLOBiZkkirfMvFgU11aqMhMXBoMJRq2hOFh1E7eHljpcDb46wCETIX6LgNYLxu6tMoXApPKkQta_Acp3kDdOycx2z6WcbvMnpJLhDmrGhBt34uQxs8x_HZXb2s2LJ2bJEB68K9tje43770Zkn1-yM5egIbT-yDigzle1IpQN-xAlXrHLUdgVcSSY"/>
+</div>
+</div>
+<!-- Content Section -->
+<div class="text-center w-full max-w-sm">
+<h1 class="font-title-lg text-title-lg text-primary mb-4">
+                    WhatsApp ile tek tuşta paylaş
+                </h1>
+<p class="font-body-md text-body-md text-on-surface-variant px-4">
+                    Oluşturduğun sınavı tek dokunuşla WhatsApp grubuna gönder
+                </p>
+</div>
+</div>
+<!-- Footer Section -->
+<div class="px-gutter pb-margin-mobile flex flex-col gap-6 items-center">
+<!-- 3 Dots Indicator -->
+<div class="flex gap-2">
+<div class="w-2 h-2 rounded-full bg-outline-variant"></div>
+<div class="w-6 h-2 rounded-full bg-primary transition-all duration-300"></div>
+<div class="w-2 h-2 rounded-full bg-outline-variant"></div>
+</div>
+<!-- Action Buttons -->
+<div class="w-full flex flex-col gap-4">
+<button class="w-full h-[56px] bg-primary-container text-white font-bold text-body-lg rounded-xl flex items-center justify-center active:scale-[0.98] transition-transform shadow-md">
+                    Devam Et
+                </button>
+<button class="w-full py-2 text-on-surface-variant font-label-md hover:text-primary transition-colors active:scale-95">
+                    Atla
+                </button>
+</div>
+</div>
+</div>
+<!-- Micro-interaction Script -->
+<script>
+        document.querySelector('button').addEventListener('click', function() {
+            // Logic for navigation would go here
+            console.log('Navigating to next onboarding step...');
+        });
+
+        // Add a subtle entrance animation
+        window.onload = () => {
+            const elements = document.querySelectorAll('.app-container > div');
+            elements.forEach((el, index) => {
+                el.style.opacity = '0';
+                el.style.transform = 'translateY(20px)';
+                setTimeout(() => {
+                    el.style.transition = 'all 0.6s cubic-bezier(0.22, 1, 0.36, 1)';
+                    el.style.opacity = '1';
+                    el.style.transform = 'translateY(0)';
+                }, index * 100);
+            });
+        };
+    </script>
+</body></html>

@@ -1,0 +1,111 @@
+# =============================================================================
+# ExamKit — .gitignore
+# =============================================================================
+# KRİTİK: Firebase secret'ları (API key, app id vb.) ASLA repoya commit edilmez.
+# Aşağıdaki dosyalar CANLI Firebase proje kimlik bilgileri içerir ve
+# docs/phase_1/secrets_management.md prosedürüne göre yönetilir.
+# =============================================================================
+
+# --- Firebase secrets (CANLI — commit YASAK) ---
+google-services.json
+GoogleService-Info.plist
+docs/phase_1/for_firebase.txt
+**/google-services.json
+**/GoogleService-Info.plist
+**/firebase-config*.json
+**/.env.local
+**/.env.*.local
+
+# --- Firestore / RTDB security rules'da örnek değil canlı değer varsa ---
+# (Şimdilik rules dosyaları commit edilir; secret içerirse buraya ekleyin.)
+
+# =============================================================================
+# Stitch / Tasarım kaynakları — heavy asset'ler repoya girmez
+# =============================================================================
+# ZIP ve çıkarılmış mockup'lar too heavy → tasarımda referans olarak tutulur
+# ama push edilmez. (Gerekirse LFS veya ayrı bir design-repo kullanın.)
+stitch_project_starter_kit.zip
+stitch_project_starter_kit/
+
+# =============================================================================
+# OS / Editor genel
+# =============================================================================
+.DS_Store
+Thumbs.db
+desktop.ini
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+.history/
+
+# =============================================================================
+# Flutter (flutter_app/) — NOT: flutter SDK şu an yüklü değil, scaffold bekliyor
+# =============================================================================
+flutter_app/.dart_tool/
+flutter_app/build/
+flutter_app/.flutter-plugins
+flutter_app/.flutter-plugins-dependencies
+flutter_app/.packages
+flutter_app/.pub-cache/
+flutter_app/.pub/
+flutter_app/pubspec.lock
+flutter_app/generated_plugin_registrant.*
+flutter_app/ios/Pods/
+flutter_app/ios/.symlinks/
+flutter_app/ios/Flutter/Flutter.framework
+flutter_app/ios/Flutter/Flutter.podspec
+flutter_app/android/.gradle/
+flutter_app/android/local.properties
+flutter_app/android/key.properties
+flutter_app/android/app/upload-keystore.*
+flutter_app/android/app/*.keystore
+flutter_app/android/app/google-services.json
+**/android/app/google-services.json
+**/ios/Runner/GoogleService-Info.plist
+flutter_app/coverage/
+flutter_app/.coverage/
+flutter_app/**/*.g.dart
+flutter_app/**/*.freezed.dart
+flutter_app/**/*.gr.dart
+flutter_app/**/*.config.dart
+
+# =============================================================================
+# Next.js (student_web/)
+# =============================================================================
+student_web/node_modules/
+student_web/.next/
+student_web/out/
+student_web/build/
+student_web/.vercel/
+student_web/.cloudflare/
+student_web/coverage/
+student_web/.env
+student_web/.env.local
+student_web/.env.*.local
+student_web/*.tsbuildinfo
+student_web/next-env.d.ts
+student_web/.eslintcache
+student_web/.nitro/
+student_web/.output/
+
+# =============================================================================
+# Loglar / Geçici
+# =============================================================================
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+firebase-debug.log
+firestore-debug.log
+*.tmp
+*.bak
+
+# =============================================================================
+# Environment / Local config
+# =============================================================================
+.env
+.env.local
+.env.*.local
+secrets.local.*

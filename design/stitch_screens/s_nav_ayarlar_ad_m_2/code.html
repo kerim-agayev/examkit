@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+
+<html class="light" lang="tr"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport"/>
+<title>Sınav Ayarları - Adım 2</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "success-light": "#D1FAE5",
+                        "inverse-surface": "#2c3134",
+                        "surface-tint": "#0053db",
+                        "secondary-fixed": "#d5e3fc",
+                        "warning-light": "#FEF3C7",
+                        "secondary-container": "#d5e3fc",
+                        "on-secondary-fixed": "#0d1c2e",
+                        "on-background": "#171c1f",
+                        "text-primary": "#0F172A",
+                        "surface-container-highest": "#dfe3e7",
+                        "on-secondary": "#ffffff",
+                        "primary": "#004ac6",
+                        "on-tertiary-fixed-variant": "#005137",
+                        "inverse-primary": "#b4c5ff",
+                        "surface-container-high": "#e4e9ed",
+                        "on-tertiary-container": "#bdffdc",
+                        "secondary": "#515f74",
+                        "background": "#f6fafe",
+                        "on-primary-fixed-variant": "#003ea8",
+                        "on-tertiary-fixed": "#002114",
+                        "on-tertiary": "#ffffff",
+                        "error": "#DC2626",
+                        "primary-fixed-dim": "#b4c5ff",
+                        "info-light": "#E0F2FE",
+                        "inverse-on-surface": "#edf1f5",
+                        "primary-light": "#DBEAFE",
+                        "tertiary-fixed-dim": "#68dba9",
+                        "tertiary": "#006243",
+                        "secondary-fixed-dim": "#b9c7df",
+                        "info": "#0284C7",
+                        "primary-container": "#2563eb",
+                        "success": "#059669",
+                        "outline-variant": "#c3c6d7",
+                        "surface-container": "#eaeef2",
+                        "surface": "#FFFFFF",
+                        "surface-dim": "#d6dade",
+                        "surface-variant": "#dfe3e7",
+                        "warning": "#D97706",
+                        "tertiary-container": "#007d57",
+                        "surface-bright": "#f6fafe",
+                        "on-error": "#ffffff",
+                        "on-surface-variant": "#434655",
+                        "surface-container-lowest": "#ffffff",
+                        "on-primary-fixed": "#00174b",
+                        "outline": "#737686",
+                        "tertiary-fixed": "#85f8c4",
+                        "on-primary": "#ffffff",
+                        "on-secondary-container": "#57657a",
+                        "on-error-container": "#93000a",
+                        "error-light": "#FEE2E2",
+                        "error-container": "#ffdad6",
+                        "surface-container-low": "#f0f4f8",
+                        "on-primary-container": "#eeefff",
+                        "primary-fixed": "#dbe1ff",
+                        "on-surface": "#171c1f",
+                        "on-secondary-fixed-variant": "#3a485b",
+                        "border": "#E2E8F0",
+                        "primary-dark": "#1E40AF"
+                    },
+                    borderRadius: {
+                        DEFAULT: "0.25rem",
+                        lg: "0.5rem",
+                        xl: "0.75rem",
+                        full: "9999px"
+                    },
+                    spacing: {
+                        "margin-mobile": "16px",
+                        "gutter": "16px",
+                        "margin-desktop": "24px",
+                        "unit": "8px",
+                        "container-max-student": "480px"
+                    },
+                    fontFamily: {
+                        caption: ["Inter"],
+                        "title-lg": ["Inter"],
+                        "title-md": ["Inter"],
+                        display: ["Inter"],
+                        headline: ["Inter"],
+                        "label-md": ["Inter"],
+                        "body-md": ["Inter"],
+                        "body-lg": ["Inter"]
+                    },
+                    fontSize: {
+                        caption: ["12px", { lineHeight: "16px", fontWeight: "400" }],
+                        "title-lg": ["22px", { lineHeight: "28px", fontWeight: "600" }],
+                        "title-md": ["18px", { lineHeight: "24px", fontWeight: "600" }],
+                        display: ["32px", { lineHeight: "40px", letterSpacing: "-0.02em", fontWeight: "700" }],
+                        headline: ["26px", { lineHeight: "32px", letterSpacing: "-0.01em", fontWeight: "700" }],
+                        "label-md": ["14px", { lineHeight: "20px", letterSpacing: "0.01em", fontWeight: "500" }],
+                        "body-md": ["16px", { lineHeight: "24px", fontWeight: "400" }],
+                        "body-lg": ["18px", { lineHeight: "28px", fontWeight: "400" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        body { background-color: #F1F5F9; }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .material-symbols-outlined.fill {
+            font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        
+        /* Toggle Switch Styles */
+        .toggle-checkbox:checked {
+            right: 0;
+            border-color: #2563eb;
+        }
+        .toggle-checkbox:checked + .toggle-label {
+            background-color: #2563eb;
+        }
+        
+        /* Range Slider Styles */
+        input[type=range]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            height: 20px;
+            width: 20px;
+            border-radius: 50%;
+            background: #2563eb;
+            cursor: pointer;
+            margin-top: -8px; /* You need to specify a margin in Chrome, but in Firefox and IE it is automatic */
+        }
+        input[type=range]::-webkit-slider-runnable-track {
+            width: 100%;
+            height: 4px;
+            cursor: pointer;
+            background: #E2E8F0;
+            border-radius: 2px;
+        }
+        input[type=range]:focus::-webkit-slider-runnable-track {
+            background: #E2E8F0;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="font-body-md text-text-primary antialiased bg-[#F1F5F9] min-h-screen flex flex-col items-center">
+<!-- Container for Web/Mobile fixed width -->
+<div class="w-full max-w-container-max-student bg-[#F1F5F9] min-h-screen flex flex-col relative pb-24 shadow-sm">
+<!-- TopAppBar (Simplified Custom for Exam Flow) -->
+<header class="w-full h-[64px] bg-surface border-b border-border flex justify-between items-center px-margin-mobile sticky top-0 z-50">
+<button class="w-10 h-10 flex items-center justify-center text-on-surface-variant hover:bg-surface-container-low rounded-full transition-colors">
+<span class="material-symbols-outlined">arrow_back</span>
+</button>
+<h1 class="font-title-md text-title-md text-text-primary truncate max-w-[200px]">Biologiya Final...</h1>
+<button class="w-10 h-10 flex items-center justify-center text-on-surface-variant hover:bg-surface-container-low rounded-full transition-colors">
+<span class="material-symbols-outlined">close</span>
+</button>
+</header>
+<!-- Main Content Canvas -->
+<main class="flex-1 flex flex-col px-margin-mobile py-6 gap-6 overflow-y-auto">
+<!-- Stepper -->
+<div class="flex items-center justify-between w-full px-2 mb-2">
+<!-- Step 1 (Completed) -->
+<div class="flex flex-col items-center gap-1 w-1/5 relative">
+<div class="w-6 h-6 rounded-full bg-primary-container text-white flex items-center justify-center z-10">
+<span class="material-symbols-outlined" style="font-size: 14px;">check</span>
+</div>
+<div class="absolute top-3 left-1/2 w-full h-[2px] bg-primary-container -z-10"></div>
+</div>
+<!-- Step 2 (Active) -->
+<div class="flex flex-col items-center gap-1 w-1/5 relative">
+<div class="w-6 h-6 rounded-full bg-primary-container text-white flex items-center justify-center z-10 font-label-md text-label-md">
+                        2
+                    </div>
+<div class="absolute top-3 right-1/2 w-full h-[2px] bg-primary-container -z-10"></div>
+<div class="absolute top-3 left-1/2 w-full h-[2px] bg-border -z-10"></div>
+</div>
+<!-- Step 3 (Inactive) -->
+<div class="flex flex-col items-center gap-1 w-1/5 relative">
+<div class="w-6 h-6 rounded-full bg-surface border-2 border-border text-on-surface-variant flex items-center justify-center z-10 font-label-md text-label-md">
+                        3
+                    </div>
+<div class="absolute top-3 right-1/2 w-full h-[2px] bg-border -z-10"></div>
+<div class="absolute top-3 left-1/2 w-full h-[2px] bg-border -z-10"></div>
+</div>
+<!-- Step 4 (Inactive) -->
+<div class="flex flex-col items-center gap-1 w-1/5 relative">
+<div class="w-6 h-6 rounded-full bg-surface border-2 border-border text-on-surface-variant flex items-center justify-center z-10 font-label-md text-label-md">
+                        4
+                    </div>
+<div class="absolute top-3 right-1/2 w-full h-[2px] bg-border -z-10"></div>
+<div class="absolute top-3 left-1/2 w-full h-[2px] bg-border -z-10"></div>
+</div>
+<!-- Step 5 (Inactive) -->
+<div class="flex flex-col items-center gap-1 w-1/5 relative">
+<div class="w-6 h-6 rounded-full bg-surface border-2 border-border text-on-surface-variant flex items-center justify-center z-10 font-label-md text-label-md">
+                        5
+                    </div>
+<div class="absolute top-3 right-1/2 w-full h-[2px] bg-border -z-10"></div>
+</div>
+</div>
+<h2 class="font-headline text-headline text-text-primary mb-2">Sınav Ayarları</h2>
+<!-- Sınav Modu Section -->
+<section class="bg-surface rounded-xl p-4 shadow-sm border border-border flex flex-col gap-4">
+<h3 class="font-title-md text-title-md text-text-primary">Sınav Modu</h3>
+<!-- Card A (Selected) -->
+<label class="flex items-center gap-4 p-4 rounded-lg border-[2px] border-primary-container bg-primary-light cursor-pointer transition-all">
+<div class="flex-1 flex flex-col gap-1">
+<span class="font-body-md text-body-md font-semibold text-text-primary">Kaydırma Modu</span>
+<span class="font-caption text-caption text-on-surface-variant">Tüm sorular görünür, serbestçe gezilebilir</span>
+</div>
+<div class="flex items-center justify-center w-8 h-8 rounded-full bg-primary-container text-white shrink-0">
+<span class="material-symbols-outlined">layers</span>
+</div>
+<div class="ml-2">
+<input checked="" class="w-5 h-5 text-primary-container focus:ring-primary-container border-gray-300" name="exam_mode" type="radio" value="scroll"/>
+</div>
+</label>
+<!-- Card B (Unselected) -->
+<label class="flex items-center gap-4 p-4 rounded-lg border border-border bg-surface hover:bg-surface-container-low cursor-pointer transition-all">
+<div class="flex-1 flex flex-col gap-1">
+<span class="font-body-md text-body-md font-semibold text-text-primary">Sıralı Mod</span>
+<span class="font-caption text-caption text-on-surface-variant">Soru soru, geri dönülemez</span>
+</div>
+<div class="flex items-center justify-center w-8 h-8 rounded-full bg-surface-container-high text-on-surface-variant shrink-0">
+<span class="material-symbols-outlined">lock</span>
+</div>
+<div class="ml-2">
+<input class="w-5 h-5 text-primary-container focus:ring-primary-container border-gray-300" name="exam_mode" type="radio" value="sequential"/>
+</div>
+</label>
+</section>
+<!-- Zamanlama Section -->
+<section class="bg-surface rounded-xl p-4 shadow-sm border border-border flex flex-col gap-4">
+<h3 class="font-title-md text-title-md text-text-primary">Zamanlama</h3>
+<!-- Genel Süre Sınırı Toggle ON -->
+<div class="flex flex-col gap-3">
+<div class="flex justify-between items-center">
+<span class="font-body-md text-body-md text-text-primary">Genel Süre Sınırı</span>
+<div class="relative inline-block w-12 mr-2 align-middle select-none transition duration-200 ease-in">
+<input checked="" class="toggle-checkbox absolute block w-6 h-6 rounded-full bg-white border-4 appearance-none cursor-pointer z-10 transition-transform duration-200 ease-in-out transform translate-x-6" id="toggle_general_time" name="toggle_general_time" type="checkbox"/>
+<label class="toggle-label block overflow-hidden h-6 rounded-full bg-primary-container cursor-pointer transition-colors duration-200 ease-in-out" for="toggle_general_time"></label>
+</div>
+</div>
+<!-- Slider for Time -->
+<div class="flex flex-col gap-2 pl-2 pr-4 py-2 bg-surface-container-low rounded-lg">
+<div class="flex justify-between items-center">
+<span class="font-caption text-caption text-on-surface-variant">Süre</span>
+<span class="font-label-md text-label-md text-primary-container font-semibold">45 dakika</span>
+</div>
+<input class="w-full h-1 bg-border rounded-lg appearance-none cursor-pointer" max="180" min="5" step="5" style="background: linear-gradient(to right, #2563eb 0%, #2563eb 25%, #E2E8F0 25%, #E2E8F0 100%);" type="range" value="45"/>
+</div>
+</div>
+<hr class="border-border border-t"/>
+<!-- Soru Başına Süre Toggle OFF -->
+<div class="flex justify-between items-center">
+<span class="font-body-md text-body-md text-text-primary">Soru Başına Süre</span>
+<div class="relative inline-block w-12 mr-2 align-middle select-none transition duration-200 ease-in">
+<input class="toggle-checkbox absolute block w-6 h-6 rounded-full bg-white border-4 border-border appearance-none cursor-pointer z-10 transition-transform duration-200 ease-in-out" id="toggle_question_time" name="toggle_question_time" type="checkbox"/>
+<label class="toggle-label block overflow-hidden h-6 rounded-full bg-surface-variant cursor-pointer transition-colors duration-200 ease-in-out" for="toggle_question_time"></label>
+</div>
+</div>
+</section>
+<!-- Anti-Hile Section -->
+<section class="bg-surface rounded-xl p-4 shadow-sm border border-border flex flex-col gap-4">
+<h3 class="font-title-md text-title-md text-text-primary">Anti-Hile</h3>
+<div class="flex justify-between items-center">
+<span class="font-body-md text-body-md text-text-primary">Soru Sırasını Karıştır</span>
+<div class="relative inline-block w-12 mr-2 align-middle select-none transition duration-200 ease-in">
+<input class="toggle-checkbox absolute block w-6 h-6 rounded-full bg-white border-4 border-border appearance-none cursor-pointer z-10 transition-transform duration-200 ease-in-out" id="toggle_shuffle_questions" name="toggle_shuffle_questions" type="checkbox"/>
+<label class="toggle-label block overflow-hidden h-6 rounded-full bg-surface-variant cursor-pointer transition-colors duration-200 ease-in-out" for="toggle_shuffle_questions"></label>
+</div>
+</div>
+<hr class="border-border border-t"/>
+<div class="flex justify-between items-center">
+<span class="font-body-md text-body-md text-text-primary">Şık Sırasını Karıştır</span>
+<div class="relative inline-block w-12 mr-2 align-middle select-none transition duration-200 ease-in">
+<input class="toggle-checkbox absolute block w-6 h-6 rounded-full bg-white border-4 border-border appearance-none cursor-pointer z-10 transition-transform duration-200 ease-in-out" id="toggle_shuffle_options" name="toggle_shuffle_options" type="checkbox"/>
+<label class="toggle-label block overflow-hidden h-6 rounded-full bg-surface-variant cursor-pointer transition-colors duration-200 ease-in-out" for="toggle_shuffle_options"></label>
+</div>
+</div>
+</section>
+<!-- Öğrenciye Göster Section -->
+<section class="bg-surface rounded-xl p-4 shadow-sm border border-border flex flex-col gap-4">
+<h3 class="font-title-md text-title-md text-text-primary">Öğrenciye Göster</h3>
+<div class="flex justify-between items-center">
+<span class="font-body-md text-body-md text-text-primary">Puanını göster</span>
+<div class="relative inline-block w-12 mr-2 align-middle select-none transition duration-200 ease-in">
+<input checked="" class="toggle-checkbox absolute block w-6 h-6 rounded-full bg-white border-4 appearance-none cursor-pointer z-10 transition-transform duration-200 ease-in-out transform translate-x-6" id="show_score" name="show_score" type="checkbox"/>
+<label class="toggle-label block overflow-hidden h-6 rounded-full bg-primary-container cursor-pointer transition-colors duration-200 ease-in-out" for="show_score"></label>
+</div>
+</div>
+<hr class="border-border border-t"/>
+<div class="flex justify-between items-center">
+<span class="font-body-md text-body-md text-text-primary">Doğru cevapları göster</span>
+<div class="relative inline-block w-12 mr-2 align-middle select-none transition duration-200 ease-in">
+<input checked="" class="toggle-checkbox absolute block w-6 h-6 rounded-full bg-white border-4 appearance-none cursor-pointer z-10 transition-transform duration-200 ease-in-out transform translate-x-6" id="show_correct_answers" name="show_correct_answers" type="checkbox"/>
+<label class="toggle-label block overflow-hidden h-6 rounded-full bg-primary-container cursor-pointer transition-colors duration-200 ease-in-out" for="show_correct_answers"></label>
+</div>
+</div>
+<hr class="border-border border-t"/>
+<div class="flex justify-between items-center">
+<span class="font-body-md text-body-md text-text-primary">Sıralamayı göster</span>
+<div class="relative inline-block w-12 mr-2 align-middle select-none transition duration-200 ease-in">
+<input checked="" class="toggle-checkbox absolute block w-6 h-6 rounded-full bg-white border-4 appearance-none cursor-pointer z-10 transition-transform duration-200 ease-in-out transform translate-x-6" id="show_ranking" name="show_ranking" type="checkbox"/>
+<label class="toggle-label block overflow-hidden h-6 rounded-full bg-primary-container cursor-pointer transition-colors duration-200 ease-in-out" for="show_ranking"></label>
+</div>
+</div>
+</section>
+<!-- Spacer for bottom action area -->
+<div class="h-4"></div>
+</main>
+<!-- Fixed Bottom Action Area -->
+<div class="fixed bottom-0 w-full max-w-container-max-student bg-surface p-margin-mobile border-t border-border shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.05)] z-40 pb-safe">
+<button class="w-full h-[56px] bg-primary-container text-white font-title-md text-title-md rounded-lg flex items-center justify-center gap-2 hover:bg-primary-dark transition-colors active:scale-[0.98]">
+                Devam Et
+                <span class="material-symbols-outlined">arrow_forward</span>
+</button>
+</div>
+</div>
+<!-- Script for Range Slider Gradient Update -->
+<script>
+        const rangeInput = document.querySelector('input[type="range"]');
+        
+        function updateSliderGradient(val) {
+            const min = rangeInput.min || 5;
+            const max = rangeInput.max || 180;
+            const percentage = ((val - min) / (max - min)) * 100;
+            rangeInput.style.background = `linear-gradient(to right, #2563eb 0%, #2563eb ${percentage}%, #E2E8F0 ${percentage}%, #E2E8F0 100%)`;
+        }
+
+        rangeInput.addEventListener('input', function(e) {
+            // Update display text (optional if you want it live, but static in prompt is fine, just showing capability)
+            // e.target.previousElementSibling.children[1].innerText = e.target.value + " dakika";
+            updateSliderGradient(e.target.value);
+        });
+        
+        // Initial call
+        updateSliderGradient(rangeInput.value);
+    </script>
+</body></html>

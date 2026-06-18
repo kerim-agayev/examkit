@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+
+<html class="light" lang="tr"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>ExamKit - Kısa Cevap Soru</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-background": "#171c1f",
+                        "on-primary-fixed": "#00174b",
+                        "on-primary-fixed-variant": "#003ea8",
+                        "surface-dim": "#d6dade",
+                        "background": "#f6fafe",
+                        "surface-container-lowest": "#ffffff",
+                        "primary-dark": "#1E40AF",
+                        "surface-tint": "#0053db",
+                        "secondary-fixed": "#d5e3fc",
+                        "info-light": "#E0F2FE",
+                        "warning": "#D97706",
+                        "success-light": "#D1FAE5",
+                        "success": "#059669",
+                        "on-error-container": "#93000a",
+                        "tertiary-container": "#007d57",
+                        "secondary-container": "#d5e3fc",
+                        "inverse-primary": "#b4c5ff",
+                        "info": "#0284C7",
+                        "surface-bright": "#f6fafe",
+                        "primary-fixed-dim": "#b4c5ff",
+                        "secondary": "#515f74",
+                        "on-primary": "#ffffff",
+                        "error-light": "#FEE2E2",
+                        "surface-container-highest": "#dfe3e7",
+                        "tertiary": "#006243",
+                        "secondary-fixed-dim": "#b9c7df",
+                        "outline-variant": "#c3c6d7",
+                        "tertiary-fixed": "#85f8c4",
+                        "surface-container": "#eaeef2",
+                        "primary-container": "#2563eb",
+                        "inverse-on-surface": "#edf1f5",
+                        "primary-light": "#DBEAFE",
+                        "on-secondary-fixed": "#0d1c2e",
+                        "warning-light": "#FEF3C7",
+                        "on-surface": "#171c1f",
+                        "on-tertiary-container": "#bdffdc",
+                        "on-error": "#ffffff",
+                        "on-surface-variant": "#434655",
+                        "surface": "#FFFFFF",
+                        "surface-container-high": "#e4e9ed",
+                        "outline": "#737686",
+                        "tertiary-fixed-dim": "#68dba9",
+                        "primary-fixed": "#dbe1ff",
+                        "on-secondary-fixed-variant": "#3a485b",
+                        "error-container": "#ffdad6",
+                        "primary": "#004ac6",
+                        "error": "#DC2626",
+                        "text-primary": "#0F172A",
+                        "inverse-surface": "#2c3134",
+                        "surface-container-low": "#f0f4f8",
+                        "on-tertiary-fixed-variant": "#005137",
+                        "on-primary-container": "#eeefff",
+                        "on-secondary": "#ffffff",
+                        "on-tertiary": "#ffffff",
+                        "surface-variant": "#dfe3e7",
+                        "border": "#E2E8F0",
+                        "on-tertiary-fixed": "#002114",
+                        "on-secondary-container": "#57657a"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "unit": "8px",
+                        "gutter": "16px",
+                        "container-max-student": "480px",
+                        "margin-desktop": "24px",
+                        "margin-mobile": "16px"
+                    },
+                    "fontFamily": {
+                        "label-md": ["Inter"],
+                        "title-md": ["Inter"],
+                        "headline": ["Inter"],
+                        "body-md": ["Inter"],
+                        "title-lg": ["Inter"],
+                        "body-lg": ["Inter"],
+                        "display": ["Inter"],
+                        "caption": ["Inter"]
+                    },
+                    "fontSize": {
+                        "label-md": ["14px", { "lineHeight": "20px", "letterSpacing": "0.01em", "fontWeight": "500" }],
+                        "title-md": ["18px", { "lineHeight": "24px", "fontWeight": "600" }],
+                        "headline": ["26px", { "lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "700" }],
+                        "body-md": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "title-lg": ["22px", { "lineHeight": "28px", "fontWeight": "600" }],
+                        "body-lg": ["18px", { "lineHeight": "28px", "fontWeight": "400" }],
+                        "display": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "caption": ["12px", { "lineHeight": "16px", "fontWeight": "400" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        body { font-family: 'Inter', sans-serif; background-color: #f6fafe; }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        /* Hide scrollbar for clean look */
+        ::-webkit-scrollbar { width: 0px; background: transparent; }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-background min-h-screen flex flex-col md:items-center">
+<!-- Mobile Container (Mimics Flutter App constraints on web) -->
+<div class="w-full max-w-[480px] bg-background min-h-screen relative flex flex-col shadow-sm">
+<!-- App Bar -->
+<header class="bg-surface border-b border-outline-variant w-full h-[64px] flex items-center px-margin-mobile flex-shrink-0 z-10 sticky top-0">
+<button class="w-10 h-10 flex items-center justify-center rounded-full hover:bg-surface-variant active:scale-95 transition-all text-on-surface-variant">
+<span class="material-symbols-outlined">close</span>
+</button>
+<div class="flex-1 text-center">
+<h1 class="font-title-lg text-title-lg text-text-primary">Kısa Cevap Soru</h1>
+</div>
+<button class="font-label-md text-label-md text-primary-container px-3 py-2 rounded-md hover:bg-primary-light active:scale-95 transition-all">
+                Kaydet
+            </button>
+</header>
+<!-- Body Content -->
+<main class="flex-1 p-margin-mobile overflow-y-auto space-y-4 pb-[88px]">
+<!-- Main Form Card -->
+<div class="bg-surface rounded-xl p-4 shadow-sm border border-border flex flex-col gap-6">
+<!-- Soru Metni -->
+<div class="flex flex-col gap-2">
+<label class="font-label-md text-label-md text-on-surface-variant" for="question-text">Soru Metni <span class="text-error">*</span></label>
+<textarea class="w-full rounded-lg border-border focus:border-primary-container focus:ring-1 focus:ring-primary-container text-body-md font-body-md p-3 resize-none bg-surface" id="question-text" placeholder="Sorunuzu buraya yazın..." rows="3"></textarea>
+</div>
+<hr class="border-border"/>
+<!-- Puan & Timer -->
+<div class="flex gap-4">
+<div class="flex-1 flex flex-col gap-2">
+<label class="font-label-md text-label-md text-on-surface-variant">Puan</label>
+<div class="relative">
+<input class="w-full h-[56px] rounded-lg border-border focus:border-primary-container focus:ring-1 focus:ring-primary-container text-body-md font-body-md pl-4 pr-10 bg-surface" type="number" value="10"/>
+<span class="material-symbols-outlined absolute right-3 top-1/2 -translate-y-1/2 text-on-surface-variant pointer-events-none">star</span>
+</div>
+</div>
+<div class="flex-1 flex flex-col gap-2">
+<label class="font-label-md text-label-md text-on-surface-variant">Süre (Dk)</label>
+<div class="relative">
+<input class="w-full h-[56px] rounded-lg border-border focus:border-primary-container focus:ring-1 focus:ring-primary-container text-body-md font-body-md pl-4 pr-10 bg-surface" type="number" value="2"/>
+<span class="material-symbols-outlined absolute right-3 top-1/2 -translate-y-1/2 text-on-surface-variant pointer-events-none">timer</span>
+</div>
+</div>
+</div>
+<hr class="border-border"/>
+<!-- Kabul Edilen Cevaplar Section -->
+<div class="flex flex-col gap-4">
+<div class="flex justify-between items-center">
+<h3 class="font-title-md text-title-md text-text-primary">Kabul Edilen Cevaplar</h3>
+<span class="material-symbols-outlined text-on-surface-variant text-[20px]" title="Öğrencinin cevabı bu listeyle karşılaştırılır.">info</span>
+</div>
+<!-- Info Chip -->
+<div class="bg-info-light rounded-lg p-3 flex items-start gap-3">
+<span class="material-symbols-outlined text-info mt-0.5" style="font-variation-settings: 'FILL' 1;">error</span>
+<p class="font-caption text-caption text-info">Sistem büyük/küçük harf ayrımı yapmaz. (Örn: "Elma" ile "elma" aynı kabul edilir.)</p>
+</div>
+<!-- Cevap Listesi -->
+<div class="flex flex-col gap-3">
+<!-- Row 1: Ana Cevap -->
+<div class="flex items-center gap-3">
+<div class="relative flex-1">
+<label class="absolute -top-2.5 left-3 bg-surface px-1 font-caption text-caption text-primary-container">Cevap 1 <span class="text-error">*</span></label>
+<input class="w-full h-[56px] rounded-lg border-primary-container focus:ring-1 focus:ring-primary-container text-body-md font-body-md px-4 bg-surface" placeholder="Doğru cevap..." type="text" value="Paris"/>
+</div>
+<button class="w-12 h-[56px] flex items-center justify-center rounded-lg border border-border text-error hover:bg-error-light transition-colors">
+<span class="material-symbols-outlined">delete</span>
+</button>
+</div>
+<!-- Row 2: Alternatif -->
+<div class="flex items-center gap-3">
+<div class="relative flex-1">
+<label class="absolute -top-2.5 left-3 bg-surface px-1 font-caption text-caption text-on-surface-variant">Alternatif Cevap</label>
+<input class="w-full h-[56px] rounded-lg border-border focus:border-primary-container focus:ring-1 focus:ring-primary-container text-body-md font-body-md px-4 bg-surface" placeholder="Alternatif..." type="text" value="Işık Şehri"/>
+</div>
+<button class="w-12 h-[56px] flex items-center justify-center rounded-lg border border-border text-error hover:bg-error-light transition-colors">
+<span class="material-symbols-outlined">delete</span>
+</button>
+</div>
+</div>
+<!-- Ekle Butonu -->
+<button class="flex items-center gap-2 text-primary-container hover:text-primary-dark font-label-md text-label-md py-2 w-fit active:scale-95 transition-transform">
+<span class="material-symbols-outlined">add</span>
+                        Alternatif ekle
+                    </button>
+</div>
+</div>
+</main>
+<!-- Optional: Floating FAB for saving could go here if not in AppBar, but requested in AppBar -->
+</div>
+</body></html>

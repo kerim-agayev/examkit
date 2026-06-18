@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+
+<html lang="tr"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "tertiary-container": "#007d57",
+                        "secondary-fixed-dim": "#b9c7df",
+                        "on-secondary": "#ffffff",
+                        "on-primary-container": "#eeefff",
+                        "on-surface": "#171c1f",
+                        "surface": "#FFFFFF",
+                        "error": "#DC2626",
+                        "on-secondary-fixed-variant": "#3a485b",
+                        "primary-fixed-dim": "#b4c5ff",
+                        "error-light": "#FEE2E2",
+                        "surface-bright": "#f6fafe",
+                        "surface-variant": "#dfe3e7",
+                        "border": "#E2E8F0",
+                        "on-primary": "#ffffff",
+                        "info": "#0284C7",
+                        "secondary-fixed": "#d5e3fc",
+                        "inverse-on-surface": "#edf1f5",
+                        "text-primary": "#0F172A",
+                        "primary-fixed": "#dbe1ff",
+                        "on-tertiary-fixed-variant": "#005137",
+                        "tertiary": "#006243",
+                        "info-light": "#E0F2FE",
+                        "on-primary-fixed-variant": "#003ea8",
+                        "surface-container-lowest": "#ffffff",
+                        "error-container": "#ffdad6",
+                        "success-light": "#D1FAE5",
+                        "surface-container": "#eaeef2",
+                        "success": "#059669",
+                        "on-secondary-fixed": "#0d1c2e",
+                        "primary": "#004ac6",
+                        "on-primary-fixed": "#00174b",
+                        "background": "#f6fafe",
+                        "on-tertiary-fixed": "#002114",
+                        "warning-light": "#FEF3C7",
+                        "surface-container-highest": "#dfe3e7",
+                        "on-secondary-container": "#57657a",
+                        "warning": "#D97706",
+                        "inverse-primary": "#b4c5ff",
+                        "secondary-container": "#d5e3fc",
+                        "on-background": "#171c1f",
+                        "tertiary-fixed": "#85f8c4",
+                        "surface-container-high": "#e4e9ed",
+                        "primary-light": "#DBEAFE",
+                        "on-error-container": "#93000a",
+                        "surface-container-low": "#f0f4f8",
+                        "primary-container": "#2563eb",
+                        "tertiary-fixed-dim": "#68dba9",
+                        "secondary": "#515f74",
+                        "outline": "#737686",
+                        "on-surface-variant": "#434655",
+                        "on-tertiary-container": "#bdffdc",
+                        "surface-tint": "#0053db",
+                        "inverse-surface": "#2c3134",
+                        "on-tertiary": "#ffffff",
+                        "on-error": "#ffffff",
+                        "surface-dim": "#d6dade",
+                        "outline-variant": "#c3c6d7",
+                        "primary-dark": "#1E40AF"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "gutter": "16px",
+                        "container-max-student": "480px",
+                        "margin-desktop": "24px",
+                        "margin-mobile": "16px",
+                        "unit": "8px"
+                    },
+                    "fontFamily": {
+                        "body-lg": ["Inter"],
+                        "caption": ["Inter"],
+                        "label-md": ["Inter"],
+                        "body-md": ["Inter"],
+                        "title-lg": ["Inter"],
+                        "display": ["Inter"],
+                        "title-md": ["Inter"],
+                        "headline": ["Inter"]
+                    },
+                    "fontSize": {
+                        "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                        "caption": ["12px", {"lineHeight": "16px", "fontWeight": "400"}],
+                        "label-md": ["14px", {"lineHeight": "20px", "letterSpacing": "0.01em", "fontWeight": "500"}],
+                        "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                        "title-lg": ["22px", {"lineHeight": "28px", "fontWeight": "600"}],
+                        "display": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                        "title-md": ["18px", {"lineHeight": "24px", "fontWeight": "600"}],
+                        "headline": ["26px", {"lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "700"}]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        body { font-family: 'Inter', sans-serif; -webkit-tap-highlight-color: transparent; }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .ios-scrolling { -webkit-overflow-scrolling: touch; }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-surface min-h-screen flex flex-col items-center">
+<!-- Top AppBar - Following JSON Logic -->
+<header class="w-full h-[64px] flex items-center bg-surface border-b border-outline-variant px-margin-mobile fixed top-0 left-0 z-50">
+<div class="flex justify-between items-center w-full">
+<div class="flex items-center gap-4">
+<button class="material-symbols-outlined text-on-surface-variant active:scale-95 transition-transform" style="font-variation-settings: 'wght' 500">arrow_back</button>
+<div class="flex flex-col">
+<h1 class="font-title-lg text-title-lg text-primary leading-tight">Profil Bilgileri</h1>
+<span class="font-caption text-caption text-on-surface-variant">Adım 1/1</span>
+</div>
+</div>
+<div class="w-10 h-10 rounded-full bg-primary-fixed flex items-center justify-center border-2 border-primary-light">
+<span class="font-label-md text-label-md text-on-primary-fixed">MK</span>
+</div>
+</div>
+</header>
+<main class="w-full max-w-container-max-student px-margin-mobile pt-24 pb-32 flex flex-col gap-8 flex-grow ios-scrolling">
+<!-- Profile Avatar Selection Section -->
+<section class="flex flex-col items-center justify-center gap-4">
+<div class="relative">
+<div class="w-24 h-24 rounded-full bg-surface-container-highest flex items-center justify-center shadow-sm border-2 border-white overflow-hidden">
+<span class="font-display text-display text-on-surface-variant">MK</span>
+</div>
+<button class="absolute bottom-0 right-0 w-8 h-8 rounded-full bg-primary flex items-center justify-center text-white shadow-md active:scale-90 transition-transform">
+<span class="material-symbols-outlined text-[18px]">edit</span>
+</button>
+</div>
+<p class="font-body-md text-body-md text-on-surface-variant text-center">Profil resminizi güncelleyin</p>
+</section>
+<!-- Form Fields -->
+<section class="flex flex-col gap-6">
+<div class="flex flex-col gap-2">
+<label class="font-label-md text-label-md text-on-surface-variant px-1" for="fullName">Ad Soyad</label>
+<div class="h-14 bg-surface-container-low border-b-2 border-outline-variant focus-within:border-primary transition-colors flex items-center px-4 rounded-t-lg">
+<input class="w-full bg-transparent border-none focus:ring-0 font-body-md text-body-md text-on-surface p-0" id="fullName" placeholder="Tam adınızı giriniz" type="text" value="Murat Kaya"/>
+</div>
+</div>
+<div class="flex flex-col gap-2">
+<label class="font-label-md text-label-md text-on-surface-variant px-1" for="schoolName">Okul Adı</label>
+<div class="h-14 bg-surface-container-low border-b-2 border-outline-variant focus-within:border-primary transition-colors flex items-center px-4 rounded-t-lg">
+<input class="w-full bg-transparent border-none focus:ring-0 font-body-md text-body-md text-on-surface p-0" id="schoolName" placeholder="Okulunuzu arayın veya yazın" type="text"/>
+<span class="material-symbols-outlined text-on-surface-variant">search</span>
+</div>
+</div>
+</section>
+<!-- Language Selection Cards -->
+<section class="flex flex-col gap-4">
+<h2 class="font-title-md text-title-md text-on-surface">Uygulama Dili</h2>
+<div class="grid grid-cols-2 gap-4">
+<!-- Azerbaijan Selection -->
+<button class="flex flex-col items-center justify-center p-4 gap-3 bg-surface border-2 border-outline-variant rounded-xl transition-all active:scale-95" id="lang-az" onclick="selectLang('az')">
+<div class="w-12 h-12 rounded-full overflow-hidden shadow-sm">
+<img class="w-full h-full object-cover" data-alt="A macro close-up of the Azerbaijan national flag with its vibrant blue, red, and green stripes and white crescent moon and eight-pointed star. The lighting is soft and cinematic, highlighting the fabric's rich texture and weave. The aesthetic is clean and professional, using a high-quality commercial photography style suitable for a modern educational app's interface." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBpjUxRLfe3Z2HiqdZgk918m0rEImXi_e5wlF5LZhWL5q0bWm5bdlAWw1WSHVVBkwe0mRt4NGdSZUkl8KNwSI4tkGahssnXiMEdHMRNSiSOiW8kjaJ0ET01DtFalWCe7mXiZK-c-ZBsBA-U2apyVJsrWnY7T-NwG6rsB2FN9v6jYyyyXPsFIpX-Pxi5NJs4H2GTCfzm7Fop8ZWdM1ap6-guiJUrMvb430cW_-Julw9j_rD9Zc0oZAa5VUYjo6JbHTVx7XKfDthytMw"/>
+</div>
+<span class="font-label-md text-label-md text-on-surface">Azərbaycan dili</span>
+</button>
+<!-- Turkish Selection (Active) -->
+<button class="flex flex-col items-center justify-center p-4 gap-3 bg-primary-light border-2 border-primary rounded-xl shadow-sm transition-all active:scale-95" id="lang-tr" onclick="selectLang('tr')">
+<div class="w-12 h-12 rounded-full overflow-hidden shadow-sm relative">
+<img class="w-full h-full object-cover" data-alt="A focused close-up of the Turkish national flag's crescent and star against its deep red field. The lighting is bright and modern, creating a professional and patriotic feel. The fabric shows subtle, high-quality textures. The overall visual style is elegant and institucional, consistent with a high-stakes educational platform's design language." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCst2OVtzmbHytfHWCu_5yHM_wB1zk_hxJ2XPko1UiGwpbs0K263PAWPkdRPqN61jR97XqGvK3Y8p9gt_wwoFjsw_LfEtol0PcEu1qZLjcLddzXb0bMkDR84ObOZBNhF-r2peU_6b2GT6L5OqflwdZYp5-HwpSOoT2MiEouz9jrR57zTVAoqpmgsgfON9nIzgv54QYU51CZu5833eLSLwmsvQDqHP4UoRY6y2lbWgnEq7zHpp5TCxemvGNiDmHLGzlS2HWOt6iZzFE"/>
+<div class="absolute inset-0 bg-primary/10"></div>
+</div>
+<span class="font-label-md text-label-md text-primary font-bold">Türkçe</span>
+<div class="absolute -top-2 -right-2 bg-primary text-white rounded-full w-6 h-6 flex items-center justify-center">
+<span class="material-symbols-outlined text-[14px]">check</span>
+</div>
+</button>
+</div>
+</section>
+</main>
+<!-- Bottom Sticky Button - Following Style Guidance -->
+<footer class="fixed bottom-0 left-0 w-full bg-surface border-t border-outline-variant p-margin-mobile flex justify-center z-50">
+<div class="w-full max-w-container-max-student">
+<button class="w-full h-14 bg-primary text-white rounded-xl font-bold font-body-lg text-body-lg shadow-lg shadow-primary/20 active:scale-[0.98] transition-all hover:bg-primary-dark">
+                Tamamla ve Başla
+            </button>
+</div>
+</footer>
+<script>
+        function selectLang(lang) {
+            const azCard = document.getElementById('lang-az');
+            const trCard = document.getElementById('lang-tr');
+            
+            if (lang === 'az') {
+                azCard.className = "relative flex flex-col items-center justify-center p-4 gap-3 bg-primary-light border-2 border-primary rounded-xl shadow-sm transition-all active:scale-95";
+                trCard.className = "flex flex-col items-center justify-center p-4 gap-3 bg-surface border-2 border-outline-variant rounded-xl transition-all active:scale-95";
+                
+                // Add/Remove checkmark logic would go here in a full app
+                azCard.innerHTML = `
+                    <div class="w-12 h-12 rounded-full overflow-hidden shadow-sm relative">
+                        <img src="https://images.unsplash.com/photo-1596468138822-7104b2b64a2c?q=80&w=200&auto=format&fit=crop" data-alt="Azerbaijan flag" class="w-full h-full object-cover">
+                    </div>
+                    <span class="font-label-md text-label-md text-primary font-bold">Azərbaycan dili</span>
+                    <div class="absolute -top-2 -right-2 bg-primary text-white rounded-full w-6 h-6 flex items-center justify-center">
+                        <span class="material-symbols-outlined text-[14px]">check</span>
+                    </div>
+                `;
+                trCard.innerHTML = `
+                    <div class="w-12 h-12 rounded-full overflow-hidden shadow-sm">
+                        <img src="https://images.unsplash.com/photo-1541604193435-225878996233?q=80&w=200&auto=format&fit=crop" data-alt="Turkey flag" class="w-full h-full object-cover">
+                    </div>
+                    <span class="font-label-md text-label-md text-on-surface">Türkçe</span>
+                `;
+            } else {
+                trCard.className = "relative flex flex-col items-center justify-center p-4 gap-3 bg-primary-light border-2 border-primary rounded-xl shadow-sm transition-all active:scale-95";
+                azCard.className = "flex flex-col items-center justify-center p-4 gap-3 bg-surface border-2 border-outline-variant rounded-xl transition-all active:scale-95";
+                
+                trCard.innerHTML = `
+                    <div class="w-12 h-12 rounded-full overflow-hidden shadow-sm relative">
+                        <img src="https://images.unsplash.com/photo-1541604193435-225878996233?q=80&w=200&auto=format&fit=crop" data-alt="Turkey flag" class="w-full h-full object-cover">
+                    </div>
+                    <span class="font-label-md text-label-md text-primary font-bold">Türkçe</span>
+                    <div class="absolute -top-2 -right-2 bg-primary text-white rounded-full w-6 h-6 flex items-center justify-center">
+                        <span class="material-symbols-outlined text-[14px]">check</span>
+                    </div>
+                `;
+                azCard.innerHTML = `
+                    <div class="w-12 h-12 rounded-full overflow-hidden shadow-sm">
+                        <img src="https://images.unsplash.com/photo-1596468138822-7104b2b64a2c?q=80&w=200&auto=format&fit=crop" data-alt="Azerbaijan flag" class="w-full h-full object-cover">
+                    </div>
+                    <span class="font-label-md text-label-md text-on-surface">Azərbaycan dili</span>
+                `;
+            }
+        }
+    </script>
+</body></html>

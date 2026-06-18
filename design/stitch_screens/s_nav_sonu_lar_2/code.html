@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+
+<html class="light" lang="tr"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Sınav Sonuçları - ExamKit</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "secondary": "#515f74",
+                        "error": "#DC2626",
+                        "primary-fixed-dim": "#b4c5ff",
+                        "on-tertiary-fixed": "#002114",
+                        "secondary-fixed-dim": "#b9c7df",
+                        "outline": "#737686",
+                        "on-tertiary-fixed-variant": "#005137",
+                        "on-primary-fixed": "#00174b",
+                        "error-light": "#FEE2E2",
+                        "tertiary-container": "#007d57",
+                        "surface-container": "#eaeef2",
+                        "on-tertiary-container": "#bdffdc",
+                        "primary-light": "#DBEAFE",
+                        "on-surface-variant": "#434655",
+                        "info": "#0284C7",
+                        "surface-container-lowest": "#ffffff",
+                        "surface-bright": "#f6fafe",
+                        "secondary-fixed": "#d5e3fc",
+                        "tertiary-fixed": "#85f8c4",
+                        "success-light": "#D1FAE5",
+                        "warning": "#D97706",
+                        "primary": "#004ac6",
+                        "on-error-container": "#93000a",
+                        "on-secondary-fixed-variant": "#3a485b",
+                        "on-background": "#171c1f",
+                        "surface": "#FFFFFF",
+                        "surface-tint": "#0053db",
+                        "outline-variant": "#c3c6d7",
+                        "on-primary-fixed-variant": "#003ea8",
+                        "primary-fixed": "#dbe1ff",
+                        "success": "#059669",
+                        "on-tertiary": "#ffffff",
+                        "surface-dim": "#d6dade",
+                        "background": "#f6fafe",
+                        "on-secondary": "#ffffff",
+                        "warning-light": "#FEF3C7",
+                        "on-secondary-container": "#57657a",
+                        "error-container": "#ffdad6",
+                        "surface-container-highest": "#dfe3e7",
+                        "primary-container": "#2563eb",
+                        "inverse-primary": "#b4c5ff",
+                        "inverse-on-surface": "#edf1f5",
+                        "surface-variant": "#dfe3e7",
+                        "secondary-container": "#d5e3fc",
+                        "info-light": "#E0F2FE",
+                        "surface-container-high": "#e4e9ed",
+                        "primary-dark": "#1E40AF",
+                        "text-primary": "#0F172A",
+                        "on-primary": "#ffffff",
+                        "on-primary-container": "#eeefff",
+                        "on-secondary-fixed": "#0d1c2e",
+                        "on-surface": "#171c1f",
+                        "on-error": "#ffffff",
+                        "tertiary": "#006243",
+                        "inverse-surface": "#2c3134",
+                        "tertiary-fixed-dim": "#68dba9",
+                        "border": "#E2E8F0",
+                        "surface-container-low": "#f0f4f8"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "container-max-student": "480px",
+                        "unit": "8px",
+                        "margin-mobile": "16px",
+                        "margin-desktop": "24px",
+                        "gutter": "16px"
+                    },
+                    "fontFamily": {
+                        "title-md": ["Inter"],
+                        "display": ["Inter"],
+                        "title-lg": ["Inter"],
+                        "caption": ["Inter"],
+                        "body-lg": ["Inter"],
+                        "label-md": ["Inter"],
+                        "headline": ["Inter"],
+                        "body-md": ["Inter"]
+                    },
+                    "fontSize": {
+                        "title-md": ["18px", {"lineHeight": "24px", "fontWeight": "600"}],
+                        "display": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                        "title-lg": ["22px", {"lineHeight": "28px", "fontWeight": "600"}],
+                        "caption": ["12px", {"lineHeight": "16px", "fontWeight": "400"}],
+                        "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                        "label-md": ["14px", {"lineHeight": "20px", "letterSpacing": "0.01em", "fontWeight": "500"}],
+                        "headline": ["26px", {"lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "700"}],
+                        "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        body { background-color: #F1F5F9; }
+        .material-symbols-outlined { font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="antialiased text-on-surface bg-background flex flex-col items-center min-h-screen font-body-md">
+<div class="w-full max-w-[480px] bg-background min-h-screen relative shadow-sm flex flex-col">
+<!-- TopAppBar -->
+<header class="w-full h-[64px] flex items-center px-margin-mobile bg-surface border-b border-outline-variant shrink-0 z-10 sticky top-0">
+<button class="w-12 h-12 flex items-center justify-center rounded-full hover:bg-surface-container-low transition-colors text-on-surface-variant mr-2 active:scale-95 duration-100">
+<span class="material-symbols-outlined">arrow_back</span>
+</button>
+<div class="flex-1 flex flex-col justify-center">
+<h1 class="font-title-lg text-title-lg text-on-surface">Sınav Sonuçları</h1>
+<p class="font-caption text-caption text-on-surface-variant">Biologiya Final · 8 öğrenci</p>
+</div>
+<button class="w-12 h-12 flex items-center justify-center rounded-full hover:bg-surface-container-low transition-colors text-on-surface-variant active:scale-95 duration-100">
+<span class="material-symbols-outlined">more_vert</span>
+</button>
+</header>
+<!-- Main Content Canvas -->
+<main class="flex-1 overflow-y-auto px-margin-mobile py-6 space-y-6 pb-[100px]">
+<!-- Statistics Card -->
+<section class="bg-surface rounded-xl p-4 shadow-[0_2px_4px_rgba(0,0,0,0.05)] border border-border">
+<div class="grid grid-cols-4 gap-2 mb-6 divide-x divide-outline-variant">
+<div class="flex flex-col items-center justify-center text-center px-1">
+<span class="font-title-md text-title-md text-primary">8</span>
+<span class="font-caption text-caption text-on-surface-variant mt-1">katılımcı</span>
+</div>
+<div class="flex flex-col items-center justify-center text-center px-1">
+<span class="font-title-md text-title-md text-primary">72%</span>
+<span class="font-caption text-caption text-on-surface-variant mt-1">ortalama</span>
+</div>
+<div class="flex flex-col items-center justify-center text-center px-1">
+<span class="font-title-md text-title-md text-success">94%</span>
+<span class="font-caption text-caption text-on-surface-variant mt-1">en yüksek</span>
+</div>
+<div class="flex flex-col items-center justify-center text-center px-1">
+<span class="font-title-md text-title-md text-primary">%75</span>
+<span class="font-caption text-caption text-on-surface-variant mt-1">geçme oranı</span>
+</div>
+</div>
+<!-- Mini Bar Chart -->
+<div class="pt-4 border-t border-outline-variant">
+<h3 class="font-label-md text-label-md text-on-surface-variant mb-4">Dağılım</h3>
+<div class="flex items-end justify-between h-24 gap-2 px-2">
+<div class="w-full flex flex-col items-center gap-2 group">
+<div class="w-full bg-primary rounded-t-sm h-[10%] group-hover:bg-primary-dark transition-colors"></div>
+<span class="font-caption text-caption text-on-surface-variant text-[10px]">0-20</span>
+</div>
+<div class="w-full flex flex-col items-center gap-2 group">
+<div class="w-full bg-primary rounded-t-sm h-[15%] group-hover:bg-primary-dark transition-colors"></div>
+<span class="font-caption text-caption text-on-surface-variant text-[10px]">21-40</span>
+</div>
+<div class="w-full flex flex-col items-center gap-2 group">
+<div class="w-full bg-primary rounded-t-sm h-[25%] group-hover:bg-primary-dark transition-colors"></div>
+<span class="font-caption text-caption text-on-surface-variant text-[10px]">41-60</span>
+</div>
+<div class="w-full flex flex-col items-center gap-2 group">
+<div class="w-full bg-primary rounded-t-sm h-[60%] group-hover:bg-primary-dark transition-colors"></div>
+<span class="font-caption text-caption text-on-surface-variant text-[10px]">61-80</span>
+</div>
+<div class="w-full flex flex-col items-center gap-2 group">
+<div class="w-full bg-primary rounded-t-sm h-[40%] group-hover:bg-primary-dark transition-colors"></div>
+<span class="font-caption text-caption text-on-surface-variant text-[10px]">81-100</span>
+</div>
+</div>
+</div>
+</section>
+<!-- Leaderboard Section -->
+<section class="space-y-3">
+<h2 class="font-title-md text-title-md text-on-surface px-1">Sıralama</h2>
+<!-- Rank 1 -->
+<div class="bg-surface rounded-xl p-4 flex items-center gap-4 shadow-[0_2px_4px_rgba(0,0,0,0.05)] border border-warning/30 relative overflow-hidden">
+<div class="absolute top-0 left-0 w-1 h-full bg-warning"></div>
+<div class="w-10 h-10 rounded-full bg-warning-light flex items-center justify-center shrink-0">
+<span class="text-xl">🥇</span>
+</div>
+<div class="flex-1 min-w-0">
+<h3 class="font-title-md text-title-md text-on-surface truncate">Aynur Məmmədova</h3>
+<div class="flex items-center gap-2 mt-1">
+<span class="font-caption text-caption text-on-surface-variant">48 puan / 50</span>
+<span class="w-1 h-1 rounded-full bg-outline-variant"></span>
+<span class="font-caption text-caption text-on-surface-variant">18:32</span>
+</div>
+</div>
+<div class="shrink-0 flex flex-col items-end gap-2">
+<span class="font-title-md text-title-md text-success">94%</span>
+<div class="px-2 py-1 bg-primary-container text-on-primary-container rounded-full font-caption text-caption font-medium">
+                            En Yüksek
+                        </div>
+</div>
+</div>
+<!-- Rank 2 -->
+<div class="bg-surface rounded-xl p-4 flex items-center gap-4 shadow-[0_2px_4px_rgba(0,0,0,0.05)] border border-border">
+<div class="w-10 h-10 rounded-full bg-surface-container-highest flex items-center justify-center shrink-0">
+<span class="text-xl">🥈</span>
+</div>
+<div class="flex-1 min-w-0">
+<h3 class="font-label-md text-label-md text-on-surface truncate">Kamran Hüseynov</h3>
+<div class="flex items-center gap-2 mt-1">
+<span class="font-caption text-caption text-on-surface-variant">44 puan / 50</span>
+<span class="w-1 h-1 rounded-full bg-outline-variant"></span>
+<span class="font-caption text-caption text-on-surface-variant">21:15</span>
+</div>
+</div>
+<div class="shrink-0">
+<span class="font-title-md text-title-md text-primary">88%</span>
+</div>
+</div>
+<!-- Rank 3 -->
+<div class="bg-surface rounded-xl p-4 flex items-center gap-4 shadow-[0_2px_4px_rgba(0,0,0,0.05)] border border-border">
+<div class="w-10 h-10 rounded-full bg-surface-variant flex items-center justify-center shrink-0">
+<span class="text-xl">🥉</span>
+</div>
+<div class="flex-1 min-w-0">
+<h3 class="font-label-md text-label-md text-on-surface truncate">Leyla Əsgərova</h3>
+<div class="flex items-center gap-2 mt-1">
+<span class="font-caption text-caption text-on-surface-variant">41 puan / 50</span>
+<span class="w-1 h-1 rounded-full bg-outline-variant"></span>
+<span class="font-caption text-caption text-on-surface-variant">19:44</span>
+</div>
+</div>
+<div class="shrink-0">
+<span class="font-title-md text-title-md text-primary">82%</span>
+</div>
+</div>
+<button class="w-full py-3 mt-2 font-label-md text-label-md text-primary hover:bg-primary-light/50 rounded-lg transition-colors flex items-center justify-center gap-2">
+                    Tüm listeyi gör <span class="material-symbols-outlined text-sm">expand_more</span>
+</button>
+</section>
+<!-- Question Analysis -->
+<section class="space-y-4">
+<h2 class="font-title-md text-title-md text-on-surface px-1">Soru Analizi</h2>
+<div class="bg-surface rounded-xl p-4 shadow-[0_2px_4px_rgba(0,0,0,0.05)] border border-border space-y-4">
+<!-- Q1 (High Success) -->
+<div>
+<div class="flex justify-between items-center mb-2">
+<span class="font-label-md text-label-md text-on-surface">Soru 1</span>
+<span class="font-caption text-caption text-success font-medium">90% Doğru</span>
+</div>
+<div class="w-full bg-surface-container-highest rounded-full h-2.5">
+<div class="bg-success h-2.5 rounded-full" style="width: 90%"></div>
+</div>
+</div>
+<!-- Q7 (Low Success) -->
+<div>
+<div class="flex justify-between items-center mb-2">
+<span class="font-label-md text-label-md text-on-surface flex items-center gap-2">
+                                Soru 7
+                                <span class="material-symbols-outlined text-error text-sm" style="font-variation-settings: 'FILL' 1;">warning</span>
+</span>
+<span class="font-caption text-caption text-error font-medium">45% Doğru</span>
+</div>
+<div class="w-full bg-surface-container-highest rounded-full h-2.5">
+<div class="bg-error h-2.5 rounded-full" style="width: 45%"></div>
+</div>
+<p class="font-caption text-caption text-on-surface-variant mt-2">Bu soru öğrencilerin çoğunluğu tarafından yanlış cevaplandı. Konuyu tekrar gözden geçirin.</p>
+</div>
+<button class="w-full py-2 mt-2 font-label-md text-label-md text-primary border border-primary rounded-lg hover:bg-primary-light/20 transition-colors">
+                        Detaylı Analizi Gör
+                    </button>
+</div>
+</section>
+</main>
+<!-- BottomNavBar (Hidden on this transactional/focused screen as per instructions, but kept in code structure if needed to revert) -->
+<!-- Suppressed as this is a focused detail screen -->
+</div>
+</body></html>

@@ -1,0 +1,36 @@
+// =============================================================================
+// EXAMPLE / PLACEHOLDER — gerçek Firebase Web config ASLA repoya commit edilmez.
+// Firebase Console > Project Settings > 'Web app' > Config snippet kopyalanıp
+// student_web/.env.local içine konur (bkz. docs/phase_1/secrets_management.md).
+// =============================================================================
+
+// RTDB URL
+// https://REPLACE_ME_PROJECT_ID-default-rtdb.REGION.firebasedatabase.app
+
+// --- student_web/.env.local içine kopyalanacak (gitignored) ---
+// NEXT_PUBLIC_FIREBASE_API_KEY=REPLACE_ME_WEB_API_KEY
+// NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN=REPLACE_ME_PROJECT_ID.firebaseapp.com
+// NEXT_PUBLIC_FIREBASE_DATABASE_URL=https://REPLACE_ME_PROJECT_ID-default-rtdb.REGION.firebasedatabase.app
+// NEXT_PUBLIC_FIREBASE_PROJECT_ID=REPLACE_ME_PROJECT_ID
+// NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET=REPLACE_ME_PROJECT_ID.firebasestorage.app
+// NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID=REPLACE_ME_SENDER_ID
+// NEXT_PUBLIC_FIREBASE_APP_ID=REPLACE_ME_WEB_APP_ID
+// NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID=REPLACE_ME_MEASUREMENT_ID
+
+// --- Eski referans: doğrudan initializeApp (önerilmez, env kullanın) ---
+// import { initializeApp } from "firebase/app";
+// import { getAnalytics } from "firebase/analytics";
+//
+// const firebaseConfig = {
+//   apiKey:            "REPLACE_ME_WEB_API_KEY",
+//   authDomain:        "REPLACE_ME_PROJECT_ID.firebaseapp.com",
+//   databaseURL:       "https://REPLACE_ME_PROJECT_ID-default-rtdb.REGION.firebasedatabase.app",
+//   projectId:         "REPLACE_ME_PROJECT_ID",
+//   storageBucket:     "REPLACE_ME_PROJECT_ID.firebasestorage.app",
+//   messagingSenderId: "REPLACE_ME_SENDER_ID",
+//   appId:             "REPLACE_ME_WEB_APP_ID",
+//   measurementId:     "REPLACE_ME_MEASUREMENT_ID"
+// };
+//
+// const app = initializeApp(firebaseConfig);
+// const analytics = getAnalytics(app);

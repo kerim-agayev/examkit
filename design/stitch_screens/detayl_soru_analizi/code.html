@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+
+<html class="light" lang="tr"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Soru Analizi - ExamKit</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "outline-variant": "#c3c6d7",
+                      "surface-container-high": "#e7e7f3",
+                      "on-tertiary-container": "#ffede6",
+                      "on-error-container": "#93000a",
+                      "primary-dark": "#3B82F6",
+                      "secondary-fixed-dim": "#68dba9",
+                      "surface-dim": "#d9d9e5",
+                      "primary-container": "#2563eb",
+                      "on-surface": "#191b23",
+                      "success-light": "#059669",
+                      "error-dark": "#EF4444",
+                      "warning-light": "#D97706",
+                      "surface-container-highest": "#e1e2ed",
+                      "text-primary-dark": "#F8FAFC",
+                      "inverse-on-surface": "#f0f0fb",
+                      "on-primary-fixed-variant": "#003ea8",
+                      "surface-container": "#ededf9",
+                      "surface-variant-dark": "#334155",
+                      "on-secondary": "#ffffff",
+                      "primary-fixed": "#dbe1ff",
+                      "tertiary-container": "#bc4800",
+                      "on-primary-fixed": "#00174b",
+                      "surface-light": "#FFFFFF",
+                      "on-surface-variant": "#434655",
+                      "surface-variant": "#e1e2ed",
+                      "primary": "#004ac6",
+                      "text-primary-light": "#0F172A",
+                      "surface": "#faf8ff",
+                      "text-secondary-light": "#475569",
+                      "on-error": "#ffffff",
+                      "on-tertiary-fixed-variant": "#7d2d00",
+                      "on-primary-container": "#eeefff",
+                      "error-container": "#ffdad6",
+                      "on-primary": "#ffffff",
+                      "inverse-surface": "#2e3039",
+                      "error-light": "#DC2626",
+                      "success-dark": "#10B981",
+                      "on-tertiary-fixed": "#360f00",
+                      "bg-light": "#F1F5F9",
+                      "secondary-container": "#82f5c1",
+                      "error": "#ba1a1a",
+                      "on-secondary-fixed": "#002114",
+                      "secondary": "#006c4a",
+                      "primary-bg-light": "#DBEAFE",
+                      "on-tertiary": "#ffffff",
+                      "border-light": "#E2E8F0",
+                      "primary-bg-dark": "#1E3A8A",
+                      "secondary-fixed": "#85f8c4",
+                      "outline": "#737686",
+                      "surface-dark": "#1E293B",
+                      "surface-container-lowest": "#ffffff",
+                      "surface-bright": "#faf8ff",
+                      "inverse-primary": "#b4c5ff",
+                      "bg-dark": "#0F172A",
+                      "text-secondary-dark": "#94A3B8",
+                      "surface-tint": "#0053db",
+                      "tertiary-fixed-dim": "#ffb596",
+                      "tertiary-fixed": "#ffdbcd",
+                      "on-secondary-container": "#00714e",
+                      "surface-variant-light": "#F8FAFC",
+                      "border-dark": "#334155",
+                      "on-secondary-fixed-variant": "#005137",
+                      "warning-dark": "#F59E0B",
+                      "primary-fixed-dim": "#b4c5ff",
+                      "on-background": "#191b23",
+                      "tertiary": "#943700",
+                      "surface-container-low": "#f3f3fe",
+                      "background": "#faf8ff"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.25rem",
+                      "lg": "0.5rem",
+                      "xl": "0.75rem",
+                      "full": "9999px"
+              },
+              "spacing": {
+                      "gutter": "16px",
+                      "sm": "8px",
+                      "margin": "24px",
+                      "xl": "32px",
+                      "base": "4px",
+                      "md": "16px",
+                      "xs": "4px",
+                      "lg": "24px"
+              },
+              "fontFamily": {
+                      "body": ["Inter"],
+                      "title-lg": ["Inter"],
+                      "body-lg": ["Inter"],
+                      "headline": ["Inter"],
+                      "display": ["Inter"],
+                      "label": ["Inter"]
+              },
+              "fontSize": {
+                      "body": ["16px", { "lineHeight": "1.5", "fontWeight": "400" }],
+                      "title-lg": ["22px", { "lineHeight": "1.4", "fontWeight": "600" }],
+                      "body-lg": ["18px", { "lineHeight": "1.5", "fontWeight": "400" }],
+                      "headline": ["26px", { "lineHeight": "1.3", "fontWeight": "700" }],
+                      "display": ["32px", { "lineHeight": "1.2", "fontWeight": "700" }],
+                      "label": ["14px", { "lineHeight": "1.4", "fontWeight": "500" }]
+              }
+      },
+          },
+        }
+      </script>
+<style>
+        body {
+            -webkit-tap-highlight-color: transparent;
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-surface font-body text-body text-on-surface antialiased min-h-screen pb-safe pb-24 md:pb-0">
+<!-- TopAppBar -->
+<header class="fixed top-0 w-full z-50 bg-surface-light border-b border-border-light shadow-sm flex justify-between items-center h-16 px-margin">
+<div class="flex items-center gap-4">
+<button aria-label="Geri" class="text-primary hover:bg-surface-container transition-colors duration-200 ease-in-out p-2 rounded-full">
+<span class="material-symbols-outlined">arrow_back</span>
+</button>
+<h1 class="font-title-lg text-title-lg text-on-surface">Detaylı Soru Analizi</h1>
+</div>
+<div class="hidden md:flex items-center gap-8">
+<!-- Desktop Nav placeholder if needed, omitted as per focused intent -->
+</div>
+<div class="flex items-center">
+<div class="w-10 h-10 rounded-full bg-surface-variant flex items-center justify-center overflow-hidden">
+<img alt="User profile photo" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDlKH9MVHITXPpfx2S8ENzbIwsAXF1QYgIQOBkq-NnbYbzGVkMOlIrWdbZYFiNWlQcLAhCucRIh6WKWg6dhPhvRHzXeuNqE41FoAu4gIaO4BT-Fv8z4HoIDH14VtK-uDoJN9exFTL-nlgvjlxA6af3HYTFDyFVL0uTVX2496r1ePtoOrtznRQss1mQHoFhQnDdpe8N-WBZXzFq4XW4Mt-3y1V9VVh8iXEpfspMlwhSUMl2BUh7Mh0oRgcpwf1t5ljoiVZIm8a9amrw"/>
+</div>
+</div>
+</header>
+<!-- Main Content -->
+<main class="pt-24 px-margin max-w-5xl mx-auto space-y-lg md:space-y-xl">
+<!-- Summary Section -->
+<section class="bg-surface-light rounded-xl shadow-sm border border-border-light p-md md:p-lg flex flex-col md:flex-row justify-between items-start md:items-center gap-md">
+<div>
+<h2 class="font-headline text-headline text-on-surface mb-xs">Biologiya Final</h2>
+<p class="font-body text-body text-on-surface-variant">Sınav Analiz Özeti</p>
+</div>
+<div class="flex gap-md w-full md:w-auto">
+<div class="bg-surface-container rounded-lg p-sm flex-1 md:flex-none md:min-w-[120px] text-center">
+<span class="block font-label text-label text-on-surface-variant mb-xs">Katılım</span>
+<span class="block font-title-lg text-title-lg text-primary">8 Öğrenci</span>
+</div>
+<div class="bg-primary-container rounded-lg p-sm flex-1 md:flex-none md:min-w-[120px] text-center">
+<span class="block font-label text-label text-on-primary-container mb-xs">Ortalama Başarı</span>
+<span class="block font-title-lg text-title-lg text-on-primary-container">%72</span>
+</div>
+</div>
+</section>
+<!-- Main Workspace (Grid + Details) -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-lg">
+<!-- Heatmap Grid Section -->
+<section class="md:col-span-2 bg-surface-light rounded-xl shadow-sm border border-border-light p-md md:p-lg">
+<div class="flex justify-between items-center mb-md">
+<h3 class="font-title-lg text-title-lg text-on-surface">Soru Bazlı Başarı</h3>
+<!-- Legend -->
+<div class="flex gap-sm items-center">
+<div class="flex items-center gap-xs">
+<span class="w-3 h-3 rounded-sm bg-success-light opacity-20"></span>
+<span class="font-label text-[12px] text-on-surface-variant">İyi</span>
+</div>
+<div class="flex items-center gap-xs">
+<span class="w-3 h-3 rounded-sm bg-warning-light opacity-20"></span>
+<span class="font-label text-[12px] text-on-surface-variant">Orta</span>
+</div>
+<div class="flex items-center gap-xs">
+<span class="w-3 h-3 rounded-sm bg-error-light opacity-20"></span>
+<span class="font-label text-[12px] text-on-surface-variant">Kritik</span>
+</div>
+</div>
+</div>
+<!-- The Grid -->
+<div class="grid grid-cols-4 sm:grid-cols-5 md:grid-cols-5 gap-sm">
+<!-- Q1 - Good -->
+<button class="aspect-square rounded-lg flex flex-col items-center justify-center border border-success-light/30 bg-success-light/10 text-success-light hover:bg-success-light/20 transition-colors">
+<span class="font-label text-label">S1</span>
+<span class="font-body text-[12px] opacity-80">%95</span>
+</button>
+<!-- Q2 - Medium -->
+<button class="aspect-square rounded-lg flex flex-col items-center justify-center border border-warning-light/30 bg-warning-light/10 text-warning-light hover:bg-warning-light/20 transition-colors">
+<span class="font-label text-label">S2</span>
+<span class="font-body text-[12px] opacity-80">%65</span>
+</button>
+<!-- Q3 - Medium -->
+<button class="aspect-square rounded-lg flex flex-col items-center justify-center border border-warning-light/30 bg-warning-light/10 text-warning-light hover:bg-warning-light/20 transition-colors">
+<span class="font-label text-label">S3</span>
+<span class="font-body text-[12px] opacity-80">%80</span>
+</button>
+<!-- Q4 - Good -->
+<button class="aspect-square rounded-lg flex flex-col items-center justify-center border border-success-light/30 bg-success-light/10 text-success-light hover:bg-success-light/20 transition-colors">
+<span class="font-label text-label">S4</span>
+<span class="font-body text-[12px] opacity-80">%90</span>
+</button>
+<!-- Q5 - Good -->
+<button class="aspect-square rounded-lg flex flex-col items-center justify-center border border-success-light/30 bg-success-light/10 text-success-light hover:bg-success-light/20 transition-colors">
+<span class="font-label text-label">S5</span>
+<span class="font-body text-[12px] opacity-80">%100</span>
+</button>
+<!-- Q6 - Medium -->
+<button class="aspect-square rounded-lg flex flex-col items-center justify-center border border-warning-light/30 bg-warning-light/10 text-warning-light hover:bg-warning-light/20 transition-colors">
+<span class="font-label text-label">S6</span>
+<span class="font-body text-[12px] opacity-80">%75</span>
+</button>
+<!-- Q7 - Critical (Selected State Demo) -->
+<button class="aspect-square rounded-lg flex flex-col items-center justify-center border-2 border-error-light bg-error-light/20 text-error-dark shadow-[0_0_0_2px_rgba(220,38,38,0.2)] transition-all transform scale-105">
+<span class="font-label text-label font-bold">S7</span>
+<span class="font-body text-[12px] font-medium">%45</span>
+</button>
+<!-- Q8 - Medium -->
+<button class="aspect-square rounded-lg flex flex-col items-center justify-center border border-warning-light/30 bg-warning-light/10 text-warning-light hover:bg-warning-light/20 transition-colors">
+<span class="font-label text-label">S8</span>
+<span class="font-body text-[12px] opacity-80">%55</span>
+</button>
+<!-- Q9 - Good -->
+<button class="aspect-square rounded-lg flex flex-col items-center justify-center border border-success-light/30 bg-success-light/10 text-success-light hover:bg-success-light/20 transition-colors">
+<span class="font-label text-label">S9</span>
+<span class="font-body text-[12px] opacity-80">%92</span>
+</button>
+<!-- Q10 - Good -->
+<button class="aspect-square rounded-lg flex flex-col items-center justify-center border border-success-light/30 bg-success-light/10 text-success-light hover:bg-success-light/20 transition-colors">
+<span class="font-label text-label">S10</span>
+<span class="font-body text-[12px] opacity-80">%95</span>
+</button>
+<!-- Q11 - Good -->
+<button class="aspect-square rounded-lg flex flex-col items-center justify-center border border-success-light/30 bg-success-light/10 text-success-light hover:bg-success-light/20 transition-colors">
+<span class="font-label text-label">S11</span>
+<span class="font-body text-[12px] opacity-80">%90</span>
+</button>
+<!-- Q12 - Good -->
+<button class="aspect-square rounded-lg flex flex-col items-center justify-center border border-success-light/30 bg-success-light/10 text-success-light hover:bg-success-light/20 transition-colors">
+<span class="font-label text-label">S12</span>
+<span class="font-body text-[12px] opacity-80">%98</span>
+</button>
+<!-- Q13 - Medium -->
+<button class="aspect-square rounded-lg flex flex-col items-center justify-center border border-warning-light/30 bg-warning-light/10 text-warning-light hover:bg-warning-light/20 transition-colors">
+<span class="font-label text-label">S13</span>
+<span class="font-body text-[12px] opacity-80">%85</span>
+</button>
+<!-- Q14 - Critical -->
+<button class="aspect-square rounded-lg flex flex-col items-center justify-center border border-error-light/30 bg-error-light/10 text-error-dark hover:bg-error-light/20 transition-colors">
+<span class="font-label text-label">S14</span>
+<span class="font-body text-[12px] opacity-80">%30</span>
+</button>
+<!-- Q15 - Medium -->
+<button class="aspect-square rounded-lg flex flex-col items-center justify-center border border-warning-light/30 bg-warning-light/10 text-warning-light hover:bg-warning-light/20 transition-colors">
+<span class="font-label text-label">S15</span>
+<span class="font-body text-[12px] opacity-80">%60</span>
+</button>
+<!-- Q16 - Good -->
+<button class="aspect-square rounded-lg flex flex-col items-center justify-center border border-success-light/30 bg-success-light/10 text-success-light hover:bg-success-light/20 transition-colors">
+<span class="font-label text-label">S16</span>
+<span class="font-body text-[12px] opacity-80">%92</span>
+</button>
+<!-- Q17 - Medium -->
+<button class="aspect-square rounded-lg flex flex-col items-center justify-center border border-warning-light/30 bg-warning-light/10 text-warning-light hover:bg-warning-light/20 transition-colors">
+<span class="font-label text-label">S17</span>
+<span class="font-body text-[12px] opacity-80">%70</span>
+</button>
+<!-- Q18 - Medium -->
+<button class="aspect-square rounded-lg flex flex-col items-center justify-center border border-warning-light/30 bg-warning-light/10 text-warning-light hover:bg-warning-light/20 transition-colors">
+<span class="font-label text-label">S18</span>
+<span class="font-body text-[12px] opacity-80">%82</span>
+</button>
+<!-- Q19 - Good -->
+<button class="aspect-square rounded-lg flex flex-col items-center justify-center border border-success-light/30 bg-success-light/10 text-success-light hover:bg-success-light/20 transition-colors">
+<span class="font-label text-label">S19</span>
+<span class="font-body text-[12px] opacity-80">%90</span>
+</button>
+<!-- Q20 - Critical -->
+<button class="aspect-square rounded-lg flex flex-col items-center justify-center border border-error-light/30 bg-error-light/10 text-error-dark hover:bg-error-light/20 transition-colors">
+<span class="font-label text-label">S20</span>
+<span class="font-body text-[12px] opacity-80">%40</span>
+</button>
+</div>
+</section>
+<!-- Detail Section (Active State Demo for Q7) -->
+<section class="bg-surface-light rounded-xl shadow-sm border border-border-light p-md md:p-lg flex flex-col sticky top-24">
+<div class="mb-md">
+<span class="inline-flex items-center justify-center px-2 py-1 rounded bg-error-light/10 text-error-dark font-label text-[12px] mb-sm">
+                        Kritik Soru
+                    </span>
+<h3 class="font-title-lg text-title-lg text-on-surface mb-xs">Soru 7</h3>
+<p class="font-body text-body text-on-surface-variant bg-surface p-sm rounded-lg border border-border-light">
+                        Hücre zarının görevleri ile ilgili aşağıdakilerden hangisi yanlıştır?
+                    </p>
+</div>
+<div class="space-y-md flex-grow">
+<div class="bg-surface p-sm rounded-lg border border-border-light">
+<div class="flex justify-between items-center mb-xs">
+<span class="font-label text-label text-on-surface">Doğru Yanıtlama</span>
+<span class="font-label text-label text-error-dark">%45</span>
+</div>
+<div class="w-full bg-surface-variant rounded-full h-2">
+<div class="bg-error-light h-2 rounded-full" style="width: 45%"></div>
+</div>
+<p class="font-body text-[13px] text-on-surface-variant mt-xs">Sınıfın %45'i doğru yanıtladı.</p>
+</div>
+<div class="bg-surface p-sm rounded-lg border border-border-light">
+<h4 class="font-label text-label text-on-surface mb-sm">Çeldirici Analizi</h4>
+<div class="flex items-center gap-sm">
+<div class="w-8 h-8 rounded bg-warning-light/20 text-warning-dark flex items-center justify-center font-bold text-label">B</div>
+<div class="flex-grow">
+<p class="font-body text-[14px] text-on-surface">En çok işaretlenen yanlış şık</p>
+<p class="font-body text-[13px] text-on-surface-variant">%40 tercih edilme</p>
+</div>
+</div>
+</div>
+</div>
+<div class="mt-md pt-md border-t border-border-light">
+<div class="flex items-start gap-sm">
+<span class="material-symbols-outlined text-primary mt-xs">lightbulb</span>
+<div>
+<h4 class="font-label text-label text-on-surface">Öneri</h4>
+<p class="font-body text-[14px] text-on-surface-variant mt-xs">
+                                Öğrencilerin önemli bir kısmı hücre zarı konusundaki temel kavramları karıştırıyor. Bu konuyu tekrar gözden geçirin.
+                            </p>
+</div>
+</div>
+<button class="mt-md w-full bg-primary text-on-primary font-label text-label py-2 rounded-lg hover:bg-primary-dark transition-colors">
+                        Konu Tekrarı Ekle
+                    </button>
+</div>
+</section>
+</div>
+</main>
+<!-- BottomNavBar (Hidden on Web) -->
+<nav class="md:hidden fixed bottom-0 w-full z-50 bg-surface-light border-t border-border-light shadow-lg flex justify-around items-center h-20 w-full pb-safe">
+<a class="flex flex-col items-center justify-center text-on-surface-variant px-4 py-1 hover:text-primary active:scale-95 transition-transform duration-150" href="#">
+<span class="material-symbols-outlined" data-icon="home">home</span>
+<span class="font-label text-label mt-1">Home</span>
+</a>
+<a class="flex flex-col items-center justify-center bg-secondary-container text-on-secondary-container rounded-xl px-4 py-1 hover:text-primary active:scale-95 transition-transform duration-150" href="#">
+<span class="material-symbols-outlined" data-icon="quiz" style="font-variation-settings: 'FILL' 1;">quiz</span>
+<span class="font-label text-label mt-1 font-bold">Exams</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant px-4 py-1 hover:text-primary active:scale-95 transition-transform duration-150" href="#">
+<span class="material-symbols-outlined" data-icon="group">group</span>
+<span class="font-label text-label mt-1">Groups</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant px-4 py-1 hover:text-primary active:scale-95 transition-transform duration-150" href="#">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+<span class="font-label text-label mt-1">Settings</span>
+</a>
+</nav>
+</body></html>

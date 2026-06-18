@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+
+<html class="light" lang="tr"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>ExamKit - Gruplarım</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                            "tertiary": "#006243",
+                            "info-light": "#E0F2FE",
+                            "surface-variant": "#dfe3e7",
+                            "primary-fixed-dim": "#b4c5ff",
+                            "primary": "#004ac6",
+                            "error-container": "#ffdad6",
+                            "on-tertiary-fixed-variant": "#005137",
+                            "on-tertiary": "#ffffff",
+                            "primary-light": "#DBEAFE",
+                            "secondary": "#515f74",
+                            "outline": "#737686",
+                            "on-secondary-fixed-variant": "#3a485b",
+                            "on-background": "#171c1f",
+                            "surface-container-highest": "#dfe3e7",
+                            "on-error": "#ffffff",
+                            "outline-variant": "#c3c6d7",
+                            "surface-container": "#eaeef2",
+                            "inverse-on-surface": "#edf1f5",
+                            "text-primary": "#0F172A",
+                            "border": "#E2E8F0",
+                            "inverse-surface": "#2c3134",
+                            "secondary-fixed-dim": "#b9c7df",
+                            "on-primary": "#ffffff",
+                            "primary-container": "#2563eb",
+                            "on-error-container": "#93000a",
+                            "surface-tint": "#0053db",
+                            "primary-dark": "#1E40AF",
+                            "success": "#059669",
+                            "on-secondary-fixed": "#0d1c2e",
+                            "surface-container-high": "#e4e9ed",
+                            "surface-dim": "#d6dade",
+                            "error": "#DC2626",
+                            "surface": "#FFFFFF",
+                            "info": "#0284C7",
+                            "error-light": "#FEE2E2",
+                            "warning-light": "#FEF3C7",
+                            "surface-bright": "#f6fafe",
+                            "warning": "#D97706",
+                            "on-tertiary-fixed": "#002114",
+                            "surface-container-low": "#f0f4f8",
+                            "tertiary-fixed-dim": "#68dba9",
+                            "surface-container-lowest": "#ffffff",
+                            "on-primary-fixed": "#00174b",
+                            "primary-fixed": "#dbe1ff",
+                            "secondary-container": "#d5e3fc",
+                            "on-secondary": "#ffffff",
+                            "tertiary-container": "#007d57",
+                            "on-primary-fixed-variant": "#003ea8",
+                            "secondary-fixed": "#d5e3fc",
+                            "on-secondary-container": "#57657a",
+                            "tertiary-fixed": "#85f8c4",
+                            "success-light": "#D1FAE5",
+                            "on-tertiary-container": "#bdffdc",
+                            "inverse-primary": "#b4c5ff",
+                            "on-surface-variant": "#434655",
+                            "on-primary-container": "#eeefff",
+                            "on-surface": "#171c1f",
+                            "background": "#f6fafe"
+                    },
+                    "borderRadius": {
+                            "DEFAULT": "0.25rem",
+                            "lg": "0.5rem",
+                            "xl": "0.75rem",
+                            "full": "9999px"
+                    },
+                    "spacing": {
+                            "unit": "8px",
+                            "margin-desktop": "24px",
+                            "margin-mobile": "16px",
+                            "gutter": "16px",
+                            "container-max-student": "480px"
+                    },
+                    "fontFamily": {
+                            "title-lg": ["Inter"],
+                            "caption": ["Inter"],
+                            "body-lg": ["Inter"],
+                            "title-md": ["Inter"],
+                            "body-md": ["Inter"],
+                            "label-md": ["Inter"],
+                            "headline": ["Inter"],
+                            "display": ["Inter"]
+                    },
+                    "fontSize": {
+                            "title-lg": ["22px", { "lineHeight": "28px", "fontWeight": "600" }],
+                            "caption": ["12px", { "lineHeight": "16px", "fontWeight": "400" }],
+                            "body-lg": ["18px", { "lineHeight": "28px", "fontWeight": "400" }],
+                            "title-md": ["18px", { "lineHeight": "24px", "fontWeight": "600" }],
+                            "body-md": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                            "label-md": ["14px", { "lineHeight": "20px", "letterSpacing": "0.01em", "fontWeight": "500" }],
+                            "headline": ["26px", { "lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "700" }],
+                            "display": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "700" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        body { background-color: #F1F5F9; }
+        .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+        .material-symbols-outlined.filled { font-variation-settings: 'FILL' 1; }
+        .pb-safe { padding-bottom: env(safe-area-inset-bottom); }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="font-body-md text-on-background min-h-screen pb-[90px] md:pb-0 flex flex-col items-center">
+<!-- Container for Web Centering -->
+<div class="w-full md:max-w-container-max-student bg-[#F1F5F9] min-h-screen relative shadow-sm">
+<!-- TopAppBar (Customized for Screen 6) -->
+<header class="w-full h-[64px] flex items-center bg-surface border-b border-outline-variant flex justify-between items-center px-margin-mobile w-full sticky top-0 z-10">
+<h1 class="font-title-lg text-title-lg text-primary">Gruplarım</h1>
+<button aria-label="Yeni Grup Ekle" class="w-[48px] h-[48px] flex items-center justify-center rounded-full hover:bg-surface-container-low transition-colors active:scale-95 duration-100">
+<span class="material-symbols-outlined text-[28px] text-primary">add</span>
+</button>
+</header>
+<!-- Search Bar Area -->
+<div class="px-margin-mobile py-[16px] bg-[#F1F5F9] sticky top-[64px] z-10 shadow-sm shadow-[#F1F5F9]/50">
+<div class="relative w-full h-[56px]">
+<span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-outline">search</span>
+<input class="w-full h-full pl-[48px] pr-4 bg-surface border-border rounded-lg focus:border-primary focus:ring-1 focus:ring-primary text-body-md font-body-md text-on-background placeholder:text-outline transition-colors outline-none shadow-sm" placeholder="Grup ara..." type="text"/>
+</div>
+</div>
+<!-- Group List Content -->
+<main class="px-margin-mobile py-[8px] flex flex-col gap-[12px]">
+<!-- Group Card 1 -->
+<button class="w-full min-h-[72px] bg-surface rounded-lg p-[12px] flex items-center gap-[16px] hover:shadow-md transition-shadow active:scale-[0.98] border border-border/50 text-left">
+<div class="w-[48px] h-[48px] rounded-full bg-primary-light flex-shrink-0 flex items-center justify-center">
+<span class="material-symbols-outlined text-primary">school</span>
+</div>
+<div class="flex-grow flex flex-col justify-center overflow-hidden">
+<span class="font-title-md text-title-md text-on-background truncate">12-A Matematik İleri Seviye</span>
+<span class="font-caption text-caption text-secondary mt-[2px] truncate">8 sınav · Son: 2 gün önce</span>
+</div>
+<span class="material-symbols-outlined text-outline flex-shrink-0">chevron_right</span>
+</button>
+<!-- Group Card 2 -->
+<button class="w-full min-h-[72px] bg-surface rounded-lg p-[12px] flex items-center gap-[16px] hover:shadow-md transition-shadow active:scale-[0.98] border border-border/50 text-left">
+<div class="w-[48px] h-[48px] rounded-full bg-primary-light flex-shrink-0 flex items-center justify-center">
+<span class="material-symbols-outlined text-primary">science</span>
+</div>
+<div class="flex-grow flex flex-col justify-center overflow-hidden">
+<span class="font-title-md text-title-md text-on-background truncate">11-B Fizik Olimpiyat</span>
+<span class="font-caption text-caption text-secondary mt-[2px] truncate">4 sınav · Son: 1 hafta önce</span>
+</div>
+<span class="material-symbols-outlined text-outline flex-shrink-0">chevron_right</span>
+</button>
+<!-- Group Card 3 -->
+<button class="w-full min-h-[72px] bg-surface rounded-lg p-[12px] flex items-center gap-[16px] hover:shadow-md transition-shadow active:scale-[0.98] border border-border/50 text-left">
+<div class="w-[48px] h-[48px] rounded-full bg-primary-light flex-shrink-0 flex items-center justify-center">
+<span class="material-symbols-outlined text-primary">menu_book</span>
+</div>
+<div class="flex-grow flex flex-col justify-center overflow-hidden">
+<span class="font-title-md text-title-md text-on-background truncate">10-C Edebiyat Hazırlık</span>
+<span class="font-caption text-caption text-secondary mt-[2px] truncate">12 sınav · Son: Dün</span>
+</div>
+<span class="material-symbols-outlined text-outline flex-shrink-0">chevron_right</span>
+</button>
+<!-- Group Card 4 (With Badge) -->
+<button class="w-full min-h-[72px] bg-surface rounded-lg p-[12px] flex items-center gap-[16px] hover:shadow-md transition-shadow active:scale-[0.98] border border-border/50 text-left">
+<div class="w-[48px] h-[48px] rounded-full bg-primary-light flex-shrink-0 flex items-center justify-center">
+<span class="material-symbols-outlined text-primary">calculate</span>
+</div>
+<div class="flex-grow flex flex-col justify-center overflow-hidden">
+<span class="font-title-md text-title-md text-on-background truncate">9-A Temel Matematik</span>
+<span class="font-caption text-caption text-secondary mt-[2px] truncate">2 sınav · Son: Bugün</span>
+</div>
+<div class="flex items-center gap-2 flex-shrink-0">
+<span class="bg-error text-on-error font-caption text-[10px] font-bold px-2 py-0.5 rounded-full uppercase tracking-wide">3 Aktif</span>
+<span class="material-symbols-outlined text-outline">chevron_right</span>
+</div>
+</button>
+<!-- Empty State Section (Illustrative purpose based on prompt) -->
+<div class="mt-[32px] mb-[24px] flex flex-col items-center justify-center p-[24px] bg-surface/50 rounded-xl border border-dashed border-outline-variant">
+<div class="w-[120px] h-[120px] rounded-full bg-primary-light/50 flex items-center justify-center mb-4">
+<span class="material-symbols-outlined text-[64px] text-primary/40">group_add</span>
+</div>
+<h3 class="font-title-md text-title-md text-on-background mb-2">Henüz başka grup yok</h3>
+<p class="font-body-md text-body-md text-secondary text-center mb-6 max-w-[280px]">Öğrencilerinizi organize etmek için yeni gruplar oluşturmaya başlayın.</p>
+<button class="w-full h-[56px] bg-primary-container text-on-primary rounded-lg font-title-md text-title-md flex items-center justify-center gap-2 hover:bg-primary-dark transition-colors active:scale-[0.98] shadow-sm">
+<span class="material-symbols-outlined">add</span>
+                    İlk grubunu oluştur
+                </button>
+</div>
+</main>
+<!-- BottomNavBar (Mobile Only) -->
+<nav class="md:hidden fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-2 pb-safe bg-surface border-t border-outline-variant shadow-sm h-[72px]">
+<!-- Home: Inactive -->
+<button aria-label="Home" class="flex flex-col items-center justify-center text-on-surface-variant px-5 py-1 hover:bg-surface-variant transition-all active:scale-90 duration-200">
+<span class="material-symbols-outlined mb-1">home</span>
+<span class="font-label-md text-label-md">Home</span>
+</button>
+<!-- Groups: Active -->
+<button aria-label="Groups" class="flex flex-col items-center justify-center bg-secondary-container text-on-secondary-container rounded-full px-5 py-1 hover:bg-surface-variant transition-all active:scale-90 duration-200">
+<span class="material-symbols-outlined filled mb-1">group</span>
+<span class="font-label-md text-label-md font-bold">Groups</span>
+</button>
+<!-- Exams: Inactive -->
+<button aria-label="Exams" class="flex flex-col items-center justify-center text-on-surface-variant px-5 py-1 hover:bg-surface-variant transition-all active:scale-90 duration-200">
+<span class="material-symbols-outlined mb-1">description</span>
+<span class="font-label-md text-label-md">Exams</span>
+</button>
+<!-- Settings: Inactive -->
+<button aria-label="Settings" class="flex flex-col items-center justify-center text-on-surface-variant px-5 py-1 hover:bg-surface-variant transition-all active:scale-90 duration-200">
+<span class="material-symbols-outlined mb-1">settings</span>
+<span class="font-label-md text-label-md">Settings</span>
+</button>
+</nav>
+</div>
+</body></html>

@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport"/>
+<title>ExamKit - Teacher Dashboard</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface-container-high": "#e4e9ed",
+                        "on-surface": "#171c1f",
+                        "border": "#E2E8F0",
+                        "primary-container": "#2563eb",
+                        "inverse-on-surface": "#edf1f5",
+                        "background": "#f1f5f9",
+                        "warning-light": "#FEF3C7",
+                        "primary-light": "#DBEAFE",
+                        "surface-container": "#eaeef2",
+                        "warning": "#D97706",
+                        "success-light": "#D1FAE5",
+                        "on-tertiary-fixed": "#002114",
+                        "on-primary": "#ffffff",
+                        "on-tertiary": "#ffffff",
+                        "tertiary-fixed": "#85f8c4",
+                        "secondary": "#515f74",
+                        "on-primary-fixed-variant": "#003ea8",
+                        "on-secondary": "#ffffff",
+                        "surface-container-highest": "#dfe3e7",
+                        "on-surface-variant": "#434655",
+                        "on-secondary-container": "#57657a",
+                        "primary-dark": "#1E40AF",
+                        "tertiary-container": "#007d57",
+                        "on-primary-container": "#eeefff",
+                        "surface-container-lowest": "#ffffff",
+                        "primary": "#2563eb",
+                        "outline-variant": "#c3c6d7",
+                        "error": "#DC2626",
+                        "surface-variant": "#dfe3e7",
+                        "surface": "#FFFFFF",
+                        "tertiary-fixed-dim": "#68dba9",
+                        "secondary-fixed": "#d5e3fc",
+                        "on-tertiary-container": "#bdffdc",
+                        "on-background": "#171c1f",
+                        "success": "#059669",
+                        "on-error": "#ffffff",
+                        "primary-fixed": "#dbe1ff",
+                        "on-secondary-fixed-variant": "#3a485b",
+                        "text-primary": "#0F172A",
+                        "info-light": "#E0F2FE",
+                        "outline": "#737686",
+                        "on-secondary-fixed": "#0d1c2e",
+                        "inverse-surface": "#2c3134",
+                        "secondary-fixed-dim": "#b9c7df",
+                        "on-error-container": "#93000a",
+                        "surface-tint": "#0053db",
+                        "surface-dim": "#d6dade",
+                        "on-tertiary-fixed-variant": "#005137",
+                        "primary-fixed-dim": "#b4c5ff",
+                        "inverse-primary": "#b4c5ff",
+                        "surface-bright": "#f6fafe",
+                        "surface-container-low": "#f0f4f8",
+                        "info": "#0284C7",
+                        "tertiary": "#006243",
+                        "secondary-container": "#d5e3fc",
+                        "error-light": "#FEE2E2",
+                        "error-container": "#ffdad6",
+                        "on-primary-fixed": "#00174b"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "margin-mobile": "16px",
+                        "margin-desktop": "24px",
+                        "container-max-student": "480px",
+                        "gutter": "16px",
+                        "unit": "8px",
+                        "safe": "env(safe-area-inset-bottom)"
+                    },
+                    "fontFamily": {
+                        "body-md": ["Inter"],
+                        "caption": ["Inter"],
+                        "title-lg": ["Inter"],
+                        "label-md": ["Inter"],
+                        "headline": ["Inter"],
+                        "display": ["Inter"],
+                        "title-md": ["Inter"],
+                        "body-lg": ["Inter"]
+                    },
+                    "fontSize": {
+                        "body-md": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "caption": ["12px", { "lineHeight": "16px", "fontWeight": "400" }],
+                        "title-lg": ["22px", { "lineHeight": "28px", "fontWeight": "600" }],
+                        "label-md": ["14px", { "lineHeight": "20px", "letterSpacing": "0.01em", "fontWeight": "500" }],
+                        "headline": ["26px", { "lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "700" }],
+                        "display": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "title-md": ["18px", { "lineHeight": "24px", "fontWeight": "600" }],
+                        "body-lg": ["18px", { "lineHeight": "28px", "fontWeight": "400" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        body { background-color: #f1f5f9; -webkit-tap-highlight-color: transparent; }
+        .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+        .icon-fill { font-variation-settings: 'FILL' 1; }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-surface antialiased flex justify-center pb-[72px]">
+<div class="w-full max-w-container-max-student min-h-screen relative shadow-sm bg-background">
+<!-- AppBar -->
+<header class="bg-surface h-[64px] px-margin-mobile flex items-center justify-between sticky top-0 z-10 border-b border-border">
+<h1 class="font-title-lg text-title-lg text-text-primary truncate pr-4">Merhaba, Ayşə Müəllim 👋</h1>
+<button aria-label="Settings" class="w-[36px] h-[36px] rounded-full overflow-hidden flex-shrink-0 active:scale-95 transition-transform">
+<img alt="Profile" class="w-full h-full object-cover" data-alt="A close-up portrait of a professional female teacher in her 30s with a warm, welcoming smile. She has dark hair tied back neatly and is wearing smart-casual attire suitable for an academic environment. The lighting is soft and bright, emphasizing a modern, reliable, and approachable educational platform aesthetic. The background is slightly blurred and neutral." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBHhpQ_QuAV-37-ohwy70R-at4iAoBPOsncc06OsHlIm-P6S4o62CATMRMvIS-AYJi4c1k0qxR0WPB6Cn04kcTIyObbaKMVMNkMppxWzM21eGS6n3fwEaRv0azwHuQDghfR2mPTIDbBtWdXtx9zZksVQVt5LYlJvKXFVz7PrgVP3G0uDSgbBEBJ8JFREPIV0f3111f_J49aRjVmeGq7JVtyMoXMKdLjUhHtXXjCgucDSpWL2mvVIzP6wsIVT7TXBuIUWXgVy2C80YI"/>
+</button>
+</header>
+<main class="p-margin-mobile flex flex-col gap-[24px]">
+<!-- Stats Row -->
+<section aria-label="Dashboard Statistics" class="grid grid-cols-3 gap-unit">
+<div class="bg-surface rounded-lg p-[16px] flex flex-col items-center justify-center border border-border">
+<span class="material-symbols-outlined text-primary mb-1 icon-fill">groups</span>
+<span class="text-[28px] leading-[32px] font-bold text-text-primary">12</span>
+<span class="font-label-md text-label-md text-secondary">Grup</span>
+</div>
+<div class="bg-surface rounded-lg p-[16px] flex flex-col items-center justify-center border border-border">
+<span class="material-symbols-outlined text-success mb-1 icon-fill">assignment</span>
+<span class="text-[28px] leading-[32px] font-bold text-text-primary">47</span>
+<span class="font-label-md text-label-md text-secondary">Sınav</span>
+</div>
+<div class="bg-surface rounded-lg p-[16px] flex flex-col items-center justify-center border border-border">
+<span class="material-symbols-outlined text-warning mb-1 icon-fill">person</span>
+<span class="text-[28px] leading-[32px] font-bold text-text-primary">128</span>
+<span class="font-label-md text-label-md text-secondary">Bugün</span>
+</div>
+</section>
+<!-- Quick Actions -->
+<section aria-label="Quick Actions" class="flex flex-col gap-unit">
+<button class="w-full h-[64px] bg-primary text-on-primary rounded-lg flex items-center justify-center gap-2 active:scale-[0.98] transition-transform shadow-sm">
+<span class="material-symbols-outlined">group_add</span>
+<span class="font-title-md text-title-md text-white">Yeni Grup Oluştur</span>
+</button>
+<button class="w-full h-[64px] bg-success text-on-primary rounded-lg flex items-center justify-center gap-2 active:scale-[0.98] transition-transform shadow-sm">
+<span class="material-symbols-outlined">add_circle</span>
+<span class="font-title-md text-title-md text-white">Yeni Sınav Oluştur</span>
+</button>
+</section>
+<!-- Recent Exams -->
+<section aria-label="Recent Exams" class="flex flex-col gap-unit">
+<div class="flex items-center justify-between mb-2">
+<h2 class="font-title-md text-title-md text-text-primary">Son Sınavlar</h2>
+<a class="font-label-md text-label-md text-primary" href="#">Tümünü Gör</a>
+</div>
+<div class="flex flex-col gap-unit">
+<!-- Exam Card 1 (Draft) -->
+<div class="bg-surface rounded-lg p-4 h-[80px] flex items-center justify-between border border-border active:bg-surface-container-low transition-colors cursor-pointer">
+<div class="flex flex-col justify-center overflow-hidden pr-2">
+<span class="font-body-md text-body-md text-text-primary font-semibold truncate">Riyaziyyat Fənn Sınavı</span>
+<span class="font-caption text-caption text-secondary mt-1 truncate">9-A Sinifi</span>
+</div>
+<div class="bg-warning-light text-warning px-3 py-1 rounded-full flex items-center shrink-0">
+<span class="font-caption text-caption font-medium">Taslak</span>
+</div>
+</div>
+<!-- Exam Card 2 (Live) -->
+<div class="bg-surface rounded-lg p-4 h-[80px] flex items-center justify-between border border-border active:bg-surface-container-low transition-colors cursor-pointer">
+<div class="flex flex-col justify-center overflow-hidden pr-2">
+<span class="font-body-md text-body-md text-text-primary font-semibold truncate">Türk Dili Yazılı</span>
+<span class="font-caption text-caption text-secondary mt-1 truncate">11-B Sinifi</span>
+</div>
+<div class="bg-success-light text-success px-3 py-1 rounded-full flex items-center gap-1 shrink-0">
+<span class="w-2 h-2 rounded-full bg-success animate-pulse"></span>
+<span class="font-caption text-caption font-medium">Canlı</span>
+</div>
+</div>
+<!-- Exam Card 3 (Completed) -->
+<div class="bg-surface rounded-lg p-4 h-[80px] flex items-center justify-between border border-border active:bg-surface-container-low transition-colors cursor-pointer">
+<div class="flex flex-col justify-center overflow-hidden pr-2">
+<span class="font-body-md text-body-md text-text-primary font-semibold truncate">Kimya Bölüm 2</span>
+<span class="font-caption text-caption text-secondary mt-1 truncate">10-A Sinifi</span>
+</div>
+<div class="bg-surface-container text-secondary px-3 py-1 rounded-full flex items-center shrink-0">
+<span class="font-caption text-caption font-medium">Tamamlandı</span>
+</div>
+</div>
+</div>
+</section>
+</main>
+<!-- Bottom Navigation Shell Placeholder -->
+<!-- Expected replacement by DATA:COMPONENTS:COMPONENTS_3 JSON structure -->
+<nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-2 pb-safe bg-surface dark:bg-on-background h-[72px] border-t border-outline-variant shadow-sm max-w-container-max-student left-1/2 -translate-x-1/2">
+<button class="flex flex-col items-center justify-center bg-secondary-container text-on-secondary-container rounded-full px-5 py-1 active:scale-90 duration-200 transition-all">
+<span class="material-symbols-outlined icon-fill">home</span>
+<span class="font-label-md text-label-md mt-1">Home</span>
+</button>
+<button class="flex flex-col items-center justify-center text-on-surface-variant px-5 py-1 hover:bg-surface-variant active:scale-90 duration-200 transition-all">
+<span class="material-symbols-outlined">group</span>
+<span class="font-label-md text-label-md mt-1">Groups</span>
+</button>
+<button class="flex flex-col items-center justify-center text-on-surface-variant px-5 py-1 hover:bg-surface-variant active:scale-90 duration-200 transition-all">
+<span class="material-symbols-outlined">description</span>
+<span class="font-label-md text-label-md mt-1">Exams</span>
+</button>
+<button class="flex flex-col items-center justify-center text-on-surface-variant px-5 py-1 hover:bg-surface-variant active:scale-90 duration-200 transition-all">
+<span class="material-symbols-outlined">settings</span>
+<span class="font-label-md text-label-md mt-1">Settings</span>
+</button>
+</nav>
+</div>
+</body></html>
