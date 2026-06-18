@@ -1,68 +1,42 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import '../providers/group_provider.dart';
 
-class GroupListScreen extends StatelessWidget {
+class GroupListScreen extends ConsumerWidget {
   const GroupListScreen({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    final theme = Theme.of(context);
+  Widget build(BuildContext context, WidgetRef ref) {
+    final groupsAsync = ref.watch(watchGroupsProvider);
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Gruplarım'),
-        actions: [
-          IconButton(icon: const Icon(Icons.add), onPressed: () => context.push('/groups/create')),
-        ],
+        actions: [IconButton(icon: const Icon(Icons.add), onPressed: () => context.push('/groups/create'))],
       ),
-      body: ListView(
-        padding: const EdgeInsets.all(16),
-        children: [
-          // Search
-          TextField(
-            decoration: InputDecoration(
-              hintText: 'Grup ara...',
-              prefixIcon: const Icon(Icons.search),
-              filled: true, fillColor: Colors.white,
-              border: OutlineInputBorder(borderRadius: BorderRadius.circular(12), borderSide: const BorderSide(color: Color(0xFFE2E8F0))),
+      body: groupsAsync.when(
+        loading: () => const Center(child: CircularProgressIndicator()),
+        error: (e, _) => Center(child: Column(mainAxisSize: MainAxisSize.min, children: [const Icon(Icons.error_outline, size: 48, color: Color(0xFFDC2626)), const SizedBox(height: 8), Text('$e', textAlign: TextAlign.center)],)),
+        data: (groups) {
+          if (groups.isEmpty) {
+            return Center(child: Column(mainAxisSize: MainAxisSize.min, children: [Icon(Icons.group, size: 48, color: Colors.grey[300]), const SizedBox(height: 12), const Text('Henüz grup yok'), const SizedBox(height: 8), ElevatedButton(onPressed: () => context.push('/groups/create'), child: const Text('İlk Grubu Oluştur'))]));
+          }
+          return ListView.builder(
+            padding: const EdgeInsets.all(16),
+            itemCount: groups.length,
+            itemBuilder: (_, i) => Card(
+              margin: const EdgeInsets.only(bottom: 8),
+              child: ListTile(
+                leading: const CircleAvatar(backgroundColor: Color(0xFFDBEAFE), child: Icon(Icons.group, color: Color(0xFF2563EB))),
+                title: Text(groups[i].name, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
+                subtitle: Text('${groups[i].examCount} sınav', style: const TextStyle(fontSize: 13, color: Color(0xFF475569))),
+                trailing: const Icon(Icons.chevron_right, color: Color(0xFF94A3B8)),
+                onTap: () => context.push('/groups/${groups[i].id}'),
+              ),
             ),
-          ),
-          const SizedBox(height: 12),
-          _GroupTile(name: '9-A Sinifi', count: 8, lastActive: '2 gün önce', onTap: () => context.push('/groups/1')),
-          const SizedBox(height: 8),
-          _GroupTile(name: '10-B Matematik', count: 12, lastActive: '5 gün önce', activeCount: 3, onTap: () => context.push('/groups/2')),
-          const SizedBox(height: 8),
-          _GroupTile(name: '11-A Fizik', count: 5, lastActive: '1 hafta önce', onTap: () => context.push('/groups/3')),
-          const SizedBox(height: 8),
-          _GroupTile(name: '12-C Kimya', count: 15, lastActive: 'Dün', onTap: () => context.push('/groups/4')),
-        ],
-      ),
-    );
-  }
-}
-
-class _GroupTile extends StatelessWidget {
-  final String name;
-  final int count;
-  final String lastActive;
-  final int? activeCount;
-  final VoidCallback onTap;
-  const _GroupTile({required this.name, required this.count, required this.lastActive, this.activeCount, required this.onTap});
-
-  @override
-  Widget build(BuildContext context) {
-    return Card(
-      child: ListTile(
-        onTap: onTap,
-        leading: CircleAvatar(backgroundColor: const Color(0xFFDBEAFE), child: const Icon(Icons.group, color: Color(0xFF2563EB))),
-        title: Text(name, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
-        subtitle: Text('$count sınav · Son: $lastActive', style: const TextStyle(fontSize: 13, color: Color(0xFF475569))),
-        trailing: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            if (activeCount != null) Container(padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2), decoration: BoxDecoration(color: const Color(0xFFFEE2E2), borderRadius: BorderRadius.circular(20)), child: Text('$activeCount Aktif', style: const TextStyle(fontSize: 11, color: Color(0xFFDC2626), fontWeight: FontWeight.w500))),
-            const Icon(Icons.chevron_right, color: Color(0xFF94A3B8)),
-          ],
-        ),
+          );
+        },
       ),
     );
   }
