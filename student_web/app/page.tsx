@@ -8,6 +8,7 @@
 
 import { useState, useCallback, type FormEvent } from "react";
 import { ExamKitLogo } from "@/components/ExamKitLogo";
+import { getExamByCode } from "@/lib/firestore";
 
 export default function HomePage() {
   const [code, setCode] = useState("");
@@ -33,10 +34,21 @@ export default function HomePage() {
       setLoading(true);
       setError("");
 
+      // Firebase: kod doğrulama
+      try {
+        const exam = await getExamByCode(code);
+        if (exam) {
+          window.location.href = `/join/${code}`;
+          return;
+        }
+      } catch {
+        // Firestore yok → direkt geç (graceful)
+      }
+
       setTimeout(() => {
         setLoading(false);
         window.location.href = `/join/${code}`;
-      }, 800);
+      }, 400);
     },
     [code]
   );

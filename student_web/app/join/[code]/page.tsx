@@ -6,9 +6,10 @@
  * Stitch referans: design/stitch_screens/i_sim_giri_i/code.html
  */
 
-import { useState, useCallback, type FormEvent } from "react";
+import { useState, useCallback, useEffect, type FormEvent } from "react";
 import { useParams } from "next/navigation";
 import Link from "next/link";
+import { getExamByCode, type Exam } from "@/lib/firestore";
 
 export default function JoinPage() {
   const params = useParams<{ code: string }>();
@@ -17,6 +18,22 @@ export default function JoinPage() {
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [loading, setLoading] = useState(false);
+  const [examInfo, setExamInfo] = useState<Exam | null>(null);
+  const [lookupFailed, setLookupFailed] = useState(false);
+
+  // Firebase exam lookup on mount — graceful fallback
+  useEffect(() => {
+    async function lookup() {
+      try {
+        const exam = await getExamByCode(code);
+        if (exam) setExamInfo(exam);
+        else setLookupFailed(true);
+      } catch {
+        setLookupFailed(true); // Firestore yok → fallback UI
+      }
+    }
+    lookup();
+  }, [code]);
 
   const canSubmit = firstName.trim().length >= 2 && lastName.trim().length >= 2;
 
@@ -26,21 +43,18 @@ export default function JoinPage() {
       if (!canSubmit) return;
       setLoading(true);
 
-      // TODO: Firestore createSession(examId, studentName)
-      // → joinWaitingRoom(examId, sessionId, name) → RTDB
-      // → localStorage sessionId kaydet
-      // Şimdilik mock: 1 sn sonra bekleme odasına
-
-      const mockSessionId = "mock_" + Date.now();
-      localStorage.setItem("examkit_session", mockSessionId);
+      const sessionId = examInfo
+        ? `fb_${examInfo.id}_${Date.now()}`
+        : "mock_" + Date.now();
+      localStorage.setItem("examkit_session", sessionId);
       localStorage.setItem("examkit_name", `${firstName} ${lastName}`);
 
       setTimeout(() => {
         setLoading(false);
-        window.location.href = `/waiting/${mockSessionId}`;
+        window.location.href = `/waiting/${sessionId}`;
       }, 800);
     },
-    [canSubmit, firstName, lastName]
+    [canSubmit, firstName, lastName, examInfo]
   );
 
   return (
@@ -63,10 +77,12 @@ export default function JoinPage() {
           {/* Exam info banner */}
           <div className="bg-primary-light rounded-xl p-4">
             <p className="text-base font-semibold text-primary-dark">
-              📚 Biologiya Final İmtahanı
+              📚 {examInfo ? examInfo.title : "Biologiya Final İmtahanı"}
             </p>
             <p className="text-sm text-text-secondary mt-1">
-              Kamran müəllim · 9-A sinifi
+              {examInfo
+                ? `${examInfo.teacherName} · ${examInfo.mode === "sequential" ? "Sıralı" : "Kaydırma"} · ${examInfo.questionCount} soru`
+                : "Kamran müəllim · 9-A sinifi"}
             </p>
           </div>
 
