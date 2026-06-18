@@ -3,7 +3,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../providers/live_exam_provider.dart';
 
 class LiveControlScreen extends ConsumerStatefulWidget {
-  const LiveControlScreen({super.key});
+  final String examId;
+  const LiveControlScreen({super.key, required this.examId});
 
   @override
   ConsumerState<LiveControlScreen> createState() => _LiveControlScreenState();
@@ -42,7 +43,7 @@ class _LiveControlScreenState extends ConsumerState<LiveControlScreen> {
           ? SizedBox(width: double.infinity, height: 56, child: OutlinedButton(onPressed: () => setState(() => _started = false), style: OutlinedButton.styleFrom(foregroundColor: const Color(0xFFDC2626)), child: const Text('Sınavı Erken Bitir')))
           : SizedBox(width: double.infinity, height: 64, child: ElevatedButton(onPressed: () async {
               try {
-                await ref.read(startExamProvider((examId: 'mock_exam_id', teacherId: 'teacher_uid', globalTimerMinutes: 20)).future);
+                await ref.read(startExamProvider((examId: widget.examId, teacherId: 'teacher_uid', globalTimerMinutes: 20)).future);
                 setState(() => _started = true);
               } catch (e) {
                 if (mounted) ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Başlatılamadı: $e')));

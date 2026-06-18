@@ -49,12 +49,12 @@ final watchExamsProvider = StreamProvider.autoDispose<List<ExamModel>>((ref) {
 });
 
 /// Sınav oluştur (basit)
-final createExamProvider = FutureProvider.autoDispose.family<void, ({String title, String groupId, String? groupName})>((ref, params) async {
+final createExamProvider = FutureProvider.autoDispose.family<String, ({String title, String groupId, String? groupName})>((ref, params) async {
   final user = ref.read(authStateProvider).value;
   if (user == null) throw Exception('Giriş yapılmamış');
 
   final firestore = ref.read(firestoreProvider);
-  await firestore.collection('exams').add({
+  final docRef = await firestore.collection('exams').add({
     'title': params.title,
     'groupId': params.groupId,
     'groupName': params.groupName,
@@ -65,6 +65,7 @@ final createExamProvider = FutureProvider.autoDispose.family<void, ({String titl
     'settings': {},
     'createdAt': FieldValue.serverTimestamp(),
   });
+  return docRef.id;
 });
 
 /// Sınav sil

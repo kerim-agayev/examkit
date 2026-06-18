@@ -71,7 +71,7 @@ class _ExamCreateScreenState extends ConsumerState<ExamCreateScreen> {
                       ),
                     ),
                     const SizedBox(height: 8),
-                    Align(alignment: Alignment.centerLeft, child: TextButton.icon(onPressed: () {}, icon: const Icon(Icons.add, size: 16), label: const Text('Yeni Grup Oluştur'))),
+                    Align(alignment: Alignment.centerLeft, child: TextButton.icon(onPressed: () => context.push('/groups/create'), icon: const Icon(Icons.add, size: 16), label: const Text('Yeni Grup Oluştur'))),
                   ],
                 ),
               ),

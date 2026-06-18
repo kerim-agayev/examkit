@@ -14,13 +14,10 @@ class ExamPreviewScreen extends ConsumerWidget {
 
     Future<void> publish() async {
       try {
-        // 1. Firestore'da sınav oluştur
-        await ref.read(createExamProvider(
+        final examId = await ref.read(createExamProvider(
           (title: state.title, groupId: state.groupId ?? '', groupName: state.groupName),
         ).future);
-
-        // 2. Kod üret ve paylaş sayfasına geç
-        if (context.mounted) context.push('/exams/${state.groupId}/share');
+        if (context.mounted) context.push('/exams/$examId/share');
       } catch (e) {
         if (context.mounted) {
           ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Yayınlanamadı: $e')));

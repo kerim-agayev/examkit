@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 
 class StudentResultDetailScreen extends StatelessWidget {
-  const StudentResultDetailScreen({super.key});
+  final String examId;
+  final String studentId;
+  const StudentResultDetailScreen({super.key, required this.examId, required this.studentId});
 
   @override
   Widget build(BuildContext context) {

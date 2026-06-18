@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class ResultsScreen extends StatelessWidget {
-  const ResultsScreen({super.key});
+class ResultsScreen extends ConsumerWidget {
+  final String examId;
+  const ResultsScreen({super.key, required this.examId});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
       appBar: AppBar(title: const Text('Sınav Sonuçları'), bottom: PreferredSize(preferredSize: const Size.fromHeight(22), child: Padding(padding: const EdgeInsets.only(bottom: 8), child: Text('Biologiya Final · 8 öğrenci', style: TextStyle(fontSize: 13, color: Colors.grey[600]))))),
       body: SingleChildScrollView(

@@ -98,7 +98,7 @@ class _QuestionListScreenState extends State<QuestionListScreen> {
                 child: SizedBox(
                   width: double.infinity, height: 56,
                   child: OutlinedButton(
-                    onPressed: () {},
+                    onPressed: () => context.push('/exams/create/questions/edit'),
                     style: OutlinedButton.styleFrom(shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12), side: const BorderSide(color: Color(0xFF2563EB)))),
                     child: const Text('+ Soru Ekle'),
                   ),

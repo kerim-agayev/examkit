@@ -62,9 +62,10 @@ service cloud.firestore {
 
     // === Exam Answers (DOĞRU CEVAPLAR — sadece öğretmen) ===
     match /exams/{examId}/exam_answers/{questionId} {
-      // KRİTİK: Sadece auth'lu öğretmen okuyabilir
-      allow read, write: if request.auth != null;
-      // Öğrenci OKUYAMAZ — bu firewall'ın temel güvenlik garantisidir
+      // KRİTİK: Sadece exam'in sahibi öğretmen okuyabilir
+      allow read, write: if request.auth != null
+        && get(/databases/$(database)/documents/exams/$(examId)).data.ownerTeacherId == request.auth.uid;
+      // Öğrenci OKUYAMAZ — parent exam ownerTeacherId kontrolü yapılır
     }
 
     // === Sessions (Öğrenci sınav oturumları) ===

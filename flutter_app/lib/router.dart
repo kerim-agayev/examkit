@@ -46,10 +46,10 @@ final routerProvider = Provider<GoRouter>((ref) {
       GoRoute(path: '/exams/create/questions', builder: (_, __) => const QuestionListScreen()),
       GoRoute(path: '/exams/create/questions/edit', builder: (_, __) => const QuestionEditorScreen()),
       GoRoute(path: '/exams/create/preview', builder: (_, __) => const ExamPreviewScreen()),
-      GoRoute(path: '/exams/:id/share', builder: (_, __) => const ShareScreen()),
-      GoRoute(path: '/exams/:id/live', builder: (_, __) => const LiveControlScreen()),
-      GoRoute(path: '/exams/:id/results', builder: (_, __) => const ResultsScreen()),
-      GoRoute(path: '/exams/:id/students/:studentId', builder: (_, __) => const StudentResultDetailScreen()),
+      GoRoute(path: '/exams/:id/share', builder: (_, s) => ShareScreen(examId: s.pathParameters['id'] ?? '')),
+      GoRoute(path: '/exams/:id/live', builder: (_, s) => LiveControlScreen(examId: s.pathParameters['id'] ?? '')),
+      GoRoute(path: '/exams/:id/results', builder: (_, s) => ResultsScreen(examId: s.pathParameters['id'] ?? '')),
+      GoRoute(path: '/exams/:id/students/:studentId', builder: (_, s) => StudentResultDetailScreen(examId: s.pathParameters['id'] ?? '', studentId: s.pathParameters['studentId'] ?? '')),
 
       // Settings
       GoRoute(path: '/settings', builder: (_, __) => const SettingsScreen()),

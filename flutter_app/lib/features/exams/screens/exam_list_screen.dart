@@ -54,7 +54,7 @@ class _ExamTab extends StatelessWidget {
             title: Text(e.title, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
             subtitle: Text('${e.groupName ?? "—"} · ${e.questionCount} soru', style: const TextStyle(fontSize: 13, color: Color(0xFF475569))),
             trailing: Container(padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4), decoration: BoxDecoration(color: color.withAlpha(25), borderRadius: BorderRadius.circular(20)), child: Text(_statusLabels[e.status] ?? '', style: TextStyle(fontSize: 12, color: color, fontWeight: FontWeight.w500))),
-            onTap: () {},
+            onTap: () => context.push('/exams/${e.id}/results'),
           ),
         );
       },
