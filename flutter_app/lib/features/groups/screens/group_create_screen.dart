@@ -35,7 +35,9 @@ class _GroupCreateScreenState extends ConsumerState<GroupCreateScreen> {
         'examCount': 0,
         'createdAt': FieldValue.serverTimestamp(),
       });
-      if (mounted) context.pop();
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Grup kaydedildi ✓'), backgroundColor: Color(0xFF059669)));
+      context.pop();
     } catch (e) {
       if (mounted) ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Kaydedilemedi: $e')));
     } finally {

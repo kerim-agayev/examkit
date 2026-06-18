@@ -35,7 +35,10 @@ class ExamPreviewScreen extends ConsumerWidget {
           },
           'createdAt': FieldValue.serverTimestamp(),
         });
-        if (context.mounted) context.push('/exams/${docRef.id}/share');
+        if (context.mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Sınav yayınlandı ✓'), backgroundColor: Color(0xFF059669)));
+          context.push('/exams/${docRef.id}/share');
+        }
       } catch (e) {
         if (context.mounted) {
           ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Yayınlanamadı: $e')));

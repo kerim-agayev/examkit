@@ -20,7 +20,11 @@ class GroupDetailScreen extends ConsumerWidget {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            Container(color: Colors.white, padding: const EdgeInsets.symmetric(vertical: 16), child: Row(children: [_Stat('24', 'Sınav'), _Stat('312', 'Öğrenci'), _Stat('3 gün', 'Önce')].map((w) => Expanded(child: w)).toList())),
+            Container(color: Colors.white, padding: const EdgeInsets.symmetric(vertical: 16), child: Row(children: [
+              _Stat('${examsAsync.valueOrNull?.where((e) => e.groupId == groupId).length ?? 0}', 'Sınav'),
+              _Stat('—', 'Öğrenci'),
+              _Stat('—', 'Önce'),
+            ].map((w) => Expanded(child: w)).toList())),
             Padding(padding: const EdgeInsets.all(16), child: SizedBox(width: double.infinity, height: 56, child: ElevatedButton.icon(
               onPressed: () {
                 ref.read(createExamStateProvider.notifier).state = CreateExamState().copyWith(groupId: groupId, groupName: groupName);

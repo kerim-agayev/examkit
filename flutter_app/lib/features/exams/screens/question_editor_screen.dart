@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import '../providers/question_provider.dart';
+import '../../../../core/firebase/firebase_providers.dart';
 
 class QuestionEditorScreen extends ConsumerStatefulWidget {
   final String examId;
@@ -27,19 +29,32 @@ class _QuestionEditorScreenState extends ConsumerState<QuestionEditorScreen> wit
         title: const Text('Soru Editörü'),
         actions: [TextButton(onPressed: () async {
           try {
+            final firestore = ref.read(firestoreProvider);
             final types = ['mcq', 'true_false', 'short_answer'];
-            await ref.read(createQuestionProvider((
-              examId: widget.examId,
-              text: 'Yeni Soru',
-              type: types[_tabCtrl.index],
-              options: ['A', 'B', 'C', 'D'],
-              points: _points,
-              orderIndex: 0,
-              correctAnswer: 'A',
-            )).future);
-            if (mounted) ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Soru kaydedildi')));
+            final type = types[_tabCtrl.index];
+            final batch = firestore.batch();
+
+            final qRef = firestore.collection('exams/${widget.examId}/questions').doc();
+            batch.set(qRef, {
+              'text': 'Yeni Soru',
+              'type': type,
+              'options': type == 'mcq' ? ['A', 'B', 'C', 'D'] : null,
+              'points': _points,
+              'orderIndex': 0,
+            });
+
+            final aRef = firestore.collection('exams/${widget.examId}/exam_answers').doc(qRef.id);
+            batch.set(aRef, {
+              'type': type,
+              if (type == 'mcq') 'correctOptionId': 'A',
+              if (type == 'true_false') 'correctBool': true,
+              if (type == 'short_answer') 'acceptedAnswers': ['cevap'],
+            });
+
+            await batch.commit();
+            if (mounted) ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Soru kaydedildi ✓'), backgroundColor: Color(0xFF059669)));
           } catch (e) {
-            if (mounted) ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Hata: $e')));
+            if (mounted) ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Hata: $e'), backgroundColor: Color(0xFFDC2626)));
           }
         }, child: const Text('Kaydet'))],
         bottom: TabBar(controller: _tabCtrl, tabs: const [Tab(text: 'ÇSM'), Tab(text: 'D/Y'), Tab(text: 'KA')]),
