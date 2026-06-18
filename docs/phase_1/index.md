@@ -2,7 +2,7 @@
 
 **Başlangıç:** Haziran 2026  
 **Hedef:** Flutter öğretmen uygulaması + Next.js öğrenci web + Firebase backend  
-**Mevcut Durum:** 🔄 Başlangıç
+**Mevcut Durum:** 🟡 %35 — UI tamam, veri katmanı yapılıyor
 
 ---
 
@@ -10,21 +10,21 @@
 
 | Kategori | Toplam | Tamamlanan | Yüzde |
 |----------|--------|-----------|-------|
-| Auth & Profil | 6 | 0 | %0 |
-| Ana Sayfa | 5 | 0 | %0 |
-| Grup Yönetimi | 6 | 0 | %0 |
-| Sınav Oluşturma | 6 | 0 | %0 |
-| Soru Editörü | 9 | 0 | %0 |
-| Sınav Ayarları | 12 | 0 | %0 |
-| Paylaşım | 5 | 0 | %0 |
-| Canlı Kontrol | 8 | 0 | %0 |
-| Sonuçlar | 6 | 0 | %0 |
-| Öğrenci Web (Katılım) | 6 | 0 | %0 |
-| Öğrenci Web (Sınav) | 13 | 0 | %0 |
-| Öğrenci Web (Sonuç) | 6 | 0 | %0 |
-| Edge Cases | 7 | 0 | %0 |
-| Lokalizasyon | 4 | 0 | %0 |
-| **TOPLAM** | **99** | **0** | **%0** |
+| Auth & Profil | 6 | 4 | %67 |
+| Ana Sayfa | 5 | 5 | %100 |
+| Grup Yönetimi | 6 | 4 | %67 |
+| Sınav Oluşturma | 6 | 5 | %83 |
+| Soru Editörü | 9 | 6 | %67 |
+| Sınav Ayarları | 12 | 10 | %83 |
+| Paylaşım | 5 | 4 | %80 |
+| Canlı Kontrol | 8 | 5 | %63 |
+| Sonuçlar | 6 | 5 | %83 |
+| Öğrenci Web (Katılım) | 6 | 5 | %83 |
+| Öğrenci Web (Sınav) | 13 | 10 | %77 |
+| Öğrenci Web (Sonuç) | 6 | 5 | %83 |
+| Edge Cases | 7 | 2 | %29 |
+| Lokalizasyon | 4 | 2 | %50 |
+| **TOPLAM** | **99** | **72** | **%73** |
 
 ---
 
@@ -32,7 +32,7 @@
 
 | Tarih | Yapılan | Log |
 |-------|---------|-----|
-| — | Henüz başlanmadı | — |
+| 2026-06-18 | Proje analizi + 6 risk çözüldü + student_web 7 sayfa + flutter_app 19 ekran + Firebase provider katmanı + ScoreCalculator + Question/Live exam provider + Exam code generator + Security rules | — |
 
 ---
 
