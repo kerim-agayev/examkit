@@ -87,3 +87,34 @@
 | BUG-027 | MEDIUM | `next.config.ts` ESLint ve TypeScript hatalarını ignore ediyor — gerçek sorunlar gizlenebilir |
 | BUG-028 | LOW | Duplicate i18n: `lib/i18n.ts` ve `i18n/request.ts` aynı işlevi görüyor |
 | BUG-029 | LOW | `getRtdb()!` null assertion — RTDB URL yanlışsa runtime crash |
+
+---
+
+## Son Düzeltmeler (19 Haziran 2026 — Round 3)
+
+### BUG-030: Shuffle + Öğrenci Sınava Girememe
+- **Kök neden:** `exam_preview_screen.dart` publish() method'u `status: 'published'` yazıyor ama **`code` yazmıyordu!** Share screen `_isDraft=false` kalıp `_publish()` hiç çağrılmıyordu. Öğrenci join sayfası `exams[key].code === code` eşleşmesini yapamıyordu.
+- **Çözüm:** `exam_preview_screen.dart` publish() method'unda `ExamCodeGenerator.generate()` ile code üretilip RTDB'ye yazılıyor. Share screen'e ihtiyaç kalmadı.
+
+### BUG-031: Stream Hatası "already listened to" (Adım 3)
+- **Kök neden:** `question_list_screen.dart`'ta aynı RTDB stream'i (`questionsStream`) 2 StreamBuilder'da kullanılıyordu (AppBar actions + body). RTDB `.onValue` single-subscription stream olduğu için ikinci dinleme hata veriyordu.
+- **Çözüm:** `.asBroadcastStream()` eklendi.
+
+### BUG-032: Grup Silme Butonu Eksik
+- **Çözüm:** Grup listesine silme ikonu + onay dialog'u eklendi. `deleteGroupProvider` kullanılıyor.
+
+### BUG-033: Delete Permission Denied
+- **Kök neden:** `sessions_by_exam/$examId` node'unda `.write` kuralı yoktu. RTDB multi-path update atomic olduğu için tek bir path'in yetkisiz olması tüm delete işlemini blokluyordu.
+- **Çözüm:** `database.rules.json` → `sessions_by_exam/$examId` için `.write: "auth != null"` eklendi.
+
+### BUG-034: Soru Editörü Kaydet Sonrası Alanlar Sıfırlanmıyor
+- **Kök neden:** MCQ seçenekleri `TextEditingController` yerine string array ile yönetiliyordu. `.clear()` array'i temizliyor ama TextField widget'ları güncellenmiyordu.
+- **Çözüm:** 4 MCQ seçeneği için `TextEditingController` kullanıldı. Kaydet sonrası tüm controller'lar `.clear()` ile temizleniyor, `_mcqCorrect=0`, `_tfCorrect=true`, `_points=3` resetleniyor.
+
+### BUG-035: Sınav Tamamlandı Statüsü Geç Güncelleniyor
+- **Kök neden:** `endExamProvider` sadece `live_exams/{id}/status: 'ended'` yazıyordu. Exam status'u sadece `calculateAllScores` içinde `completed` oluyordu.
+- **Çözüm:** `endExamProvider` multi-path update ile hem `live_exams` hem `exams` status'unu güncelliyor: `'ended'` + `'completed'`.
+
+### BUG-036: Draft → Yayınla Akışı
+- **Kök neden:** Taslak sınavda share_screen sadece "Canlı Kontrole Geç" gösteriyordu, "Yayınla" butonu yoktu.
+- **Çözüm:** Share screen taslak ise **"Sınavı Yayınla →"** butonu gösteriyor. Bu buton code'u yazıp status'u `published` yapıyor.

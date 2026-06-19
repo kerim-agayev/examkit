@@ -58,3 +58,26 @@
 ### Faz 3: UI + Dil ✅
 9. **Home Bugün** — bugün oluşturulan sınav sayısı (client-side filter) ✅
 10. **Dil Seçimi** — appLanguageProvider → app.dart locale dinamik ✅
+
+## Phase 8: Son Düzeltmeler (19 Haziran 2026 - Final)
+
+### BUG-030: Shuffle + Code ❌ → ✅
+`exam_preview_screen.dart` publish()'e code üretimi eklendi. Öğrenci girememe sorunu çözüldü.
+
+### BUG-031: Stream Hatası ❌ → ✅
+`question_list_screen.dart` stream `.asBroadcastStream()` yapıldı.
+
+### BUG-032: Grup Silme ❌ → ✅
+Grup listesine silme ikonu + onay dialog'u eklendi.
+
+### BUG-033: Delete Permission ❌ → ✅
+RTDB rules'a `sessions_by_exam/$examId/.write` eklendi.
+
+### BUG-034: Soru Editörü Temizleme ❌ → ✅
+MCQ seçenekleri TextEditingController'a geçti, tüm alanlar sıfırlanıyor.
+
+### BUG-035: Sınav Statüsü ❌ → ✅
+endExamProvider artık hem live_exams hem exams status'unu güncelliyor.
+
+### BUG-036: Draft Yayınla ❌ → ✅
+Share screen'de draft ise "Sınavı Yayınla →" butonu.
