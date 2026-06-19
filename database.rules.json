@@ -1,78 +1,34 @@
 {
   "rules": {
     "users": {
-      "$uid": {
-        ".read": "auth != null && auth.uid == $uid",
-        ".write": "auth != null && auth.uid == $uid"
-      }
+      "$uid": { ".read": "auth != null", ".write": "auth != null && auth.uid == $uid" }
     },
     "groups": {
-      "$groupId": {
-        ".read": "auth != null",
-        ".write": "auth != null && (!data.exists() || data.child('teacherId').val() == auth.uid)"
-      }
+      "$groupId": { ".read": "auth != null", ".write": "auth != null && (!data.exists() || data.child('teacherId').val() == auth.uid)" }
     },
     "groups_by_teacher": {
-      "$uid": {
-        ".read": "auth != null && auth.uid == $uid",
-        "$groupId": {
-          ".write": "auth != null && auth.uid == $uid"
-        }
-      }
+      "$uid": { ".read": "auth != null", "$groupId": { ".write": "auth != null && auth.uid == $uid" } }
     },
     "exams": {
-      "$examId": {
-        ".read": "auth != null",
-        ".write": "auth != null && (!data.exists() || data.child('ownerTeacherId').val() == auth.uid)"
-      }
+      "$examId": { ".read": true, ".write": "auth != null && (!data.exists() || data.child('ownerTeacherId').val() == auth.uid)" }
     },
     "exams_by_teacher": {
-      "$uid": {
-        ".read": "auth != null && auth.uid == $uid",
-        "$examId": {
-          ".write": "auth != null && auth.uid == $uid"
-        }
-      }
+      "$uid": { ".read": "auth != null", "$examId": { ".write": "auth != null && auth.uid == $uid" } }
     },
     "questions": {
-      "$examId": {
-        ".read": "auth != null",
-        ".write": "auth != null",
-        "$questionId": {
-          ".read": "auth != null",
-          ".write": "auth != null"
-        }
-      }
+      "$examId": { ".read": true, ".write": "auth != null", "$questionId": { ".read": true, ".write": "auth != null" } }
     },
     "exam_answers": {
-      "$examId": {
-        ".read": "auth != null",
-        ".write": "auth != null",
-        "$questionId": {
-          ".read": "auth != null",
-          ".write": "auth != null"
-        }
-      }
+      "$examId": { ".read": "auth != null", ".write": "auth != null", "$questionId": { ".read": "auth != null", ".write": "auth != null" } }
     },
     "sessions": {
-      "$sessionId": {
-        ".read": "auth != null",
-        ".write": "auth != null || !data.exists()"
-      }
+      "$sessionId": { ".read": true, ".write": true }
     },
     "sessions_by_exam": {
-      "$examId": {
-        ".read": "auth != null",
-        "$sessionId": {
-          ".write": "auth != null || !data.exists()"
-        }
-      }
+      "$examId": { ".read": true, "$sessionId": { ".write": true } }
     },
     "leaderboards": {
-      "$examId": {
-        ".read": "auth != null",
-        ".write": "auth != null"
-      }
+      "$examId": { ".read": true, ".write": "auth != null" }
     },
     "live_exams": {
       "$examId": {
