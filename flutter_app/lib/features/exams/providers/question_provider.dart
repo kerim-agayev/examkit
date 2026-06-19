@@ -1,89 +1,81 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'dart:async';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../core/firebase/firebase_providers.dart';
 
-/// QuestionModel — soru verisi (cevap YOK)
 class QuestionModel {
-  final String id;
-  final String text;
-  final String type; // mcq | true_false | short_answer
+  final String id, text, type;
   final List<String>? options;
-  final int points;
-  final int? timerSeconds;
-  final int orderIndex;
+  final int points, orderIndex;
 
-  const QuestionModel({required this.id, required this.text, required this.type, this.options, this.points = 1, this.timerSeconds, this.orderIndex = 0});
+  const QuestionModel({required this.id, required this.text, required this.type, this.options, this.points = 1, this.orderIndex = 0});
 
-  factory QuestionModel.fromFirestore(DocumentSnapshot doc) {
-    final d = doc.data() as Map<String, dynamic>;
+  factory QuestionModel.fromMap(String id, Map<dynamic, dynamic> map) {
     return QuestionModel(
-      id: doc.id,
-      text: d['text'] ?? '',
-      type: d['type'] ?? 'mcq',
-      options: d['options'] != null ? List<String>.from(d['options']) : null,
-      points: (d['points'] as num?)?.toInt() ?? 1,
-      timerSeconds: (d['timerSeconds'] as num?)?.toInt(),
-      orderIndex: (d['orderIndex'] as num?)?.toInt() ?? 0,
+      id: id, text: map['text'] ?? '', type: map['type'] ?? 'mcq',
+      options: map['options'] != null ? List<String>.from(map['options']) : null,
+      points: map['points'] ?? 1, orderIndex: map['orderIndex'] ?? 0,
     );
   }
 }
 
-/// Soruları dinle
-final watchQuestionsProvider = StreamProvider.autoDispose.family<List<QuestionModel>, String>((ref, examId) {
-  final db = ref.watch(firestoreProvider);
-  return db
-      .collection('exams/$examId/questions')
-      .orderBy('orderIndex')
-      .snapshots()
-      .map((snap) => snap.docs.map((d) => QuestionModel.fromFirestore(d)).toList());
-});
+final watchQuestionsProvider = StreamProvider.family<List<QuestionModel>, String>((ref, examId) {
+  final rtdb = ref.watch(rtdbProvider);
+  final controller = StreamController<List<QuestionModel>>.broadcast();
 
-/// Soru oluştur — hem question hem exam_answer yazar
-final createQuestionProvider = FutureProvider.autoDispose.family<void, ({String examId, String text, String type, List<String>? options, int points, int orderIndex, dynamic correctAnswer})>((ref, params) async {
-  final db = ref.watch(firestoreProvider);
-  final batch = db.batch();
-
-  final qRef = db.collection('exams/${params.examId}/questions').doc();
-  batch.set(qRef, {
-    'text': params.text,
-    'type': params.type,
-    if (params.options != null) 'options': params.options,
-    'points': params.points,
-    'timerSeconds': null,
-    'orderIndex': params.orderIndex,
-  });
-
-  // Doğru cevabı ayrı koleksiyona yaz
-  final aRef = db.collection('exams/${params.examId}/exam_answers').doc(qRef.id);
-  final answerData = <String, dynamic>{'type': params.type};
-  if (params.type == 'mcq') {
-    answerData['correctOptionId'] = params.correctAnswer;
-  } else if (params.type == 'true_false') {
-    answerData['correctBool'] = params.correctAnswer;
-  } else {
-    answerData['acceptedAnswers'] = [params.correctAnswer.toString().toLowerCase().trim()];
+  void refresh(DatabaseEvent event) {
+    final data = event.snapshot.value as Map<dynamic, dynamic>? ?? {};
+    final list = data.entries
+        .map((e) => QuestionModel.fromMap(e.key.toString(), Map<dynamic, dynamic>.from(e.value)))
+        .toList();
+    list.sort((a, b) => a.orderIndex.compareTo(b.orderIndex));
+    controller.add(list);
   }
-  batch.set(aRef, answerData);
 
-  // Question count güncelle
-  final examRef = db.collection('exams').doc(params.examId);
-  batch.update(examRef, {
-    'questionCount': FieldValue.increment(1),
-    'totalPoints': FieldValue.increment(params.points),
+  final ref_ = rtdb.ref('questions/$examId');
+  final sub = ref_.onValue.listen(refresh);
+  ref.onDispose(() { sub.cancel(); controller.close(); });
+
+  // initial fetch
+  ref_.get().then((snap) {
+    if (snap.exists) {
+      final data = snap.value as Map<dynamic, dynamic>? ?? {};
+      final list = data.entries
+          .map((e) => QuestionModel.fromMap(e.key.toString(), Map<dynamic, dynamic>.from(e.value)))
+          .toList();
+      list.sort((a, b) => a.orderIndex.compareTo(b.orderIndex));
+      controller.add(list);
+    } else {
+      controller.add([]);
+    }
   });
 
-  await batch.commit();
+  return controller.stream;
 });
 
-/// Soru sil
-final deleteQuestionProvider = FutureProvider.autoDispose.family<void, ({String examId, String questionId, int points})>((ref, params) async {
-  final db = ref.watch(firestoreProvider);
-  final batch = db.batch();
-  batch.delete(db.collection('exams/${params.examId}/questions').doc(params.questionId));
-  batch.delete(db.collection('exams/${params.examId}/exam_answers').doc(params.questionId));
-  batch.update(db.collection('exams').doc(params.examId), {
-    'questionCount': FieldValue.increment(-1),
-    'totalPoints': FieldValue.increment(-params.points),
+final createQuestionProvider = FutureProvider.autoDispose.family<void, ({String examId, String text, String type, List<String>? options, int points, int orderIndex, dynamic correctAnswer})>((ref, params) async {
+  final rtdb = ref.read(rtdbProvider);
+  final qKey = rtdb.ref('questions/${params.examId}').push().key!;
+  final q = <String, dynamic>{
+    'text': params.text, 'type': params.type, 'points': params.points, 'orderIndex': params.orderIndex,
+    if (params.options != null) 'options': params.options,
+  };
+  final a = <String, dynamic>{'type': params.type};
+  if (params.type == 'mcq') { a['correctOptionId'] = params.correctAnswer; }
+  else if (params.type == 'true_false') { a['correctBool'] = params.correctAnswer; }
+  else { a['acceptedAnswers'] = [params.correctAnswer.toString().toLowerCase().trim()]; }
+  await rtdb.ref('/').update({
+    'questions/${params.examId}/$qKey': q,
+    'exam_answers/${params.examId}/$qKey': a,
+    'exams/${params.examId}/questionCount': ServerValue.increment(1),
   });
-  await batch.commit();
+});
+
+final deleteQuestionProvider = FutureProvider.autoDispose.family<void, ({String examId, String questionId, int points})>((ref, params) async {
+  final rtdb = ref.read(rtdbProvider);
+  await rtdb.ref('/').update({
+    'questions/${params.examId}/${params.questionId}': null,
+    'exam_answers/${params.examId}/${params.questionId}': null,
+    'exams/${params.examId}/questionCount': ServerValue.increment(-1),
+  });
 });

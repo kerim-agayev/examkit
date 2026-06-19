@@ -8,6 +8,6 @@ class AppConstants {
   static const int maxGlobalTimerMinutes = 180;
   static const int defaultGlobalTimerMinutes = 45;
   static const int recoveryBufferMs = 30000; // ADR-006
-  static const String firebaseProjectId = 'examkit-c39fc';
+  static const String firebaseProjectId = 'examkit-5e691';
   static const String firebaseRegion = 'europe-west1';
 }

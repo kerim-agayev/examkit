@@ -1,10 +1,79 @@
-// =============================================================================
-// ExamKit — Realtime Database Security Rules
-// Canlı sınav senkronizasyonu: öğrenci varlığı, ilerleme, global timer.
-// =============================================================================
-
 {
   "rules": {
+    "users": {
+      "$uid": {
+        ".read": "auth != null && auth.uid == $uid",
+        ".write": "auth != null && auth.uid == $uid"
+      }
+    },
+    "groups": {
+      "$groupId": {
+        ".read": "auth != null",
+        ".write": "auth != null && (!data.exists() || data.child('teacherId').val() == auth.uid)"
+      }
+    },
+    "groups_by_teacher": {
+      "$uid": {
+        ".read": "auth != null && auth.uid == $uid",
+        "$groupId": {
+          ".write": "auth != null && auth.uid == $uid"
+        }
+      }
+    },
+    "exams": {
+      "$examId": {
+        ".read": "auth != null",
+        ".write": "auth != null && (!data.exists() || data.child('ownerTeacherId').val() == auth.uid)"
+      }
+    },
+    "exams_by_teacher": {
+      "$uid": {
+        ".read": "auth != null && auth.uid == $uid",
+        "$examId": {
+          ".write": "auth != null && auth.uid == $uid"
+        }
+      }
+    },
+    "questions": {
+      "$examId": {
+        ".read": "auth != null",
+        ".write": "auth != null",
+        "$questionId": {
+          ".read": "auth != null",
+          ".write": "auth != null"
+        }
+      }
+    },
+    "exam_answers": {
+      "$examId": {
+        ".read": "auth != null",
+        ".write": "auth != null",
+        "$questionId": {
+          ".read": "auth != null",
+          ".write": "auth != null"
+        }
+      }
+    },
+    "sessions": {
+      "$sessionId": {
+        ".read": "auth != null",
+        ".write": "auth != null || !data.exists()"
+      }
+    },
+    "sessions_by_exam": {
+      "$examId": {
+        ".read": "auth != null",
+        "$sessionId": {
+          ".write": "auth != null || !data.exists()"
+        }
+      }
+    },
+    "leaderboards": {
+      "$examId": {
+        ".read": "auth != null",
+        ".write": "auth != null"
+      }
+    },
     "live_exams": {
       "$examId": {
         ".read": true,
@@ -19,7 +88,7 @@
             "name": { ".validate": "newData.isString() && newData.val().length <= 100" },
             "joinedAt": { ".validate": "newData.isNumber()" },
             "progress": { ".validate": "newData.isNumber() && newData.val() >= 0" },
-            "status": { ".validate": "newData.isString() && newData.val().matches(/^(waiting|active|completed)$/)" },
+            "status": { ".validate": "newData.isString()" },
             "$other": { ".validate": false }
           }
         }

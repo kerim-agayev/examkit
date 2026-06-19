@@ -8,21 +8,30 @@ export default function WaitingPage() {
   const params = useParams<{ sessionId: string }>();
   const sid = params.sessionId || "";
   const [name] = useState(() => typeof window !== "undefined" ? localStorage.getItem("examkit_name") || "..." : "...");
-  const [count, setCount] = useState(8);
-  const [fbStatus, setFbStatus] = useState<string | null>(null);
+  const [examTitle, setExamTitle] = useState("...");
+  const [count, setCount] = useState(0);
+  const [fbConnected, setFbConnected] = useState(false);
 
-  // Firebase RTDB: sınav başlayınca otomatik yönlen
   useEffect(() => {
-    let unsub: (() => void) | undefined;
-    import("@/lib/realtime").then(({ subscribeToExamStatus }) => {
-      unsub = subscribeToExamStatus("mock_exam_id", (status) => {
-        setFbStatus(status);
+    let unsubStatus: (() => void) | undefined;
+    let unsubStudents: (() => void) | undefined;
+
+    import("@/lib/realtime").then(({ subscribeToExamStatus, subscribeToStudents }) => {
+      // RTDB'den gerçek öğrenci sayısı
+      const examId = typeof window !== "undefined" ? localStorage.getItem("examkit_examId") || "mock_exam_id" : "mock_exam_id";
+      setFbConnected(true);
+
+      unsubStatus = subscribeToExamStatus(examId, (status) => {
         if (status === "active") window.location.href = `/exam/${sid}`;
       });
+
+      unsubStudents = subscribeToStudents(examId, (students) => {
+        const names = Object.values(students);
+        setCount(names.length);
+      });
     }).catch(() => {});
-    // Mock sayı animasyonu
-    const i = setInterval(() => setCount(c => c + (Math.random() > 0.7 ? 0 : 0)), 10000);
-    return () => { clearInterval(i); unsub?.(); };
+
+    return () => { unsubStatus?.(); unsubStudents?.(); };
   }, [sid]);
 
   return (
@@ -34,9 +43,10 @@ export default function WaitingPage() {
           </div>
         </div>
         <h1 className="text-2xl font-bold text-text-primary">Öğretmeni bekleyin...</h1>
-        <p className="text-lg font-semibold text-primary">Biologiya Final İmtahanı</p>
+        {examTitle !== "..." && <p className="text-lg font-semibold text-primary">{examTitle}</p>}
         <div className="inline-flex items-center gap-2 px-4 py-2 bg-success-light text-success rounded-full text-sm font-medium">
-          <span className="inline-block w-2 h-2 rounded-full bg-success" style={{animation: "pulse 1.5s infinite"}}/>Bekleme odasında: {count} öğrenci
+          <span className="inline-block w-2 h-2 rounded-full bg-success" style={{animation: "pulse 1.5s infinite"}}/>
+          {fbConnected ? `Bekleme odasında: ${count} öğrenci` : "Bağlanıyor..."}
         </div>
         <p className="text-sm text-text-secondary">Öğretmen başlatınca otomatik açılacak</p>
         <p className="text-sm text-success font-medium">Katılan: {name} ✓</p>

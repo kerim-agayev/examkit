@@ -1,12 +1,12 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 /// Sınav oluşturma akışında tüm adımlar arası paylaşılan state.
-/// A1 → A2 → A3 → A4 → A5 zincirinde her ekran bu state'i okur/yazar.
 class CreateExamState {
+  final String examId; // Firestore'da oluşturulduktan sonra doldurulur
   final String title;
   final String? groupId;
   final String? groupName;
-  final String mode; // 'scroll' | 'sequential'
+  final String mode;
   final bool globalTimer;
   final int globalTimerMinutes;
   final bool questionTimer;
@@ -17,6 +17,7 @@ class CreateExamState {
   final bool showLeaderboard;
 
   const CreateExamState({
+    this.examId = '',
     this.title = '',
     this.groupId,
     this.groupName,
@@ -32,6 +33,7 @@ class CreateExamState {
   });
 
   CreateExamState copyWith({
+    String? examId,
     String? title,
     String? groupId,
     String? groupName,
@@ -46,6 +48,7 @@ class CreateExamState {
     bool? showLeaderboard,
   }) {
     return CreateExamState(
+      examId: examId ?? this.examId,
       title: title ?? this.title,
       groupId: groupId ?? this.groupId,
       groupName: groupName ?? this.groupName,

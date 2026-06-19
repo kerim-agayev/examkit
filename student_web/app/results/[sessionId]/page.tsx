@@ -2,29 +2,41 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
+import { getDatabase, ref, get } from "firebase/database";
+
+function rtdb() { return getDatabase(); }
 
 export default function ResultsPage() {
-  const [r, setR] = useState({ score: 48, total: 50, pct: 96, rank: 1, correct: 46, wrong: 3, empty: 1, durMin: 18, durSec: 32 });
-  const [board, setBoard] = useState([{ rank: 1, name: "Aynur Məmmədova", score: 48, me: true },{ rank: 2, name: "Kamran Hüseynov", score: 44, me: false },{ rank: 3, name: "Leyla Əsgərova", score: 41, me: false }]);
-  const [fbLoaded, setFbLoaded] = useState(false);
+  const [r, setR] = useState({ score: 0, total: 50, pct: 0, rank: 0 });
+  const [board, setBoard] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
 
-  // Firebase: gerçek sonuçları çek
   useEffect(() => {
     const sid = typeof window !== "undefined" ? window.location.pathname.split("/").pop() || "" : "";
-    import("@/lib/firestore").then(async ({ getSessionResult, getLeaderboard }) => {
+    (async () => {
       try {
-        const session = await getSessionResult(sid);
-        if (session?.scoreCalculatedAt) {
-          setR({
-            score: session.score ?? 0, total: 50, pct: session.percentage ?? 0,
-            rank: session.rank ?? 1, correct: 46, wrong: 3, empty: 1, durMin: 18, durSec: 32,
-          });
-          const lb = await getLeaderboard("mock_exam_id");
-          if (lb.length > 0) setBoard(lb.map(e => ({ rank: e.rank, name: e.name, score: e.score, me: e.name === (session.studentName || "") })));
+        const sessSnap = await get(ref(rtdb(), `sessions/${sid}`));
+        if (!sessSnap.exists()) { setLoading(false); return; }
+        const sess = sessSnap.val();
+        const examId = sess.examId || "";
+
+        if (sess.scoreCalculatedAt) {
+          setR({ score: sess.score ?? 0, total: sess.totalPoints ?? 50, pct: sess.percentage ?? 0, rank: sess.rank ?? 0 });
+          if (examId) {
+            const lbSnap = await get(ref(rtdb(), `leaderboards/${examId}`));
+            if (lbSnap.exists()) {
+              const lb = lbSnap.val();
+              const list = Object.entries(lb).map(([_, val]: [string, any]) => ({
+                rank: val.rank, name: val.studentName, score: val.score, me: val.studentName === (sess.studentName || ""),
+              }));
+              list.sort((a: any, b: any) => a.rank - b.rank);
+              setBoard(list);
+            }
+          }
         }
-        setFbLoaded(true);
-      } catch { setFbLoaded(true); }
-    }).catch(() => setFbLoaded(true));
+      } catch {}
+      setLoading(false);
+    })();
   }, []);
 
   return (
@@ -34,27 +46,37 @@ export default function ResultsPage() {
         <h1 className="text-lg font-semibold">Sonuçlar</h1><div className="w-12"/>
       </div>
       <div className="max-w-[640px] mx-auto p-4 space-y-4">
-        <div className="bg-surface rounded-2xl p-7 border text-center space-y-3">
-          <p className="text-sm text-text-secondary">Puanınız</p>
-          <p className="text-4xl font-bold">{r.score} <span className="text-lg text-text-secondary font-normal">/ {r.total}</span></p>
-          <div className="flex justify-center"><div className="w-[88px] h-[88px] relative"><svg className="w-full h-full -rotate-90" viewBox="0 0 88 88"><circle cx="44" cy="44" r="38" fill="none" stroke="#E2E8F0" strokeWidth="6"/><circle cx="44" cy="44" r="38" fill="none" stroke="#059669" strokeWidth="6" strokeDasharray={`${(r.pct/100)*239} 239`}/></svg><span className="absolute inset-0 flex items-center justify-center text-2xl font-bold text-success">{r.pct}%</span></div></div>
-          <p className="text-base font-bold text-warning">🥇 Sınıfta {r.rank}. sıradasınız</p>
-          <p className="text-sm text-text-secondary">{r.durMin} dk {r.durSec} sn</p>
-        </div>
-        <div className="bg-surface rounded-2xl border grid grid-cols-3 divide-x divide-border">
-          <div className="py-4 text-center"><p className="text-lg font-bold text-success">{r.correct} ✓</p><p className="text-xs text-text-secondary">Doğru</p></div>
-          <div className="py-4 text-center"><p className="text-lg font-bold text-error">{r.wrong} ✗</p><p className="text-xs text-text-secondary">Yanlış</p></div>
-          <div className="py-4 text-center"><p className="text-lg font-bold text-text-disabled">{r.empty} –</p><p className="text-xs text-text-secondary">Boş</p></div>
-        </div>
-        <div><h2 className="text-base font-semibold mb-2">Sınıf Sıralaması</h2>
-          <div className="bg-surface rounded-2xl border divide-y divide-border">
-            {board.map(e => <div key={e.rank} className={`flex items-center gap-3 px-4 py-3 ${e.me ? "bg-primary-light/50" : ""}`}>
-              <span className="w-7 text-center font-bold text-sm">{e.rank === 1 ? "🥇" : e.rank === 2 ? "🥈" : "🥉"}</span>
-              <span className={`flex-1 text-sm ${e.me ? "font-bold text-primary-dark" : ""}`}>{e.name}</span>
-              <span className="text-sm font-semibold">{e.score} puan</span>
-            </div>)}
+        {loading ? (
+          <div className="text-center py-12"><div className="inline-block w-8 h-8 border-[3px] border-primary border-t-transparent rounded-full animate-spin"/></div>
+        ) : r.score > 0 ? (
+          <>
+            <div className="bg-surface rounded-2xl p-7 border text-center space-y-3">
+              <p className="text-sm text-text-secondary">Puanınız</p>
+              <p className="text-4xl font-bold">{r.score} <span className="text-lg text-text-secondary font-normal">/ {r.total}</span></p>
+              <p className="text-5xl font-bold text-success">{r.pct}%</p>
+              {r.rank > 0 && <p className="text-base font-bold text-warning">🥇 Sınıfta {r.rank}. sıradasınız</p>}
+            </div>
+            {board.length > 0 && (
+              <div>
+                <h2 className="text-base font-semibold mb-2">Sınıf Sıralaması</h2>
+                <div className="bg-surface rounded-2xl border divide-y divide-border">
+                  {board.map(e => (
+                    <div key={e.rank} className={`flex items-center gap-3 px-4 py-3 ${e.me ? "bg-primary-light/50" : ""}`}>
+                      <span className="w-7 text-center font-bold text-sm">{e.rank === 1 ? "🥇" : e.rank === 2 ? "🥈" : "🥉"}</span>
+                      <span className={`flex-1 text-sm ${e.me ? "font-bold text-primary-dark" : ""}`}>{e.name}</span>
+                      <span className="text-sm font-semibold">{e.score} puan</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+          </>
+        ) : (
+          <div className="text-center py-12 space-y-4">
+            <p className="text-text-secondary">Öğretmen henüz puanlamadı veya sonuç bulunamadı</p>
           </div>
-        </div>
+        )}
+        <div className="text-center pt-4"><Link href="/" className="text-primary underline">← Ana sayfaya dön</Link></div>
       </div>
     </main>
   );

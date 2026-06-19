@@ -6,5 +6,7 @@ import 'app.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
+  // NOT: Firestore varsayılan ayarlarla (persistence açık) başlar.
+  // Settings elle ayarlanmaz — native SDK kendi yönetir.
   runApp(const ProviderScope(child: ExamKitApp()));
 }

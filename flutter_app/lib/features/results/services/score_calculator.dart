@@ -1,98 +1,84 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../core/firebase/firebase_providers.dart';
 
-/// ScoreCalculator — Sınav puanlama motoru.
-/// Sadece öğretmen Flutter uygulamasında çalışır (ADR-006).
-/// Öğrenci web'i ASLA puanlama yapmaz — doğru cevaplar istemciye inmez.
-
 class ScoreCalculator {
-  final FirebaseFirestore _db;
-
+  final FirebaseDatabase _db;
   ScoreCalculator(this._db);
 
-  /// Tüm session'ları puanla ve sırala.
-  /// İdempotent — aynı sınav için birden fazla kez çağrılabilir.
   Future<void> calculateAllScores(String examId) async {
-    // 1. Doğru cevapları al (exam_answers — sadece öğretmen okuyabilir)
-    final answersSnap = await _db.collection('exams/$examId/exam_answers').get();
-    final answerMap = <String, _AnswerData>{};
-    for (final doc in answersSnap.docs) {
-      final d = doc.data();
-      answerMap[doc.id] = _AnswerData(
-        type: d['type'] ?? 'mcq',
-        correctOptionId: d['correctOptionId'],
-        correctBool: d['correctBool'],
-        acceptedAnswers: List<String>.from(d['acceptedAnswers'] ?? []),
-      );
+    final answersSnap = await _db.ref('exam_answers/$examId').get();
+    final answerMap = <String, _AD>{};
+    if (answersSnap.exists) {
+      final answers = answersSnap.value as Map<dynamic, dynamic>;
+      for (final e in answers.entries) {
+        final d = Map<dynamic, dynamic>.from(e.value);
+        answerMap[e.key.toString()] = _AD(
+          type: d['type'] ?? 'mcq',
+          correctOptionId: d['correctOptionId'],
+          correctBool: d['correctBool'],
+          acceptedAnswers: List<String>.from(d['acceptedAnswers'] ?? []),
+        );
+      }
     }
 
-    // 2. Soruları al (puan değerleri için)
-    final questionsSnap = await _db.collection('exams/$examId/questions').get();
+    final questionsSnap = await _db.ref('questions/$examId').get();
     final questionPoints = <String, int>{};
     int totalPoints = 0;
-    for (final doc in questionsSnap.docs) {
-      final pts = (doc.data()['points'] as num?)?.toInt() ?? 1;
-      questionPoints[doc.id] = pts;
-      totalPoints += pts;
+    if (questionsSnap.exists) {
+      final questions = questionsSnap.value as Map<dynamic, dynamic>;
+      for (final e in questions.entries) {
+        final pts = (Map<dynamic, dynamic>.from(e.value)['points'] as int?) ?? 1;
+        questionPoints[e.key.toString()] = pts;
+        totalPoints += pts;
+      }
     }
 
-    // 3. Tüm session'ları al
-    final sessionsSnap = await _db
-        .collection('sessions')
-        .where('examId', isEqualTo: examId)
-        .get();
+    final sessionsSnap = await _db.ref('sessions_by_exam/$examId').get();
+    if (!sessionsSnap.exists) return;
+    final sessionIds = (sessionsSnap.value as Map<dynamic, dynamic>).keys.toList();
 
-    // 4. Her session için puan hesapla
-    final batch = _db.batch();
+    final updates = <String, dynamic>{};
     final scores = <String, int>{};
 
-    for (final doc in sessionsSnap.docs) {
-      final data = doc.data();
-      final answers = data['answers'] as Map<String, dynamic>? ?? {};
+    for (final sid in sessionIds) {
+      final sSnap = await _db.ref('sessions/$sid').get();
+      if (!sSnap.exists) continue;
+      final d = Map<dynamic, dynamic>.from(sSnap.value);
+      final answers = d['answers'] as Map<dynamic, dynamic>? ?? {};
       int score = 0;
 
-      for (final entry in answers.entries) {
-        final qId = entry.key;
-        final studentValue = (entry.value as Map<String, dynamic>?)?['value'];
+      for (final a in answers.entries) {
+        final qId = a.key.toString();
+        final val = Map<dynamic, dynamic>.from(a.value)['value'];
         final correct = answerMap[qId];
-        final points = questionPoints[qId] ?? 1;
-
-        if (correct != null && _isCorrect(correct, studentValue)) {
-          score += points;
+        if (correct != null && _isCorrect(correct, val)) {
+          score += questionPoints[qId] ?? 1;
         }
       }
 
-      final percentage = totalPoints > 0 ? ((score / totalPoints) * 100).round() : 0;
-      scores[doc.id] = score;
-
-      batch.update(doc.reference, {
-        'score': score,
-        'totalPoints': totalPoints,
-        'percentage': percentage,
-        'scoreCalculatedAt': FieldValue.serverTimestamp(),
-      });
+      final pct = totalPoints > 0 ? ((score / totalPoints) * 100).round() : 0;
+      scores[sid.toString()] = score;
+      updates['sessions/$sid/score'] = score;
+      updates['sessions/$sid/totalPoints'] = totalPoints;
+      updates['sessions/$sid/percentage'] = pct;
+      updates['sessions/$sid/scoreCalculatedAt'] = ServerValue.timestamp;
     }
 
-    await batch.commit();
+    if (updates.isNotEmpty) await _db.ref('/').update(updates);
 
-    // 5. Sıralamayı hesapla (score DESC, duration ASC — tie-break)
-    await _calculateRanks(examId, sessionsSnap.docs, scores);
-
-    // 6. Exam status → completed
-    await _db.collection('exams').doc(examId).update({
+    await _calculateRanks(examId, sessionIds.cast<String>(), scores, totalPoints);
+    await _db.ref('exams/$examId').update({
       'status': 'completed',
-      'endedAt': FieldValue.serverTimestamp(),
+      'endedAt': ServerValue.timestamp,
     });
   }
 
-  bool _isCorrect(_AnswerData answer, dynamic studentValue) {
+  bool _isCorrect(_AD answer, dynamic studentValue) {
     if (studentValue == null) return false;
     switch (answer.type) {
-      case 'mcq':
-        return studentValue.toString() == answer.correctOptionId;
-      case 'true_false':
-        return studentValue == answer.correctBool;
+      case 'mcq': return studentValue.toString() == answer.correctOptionId;
+      case 'true_false': return studentValue == answer.correctBool;
       case 'short_answer':
         final sv = studentValue.toString().toLowerCase().trim();
         return answer.acceptedAnswers.any((a) => a.toLowerCase().trim() == sv);
@@ -100,57 +86,65 @@ class ScoreCalculator {
     return false;
   }
 
-  Future<void> _calculateRanks(String examId, List<DocumentSnapshot> sessions, Map<String, int> scores) async {
-    // score DESC, completedAt ASC (daha hızlı = daha iyi)
-    final sorted = sessions.toList()
-      ..sort((a, b) {
-        final sA = scores[a.id] ?? 0;
-        final sB = scores[b.id] ?? 0;
-        if (sA != sB) return sB.compareTo(sA);
-        final tA = (a.data() as Map<String, dynamic>)['completedAt'] as Timestamp?;
-        final tB = (b.data() as Map<String, dynamic>)['completedAt'] as Timestamp?;
-        if (tA == null && tB == null) return 0;
-        if (tA == null) return 1;
-        if (tB == null) return -1;
-        return tA.compareTo(tB);
-      });
-
-    final batch = _db.batch();
-    for (int i = 0; i < sorted.length; i++) {
-      batch.update(sorted[i].reference, {'rank': i + 1});
+  Future<void> _calculateRanks(String examId, List<String> sids, Map<String, int> scores, int totalPoints) async {
+    final sessions = <_RankData>[];
+    for (final sid in sids) {
+      final sSnap = await _db.ref('sessions/$sid').get();
+      if (!sSnap.exists) continue;
+      final d = Map<dynamic, dynamic>.from(sSnap.value);
+      sessions.add(_RankData(
+        sid: sid,
+        score: scores[sid] ?? 0,
+        completedAt: d['completedAt'] ?? 0,
+        studentName: d['studentName'] ?? '?',
+        percentage: totalPoints > 0 ? ((scores[sid] ?? 0) / totalPoints * 100).round() : 0,
+      ));
     }
-    await batch.commit();
+    sessions.sort((a, b) {
+      if (a.score != b.score) return b.score.compareTo(a.score);
+      return (a.completedAt as int).compareTo(b.completedAt as int);
+    });
+
+    final updates = <String, dynamic>{};
+    for (int i = 0; i < sessions.length; i++) {
+      final r = sessions[i];
+      updates['sessions/${r.sid}/rank'] = i + 1;
+      updates['leaderboards/$examId/${r.sid}'] = {
+        'rank': i + 1,
+        'studentName': r.studentName,
+        'score': r.score,
+        'percentage': r.percentage,
+      };
+    }
+    if (updates.isNotEmpty) await _db.ref('/').update(updates);
   }
 }
 
-class _AnswerData {
+class _AD {
   final String type;
   final String? correctOptionId;
   final bool? correctBool;
   final List<String> acceptedAnswers;
-  const _AnswerData({required this.type, this.correctOptionId, this.correctBool, this.acceptedAnswers = const []});
+  const _AD({required this.type, this.correctOptionId, this.correctBool, this.acceptedAnswers = const []});
 }
 
-/// Provider
-final scoreCalculatorProvider = Provider<ScoreCalculator>((ref) {
-  return ScoreCalculator(ref.watch(firestoreProvider));
-});
+class _RankData {
+  final String sid, studentName;
+  final int score, percentage;
+  final dynamic completedAt;
+  const _RankData({required this.sid, required this.score, required this.completedAt, required this.studentName, required this.percentage});
+}
 
-/// Sınavı puanla (FutureProvider — UI'dan tetiklenir)
+final scoreCalculatorProvider = Provider<ScoreCalculator>((ref) => ScoreCalculator(ref.watch(rtdbProvider)));
+
 final calculateScoresProvider = FutureProvider.autoDispose.family<void, String>((ref, examId) async {
-  final calculator = ref.watch(scoreCalculatorProvider);
-  await calculator.calculateAllScores(examId);
+  await ref.watch(scoreCalculatorProvider).calculateAllScores(examId);
 });
 
-/// Hesaplanmamış sınavları tara (ADR-006 recovery)
 final watchUnscoredExamsProvider = StreamProvider.autoDispose<List<String>>((ref) {
-  final db = ref.watch(firestoreProvider);
-  return db
-      .collection('exams')
-      .where('status', isEqualTo: 'completed')
-      .snapshots()
-      .map((snap) => snap.docs
-          .where((doc) => doc.data()['scoreCalculatedAt'] == null)
-          .map((doc) => doc.id)
-          .toList());
+  final rtdb = ref.watch(rtdbProvider);
+  return rtdb.ref('exams').orderByChild('status').equalTo('completed').onValue.map((event) {
+    final data = event.snapshot.value as Map<dynamic, dynamic>? ?? {};
+    return data.keys.cast<String>().toList();
+  });
 });

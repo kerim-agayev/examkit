@@ -25,6 +25,9 @@ dependencies:
   # UI
   google_fonts: ^6.0.0
 
+  # Share
+  url_launcher: ^6.3.0
+
   # l10n
   flutter_localizations:
     sdk: flutter

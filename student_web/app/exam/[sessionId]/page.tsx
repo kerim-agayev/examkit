@@ -3,46 +3,51 @@
 import { useState, useCallback, useEffect } from "react";
 import { useParams, useSearchParams } from "next/navigation";
 import { Suspense } from "react";
+import { getDatabase, ref, get, update, serverTimestamp } from "firebase/database";
 
-// Mock fallback sorular
-const defaultQuestions = [
-  { id: "q1", text: "Mitoz bölünmenin temel amacı nedir?", type: "mcq", options: ["Enerji üretimi", "Büyüme ve onarım", "Sindirim", "Boşaltım"] },
-  { id: "q2", text: "DNA replikasyonu S fazasında gerçekleşir.", type: "tf" },
-  { id: "q3", text: "Fotosentezin temel ürünü nedir?", type: "sa" },
-  { id: "q4", text: "Hücre zarının yapısını açıklayan model hangisidir?", type: "mcq", options: ["Kilit-Anahtar", "Akıcı Mozaik Zar", "Çift Sarmal", "Endosimbiyoz"] },
-  { id: "q5", text: "Ribozomlar protein sentezinden sorumludur.", type: "tf" },
-];
+function rtdb() { return getDatabase(); }
 
 function ExamContent() {
   const params = useParams<{ sessionId: string }>();
   const sp = useSearchParams();
   const sid = params.sessionId || "";
-  const mode = sp.get("mode") === "scroll" ? "scroll" : "sequential";
+  const mode = sp.get("mode") || "scroll";
 
-  const [questions, setQuestions] = useState(defaultQuestions);
+  const [questions, setQuestions] = useState<any[]>([]);
+  const [examId, setExamId] = useState("");
+  const [examTitle, setExamTitle] = useState("Sınav");
   const [idx, setIdx] = useState(0);
   const [answers, setAnswers] = useState<Record<string, any>>({});
   const [done, setDone] = useState(false);
-  const [fbLoaded, setFbLoaded] = useState(false);
   const [loading, setLoading] = useState(true);
 
-  // Firebase: gerçek soruları ve session'ı yükle
   useEffect(() => {
-    async function load() {
+    (async () => {
       try {
-        const [{ useExamSession }] = await Promise.all([import("@/hooks/useExamSession")]);
-        // Hook'u dolaylı kullan — soruları Firestore'dan çek
-        const { getExamQuestions } = await import("@/lib/firestore");
-        const qs = await getExamQuestions("mock_exam_id");
-        if (qs.length > 0) {
-          setQuestions(qs.map((q: any) => ({ id: q.id, text: q.text, type: q.type, options: q.options })));
-          setFbLoaded(true);
+        // Session'dan examId'yi al
+        const sessSnap = await get(ref(rtdb(), `sessions/${sid}`));
+        if (!sessSnap.exists()) { setLoading(false); return; }
+        const sess = sessSnap.val();
+        const eid = sess.examId || "";
+        setExamId(eid);
+        setExamTitle(sess.examTitle || "Sınav");
+
+        // Soruları RTDB'den al
+        const qSnap = await get(ref(rtdb(), `questions/${eid}`));
+        if (qSnap.exists()) {
+          const qs = qSnap.val();
+          const list = Object.entries(qs).map(([key, val]: [string, any]) => ({
+            id: key, text: val.text, type: val.type, options: val.options || null,
+          }));
+          list.sort((a: any, b: any) => (a.orderIndex || 0) - (b.orderIndex || 0));
+          setQuestions(list.length > 0 ? list : defaultQuestions);
+        } else {
+          setQuestions(defaultQuestions);
         }
-      } catch { /* Firebase yok — mock ile devam */ }
+      } catch { setQuestions(defaultQuestions); }
       setLoading(false);
-    }
-    load();
-  }, []);
+    })();
+  }, [sid]);
 
   const q = questions[idx];
   const hasAnswer = answers[q?.id] !== undefined;
@@ -50,28 +55,25 @@ function ExamContent() {
 
   const select = useCallback(async (qId: string, v: any) => {
     setAnswers(a => ({ ...a, [qId]: v }));
-    // Firebase: cevabı kaydet
-    if (fbLoaded) {
-      try {
-        const { saveAnswer } = await import("@/lib/firestore");
-        await saveAnswer(sid, qId, v);
-      } catch {}
-    }
-  }, [sid, fbLoaded]);
+    try {
+      await update(ref(rtdb(), `sessions/${sid}/answers`), {
+        [qId]: { value: v, timestamp: serverTimestamp() },
+      });
+    } catch {}
+  }, [sid]);
 
   const finish = useCallback(async () => {
     setDone(true);
-    if (fbLoaded) {
-      try {
-        const { completeSession } = await import("@/lib/firestore");
-        await completeSession(sid);
-      } catch {}
-    }
+    try {
+      await update(ref(rtdb(), `sessions/${sid}`), {
+        status: "completed",
+        completedAt: serverTimestamp(),
+      });
+    } catch {}
     setTimeout(() => { window.location.href = `/results/${sid}`; }, 1500);
-  }, [sid, fbLoaded]);
+  }, [sid]);
 
   const advance = () => { if (isLast) finish(); else setIdx(i => i + 1); };
-  const submitExam = () => finish();
 
   if (loading) return <div className="min-h-screen flex items-center justify-center bg-background"><div className="text-center space-y-3"><div className="inline-block w-8 h-8 border-[3px] border-primary border-t-transparent rounded-full animate-spin"/><p className="text-text-secondary text-sm">Sınav yükleniyor...</p></div></div>;
 
@@ -80,9 +82,8 @@ function ExamContent() {
   return (
     <main className="min-h-screen flex flex-col bg-background">
       <div className="sticky top-0 bg-surface border-b border-border px-4 py-3 flex justify-between items-center">
-        <span className="font-semibold">Biologiya Final {fbLoaded && <span className="text-[10px] bg-success-light text-success px-1.5 py-0.5 rounded-full">● Canlı</span>} <span className="text-[10px] bg-info-light text-info px-1.5 py-0.5 rounded-full">{mode === "scroll" ? "Kaydırma" : "Sıralı"}</span></span>
+        <span className="font-semibold text-sm">{examTitle}</span>
         {mode === "sequential" && <span className="text-sm text-text-secondary">{idx + 1} / {questions.length}</span>}
-        <span className="text-sm font-mono">20:00</span>
       </div>
       <div className="flex-1 overflow-y-auto p-4">
         <div className="max-w-[640px] mx-auto space-y-3">
@@ -97,19 +98,23 @@ function ExamContent() {
                   <span className={`w-7 h-7 rounded-full border-2 flex items-center justify-center text-xs font-bold ${sel ? "border-on-primary" : "border-text-disabled"}`}>{l}</span>{o}
                 </button>;
               })}
-              {q.type === "tf" && <div className="grid grid-cols-2 gap-3">
+              {q.type === "true_false" && <div className="grid grid-cols-2 gap-3">
                 {(["✓ Doğru", "✗ Yanlış"] as const).map((l, vi) => { const v = vi === 0; const sel = answers[q.id] === v; return <button key={l} className={`h-[56px] rounded-xl border-[1.5px] font-semibold ${sel ? (v ? "bg-success text-on-primary" : "bg-error text-on-primary") : "bg-surface border-border"}`} onClick={() => select(q.id, v)}>{l}</button>; })}
               </div>}
-              {q.type === "sa" && <textarea className="w-full min-h-[80px] px-4 py-3 border-[1.5px] border-border rounded-xl text-base" placeholder="Cevabınızı yazın..." value={answers[q.id] || ""} onChange={e => select(q.id, e.target.value)}/>}
+              {q.type === "short_answer" && <textarea className="w-full min-h-[80px] px-4 py-3 border-[1.5px] border-border rounded-xl text-base" placeholder="Cevabınızı yazın..." value={answers[q.id] || ""} onChange={e => select(q.id, e.target.value)}/>}
             </div>
           ))}
         </div>
       </div>
       {mode === "sequential" && <div className="sticky bottom-0 bg-surface border-t border-border p-4"><button className={`w-full h-[56px] rounded-xl font-semibold text-lg ${hasAnswer ? "bg-primary text-on-primary" : "bg-text-disabled text-on-primary cursor-not-allowed"}`} disabled={!hasAnswer} onClick={advance}>{isLast ? "✓ Sınavı Tamamla" : "İlerle →"}</button></div>}
-      {mode === "scroll" && <div className="sticky bottom-0 bg-surface border-t border-border p-4"><button className="w-full h-[56px] rounded-xl bg-success text-on-primary font-semibold text-lg" onClick={submitExam}>Sınavı Gönder</button></div>}
+      {mode === "scroll" && <div className="sticky bottom-0 bg-surface border-t border-border p-4"><button className="w-full h-[56px] rounded-xl bg-success text-on-primary font-semibold text-lg" onClick={finish}>Sınavı Gönder</button></div>}
     </main>
   );
 }
+
+const defaultQuestions = [
+  { id: "q1", text: "Mitoz bölünmenin temel amacı nedir?", type: "mcq", options: ["Enerji üretimi", "Büyüme ve onarım", "Sindirim", "Boşaltım"] },
+];
 
 export default function ExamPage() {
   return <Suspense fallback={<div className="min-h-screen flex items-center justify-center bg-background"><div className="inline-block w-8 h-8 border-[3px] border-primary border-t-transparent rounded-full animate-spin"/></div>}><ExamContent/></Suspense>;
