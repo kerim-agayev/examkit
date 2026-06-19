@@ -5,19 +5,16 @@
  */
 
 import {
-  getDatabase,
   ref,
   onValue,
   set,
   update,
   serverTimestamp,
   type Unsubscribe,
-  type Database,
 } from "firebase/database";
+import { getRtdb } from "@/lib/firebase";
 
-function rtdb(): Database {
-  return getDatabase();
-}
+function db() { return getRtdb()!; }
 
 // ============================================================================
 // Types
@@ -48,7 +45,7 @@ export function subscribeToExamStatus(
   examId: string,
   callback: (status: string, liveState: LiveExamState | null) => void
 ): Unsubscribe {
-  const examRef = ref(rtdb(), `live_exams/${examId}`);
+  const examRef = ref(db(), `live_exams/${examId}`);
   return onValue(examRef, (snap) => {
     if (!snap.exists()) {
       callback("waiting", null);
@@ -66,7 +63,7 @@ export function subscribeToStudents(
   examId: string,
   callback: (students: Record<string, StudentPresence>) => void
 ): Unsubscribe {
-  const studentsRef = ref(rtdb(), `live_exams/${examId}/students`);
+  const studentsRef = ref(db(), `live_exams/${examId}/students`);
   return onValue(studentsRef, (snap) => {
     if (!snap.exists()) {
       callback({});
@@ -89,7 +86,7 @@ export async function joinWaitingRoom(
   name: string
 ): Promise<void> {
   const studentRef = ref(
-    rtdb(),
+    db(),
     `live_exams/${examId}/students/${sessionId}`
   );
   await set(studentRef, {
@@ -109,7 +106,7 @@ export async function updateProgress(
   count: number
 ): Promise<void> {
   const refPath = `live_exams/${examId}/students/${sessionId}`;
-  await update(ref(rtdb(), refPath), {
+  await update(ref(db(), refPath), {
     progress: count,
   });
 }
@@ -122,7 +119,7 @@ export async function markCompleted(
   sessionId: string
 ): Promise<void> {
   const refPath = `live_exams/${examId}/students/${sessionId}`;
-  await update(ref(rtdb(), refPath), {
+  await update(ref(db(), refPath), {
     status: "completed",
   });
 }
