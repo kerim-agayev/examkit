@@ -32,14 +32,34 @@ class _QuestionEditorScreenState extends ConsumerState<QuestionEditorScreen> wit
       return;
     }
 
-    final rtdb = ref.read(rtdbProvider);
+    // Validasyon
     final types = ['mcq', 'true_false', 'short_answer'];
     final type = types[_tabCtrl.index];
+    String? error;
+    switch (type) {
+      case 'mcq':
+        if (_mcqTextCtrl.text.trim().isEmpty) error = 'Soru metni boş olamaz';
+        else if (_mcqOptCtrls.any((c) => c.text.trim().isEmpty)) error = 'Tüm seçenekler (A, B, C, D) doldurulmalı';
+        break;
+      case 'true_false':
+        if (_tfTextCtrl.text.trim().isEmpty) error = 'Soru metni boş olamaz';
+        break;
+      case 'short_answer':
+        if (_saTextCtrl.text.trim().isEmpty) error = 'Soru metni boş olamaz';
+        else if (_saAnswerCtrl.text.trim().isEmpty) error = 'En az bir doğru cevap girilmeli';
+        break;
+    }
+    if (error != null) {
+      if (mounted) ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(error), backgroundColor: const Color(0xFFDC2626)));
+      return;
+    }
+
+    final rtdb = ref.read(rtdbProvider);
     String text;
     switch (type) {
-      case 'mcq': text = _mcqTextCtrl.text.trim().isEmpty ? 'Yeni Soru' : _mcqTextCtrl.text.trim(); break;
-      case 'true_false': text = _tfTextCtrl.text.trim().isEmpty ? 'Yeni Soru' : _tfTextCtrl.text.trim(); break;
-      default: text = _saTextCtrl.text.trim().isEmpty ? 'Yeni Soru' : _saTextCtrl.text.trim();
+      case 'mcq': text = _mcqTextCtrl.text.trim(); break;
+      case 'true_false': text = _tfTextCtrl.text.trim(); break;
+      default: text = _saTextCtrl.text.trim();
     }
 
     setState(() => _saving = true);
