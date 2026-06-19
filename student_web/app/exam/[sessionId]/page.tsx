@@ -46,12 +46,24 @@ function ExamContent() {
         setOptionOrders(sess.optionOrders || {});
 
         // Timer: live_exams dinle
+        let timerIv: any = null;
         onValue(ref(db(), `live_exams/${eid}/globalTimerEndsAt`), (snap) => {
           const endAt = snap.val();
           if (endAt) {
-            const update = () => { const rem = Math.max(0, endAt - Date.now()); setTimeLeft(rem); if (rem <= 0) { alert("⏰ Süreniz doldu! Sınavınız otomatik olarak gönderiliyor."); window.location.href = `/results/${sid}`; } };
-            update(); const iv = setInterval(update, 1000);
-            return () => clearInterval(iv);
+            if (timerIv) clearInterval(timerIv);
+            const update = () => {
+              const rem = Math.max(0, endAt - Date.now());
+              setTimeLeft(rem);
+              if (rem <= 0) {
+                if (timerIv) { clearInterval(timerIv); timerIv = null; }
+                // Otomatik tamamla ve yönlendir
+                update(ref(db(), `sessions/${sid}`), { status: "completed", completedAt: serverTimestamp() }).catch(() => {});
+                import("@/lib/realtime").then(({ markCompleted }) => markCompleted(eid, sid).catch(() => {}));
+                window.location.href = `/results/${sid}`;
+              }
+            };
+            update();
+            timerIv = setInterval(update, 1000);
           }
         });
 
