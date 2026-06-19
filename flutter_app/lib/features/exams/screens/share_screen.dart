@@ -43,6 +43,7 @@ class _ShareScreenState extends ConsumerState<ShareScreen> {
   void _setCode(String c) {
     _code = c;
     _webLink = 'https://examkit-beta.vercel.app/join/$_code';
+    if (mounted) setState(() {});
   }
 
   Future<void> _publish() async {
