@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import '../providers/live_exam_provider.dart';
 import '../../auth/providers/auth_provider.dart';
 import '../../results/services/score_calculator.dart';
+import '../../../../core/firebase/firebase_providers.dart';
 
 class LiveControlScreen extends ConsumerWidget {
   final String examId;
@@ -62,7 +63,16 @@ class LiveControlScreen extends ConsumerWidget {
               }, style: OutlinedButton.styleFrom(foregroundColor: const Color(0xFFDC2626)), child: const Text('Sınavı Bitir ve Sonuçları Gör')))
             : SizedBox(width: double.infinity, height: 64, child: ElevatedButton(onPressed: () async {
                 try {
-                  await ref.read(startExamProvider((examId: examId, teacherId: user?.uid ?? '', globalTimerMinutes: null)).future);
+                  // Exam settings'ten timer süresini al
+                  int? timerMinutes;
+                  try {
+                    final examSnap = await ref.read(rtdbProvider).ref('exams/$examId/settings').get();
+                    if (examSnap.exists) {
+                      final settings = Map<String, dynamic>.from(examSnap.value as Map);
+                      timerMinutes = settings['globalTimerMinutes'] as int?;
+                    }
+                  } catch (_) {}
+                  await ref.read(startExamProvider((examId: examId, teacherId: user?.uid ?? '', globalTimerMinutes: timerMinutes)).future);
                 } catch (e) {
                   if (context.mounted) ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Başlatılamadı: $e')));
                 }

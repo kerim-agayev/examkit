@@ -7,6 +7,7 @@ import { ref, get, push, set, update, serverTimestamp } from "firebase/database"
 import { getRtdb } from "@/lib/firebase";
 
 function db() { return getRtdb()!; }
+const shuffle = <T,>(arr: T[]): T[] => { const a = [...arr]; for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j]!, a[i]!]; } return a; };
 
 export default function JoinPage() {
   const params = useParams<{ code: string }>();
@@ -18,13 +19,11 @@ export default function JoinPage() {
   const [examError, setExamError] = useState("");
   const canSubmit = firstName.trim().length >= 2 && lastName.trim().length >= 2;
 
-  // RTDB'den exam code ile lookup
   useEffect(() => {
     if (!code) return;
     (async () => {
       try {
-        const examsRef = ref(db(), "exams");
-        const snap = await get(examsRef);
+        const snap = await get(ref(db(), "exams"));
         if (snap.exists()) {
           const exams = snap.val();
           for (const key of Object.keys(exams)) {
@@ -35,9 +34,7 @@ export default function JoinPage() {
           }
         }
         setExamError("Sınav bulunamadı veya henüz yayınlanmadı");
-      } catch (e) {
-        setExamError("Bağlantı hatası: " + String(e));
-      }
+      } catch (e) { setExamError("Bağlantı hatası: " + String(e)); }
     })();
   }, [code]);
 
@@ -47,29 +44,34 @@ export default function JoinPage() {
     const name = `${firstName} ${lastName}`;
 
     try {
-      // RTDB'de session oluştur
+      // Soruları al
+      const qSnap = await get(ref(db(), `questions/${exam.id}`));
+      const qs = qSnap.val() || {};
+      let qIds = Object.keys(qs);
+      let optionOrders: Record<string, string[]> = {};
+
+      // Shuffle
+      const settings = exam.settings || {};
+      if (settings.shuffleQuestions) qIds = shuffle(qIds);
+      for (const qId of qIds) {
+        const q = qs[qId];
+        if (q.options && settings.shuffleOptions) {
+          optionOrders[qId] = shuffle(q.options);
+        } else if (q.options) {
+          optionOrders[qId] = q.options;
+        }
+      }
+
       const sessionRef = push(ref(db(), "sessions"));
       const sid = sessionRef.key!;
       const now = serverTimestamp();
       await set(sessionRef, {
-        examId: exam.id,
-        studentName: name,
-        status: "active",
-        answers: {},
-        questionOrder: [],
-        optionOrders: {},
-        startedAt: now,
+        examId: exam.id, studentName: name, status: "active", answers: {},
+        questionOrder: qIds, optionOrders, startedAt: now,
       });
-      // Index: sessions_by_exam
-      await update(ref(db(), "/"), {
-        [`sessions_by_exam/${exam.id}/${sid}`]: now,
-      });
-      // Bekleme odasına katıl
+      await update(ref(db(), "/"), { [`sessions_by_exam/${exam.id}/${sid}`]: now, });
       await set(ref(db(), `live_exams/${exam.id}/students/${sid}`), {
-        name,
-        joinedAt: now,
-        progress: 0,
-        status: "waiting",
+        name, joinedAt: now, progress: 0, status: "waiting",
       });
 
       localStorage.setItem("examkit_session", sid);
@@ -78,17 +80,12 @@ export default function JoinPage() {
       window.location.href = `/waiting/${sid}`;
     } catch (e) {
       setExamError("Katılım hatası: " + String(e));
-    } finally {
-      setLoading(false);
-    }
+    } finally { setLoading(false); }
   }, [canSubmit, firstName, lastName, exam]);
 
   if (examError) return (
     <main className="min-h-screen flex flex-col items-center justify-center bg-background p-4">
-      <div className="text-center space-y-4">
-        <p className="text-error text-lg">{examError}</p>
-        <Link href="/" className="text-primary underline">← Ana sayfaya dön</Link>
-      </div>
+      <div className="text-center space-y-4"><p className="text-error text-lg">{examError}</p><Link href="/" className="text-primary underline">← Ana sayfaya dön</Link></div>
     </main>
   );
 
@@ -97,12 +94,7 @@ export default function JoinPage() {
       <nav className="p-4"><Link href="/" className="inline-flex items-center gap-1 text-text-secondary hover:text-text-primary"><svg className="w-5 h-5" viewBox="0 0 24 24" fill="currentColor"><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg><span className="font-medium text-base">Geri</span></Link></nav>
       <div className="flex-1 flex items-center justify-center p-4">
         <div className="w-full max-w-[480px] space-y-6">
-          {exam && (
-            <div className="bg-primary-light rounded-xl p-4">
-              <p className="text-base font-semibold text-primary-dark">📚 {exam.title}</p>
-              <p className="text-sm text-text-secondary mt-1">{exam.groupName || "—"}</p>
-            </div>
-          )}
+          {exam && (<div className="bg-primary-light rounded-xl p-4"><p className="text-base font-semibold text-primary-dark">📚 {exam.title}</p><p className="text-sm text-text-secondary mt-1">{exam.groupName || "—"}</p></div>)}
           <div className="bg-surface rounded-[16px] p-6 border border-border">
             <h1 className="text-2xl font-bold text-text-primary mb-6">Adınızı girin</h1>
             <form onSubmit={handleSubmit} className="space-y-4" noValidate>

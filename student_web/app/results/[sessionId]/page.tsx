@@ -12,6 +12,7 @@ export default function ResultsPage() {
   const [board, setBoard] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [puanlamadi, setPuanlamadi] = useState(true);
+  const [showSettings, setShowSettings] = useState({ showScore: true, showCorrect: true, showLeaderboard: true });
 
   useEffect(() => {
     const sid = typeof window !== "undefined" ? window.location.pathname.split("/").pop() || "" : "";
@@ -23,6 +24,12 @@ export default function ResultsPage() {
       if (!sess.scoreCalculatedAt) return;
 
       const examId = sess.examId || "";
+      // Exam settings oku (showScore/showCorrect/showLeaderboard)
+      if (examId) {
+        get(ref(db(), `exams/${examId}/settings`)).then(snap => {
+          if (snap.exists()) setShowSettings({showScore: snap.val().showScore !== false, showCorrect: snap.val().showCorrectAnswers !== false, showLeaderboard: snap.val().showLeaderboard !== false});
+        });
+      }
       setR({ score: sess.score ?? 0, total: sess.totalPoints ?? 50, pct: sess.percentage ?? 0, rank: sess.rank ?? 0 });
       setPuanlamadi(false);
 
@@ -72,7 +79,7 @@ export default function ResultsPage() {
               <p className="text-5xl font-bold text-success">{r.pct}%</p>
               {r.rank > 0 && <p className="text-base font-bold text-warning">🥇 Sınıfta {r.rank}. sıradasınız</p>}
             </div>
-            {board.length > 0 && (
+            {showSettings.showLeaderboard && board.length > 0 && (
               <div>
                 <h2 className="text-base font-semibold mb-2">Sınıf Sıralaması</h2>
                 <div className="bg-surface rounded-2xl border divide-y divide-border">

@@ -21,7 +21,7 @@ class _ShareScreenState extends ConsumerState<ShareScreen> {
     _webLink = 'https://examkit-beta.vercel.app/join/$_code';
     Future.microtask(() async {
       try {
-        await ref.read(rtdbProvider).ref('exams/${widget.examId}').update({'code': _code, 'status': 'active'});
+        await ref.read(rtdbProvider).ref('exams/${widget.examId}').update({'code': _code});
       } catch (e) { debugPrint('ShareScreen: $e'); }
     });
   }

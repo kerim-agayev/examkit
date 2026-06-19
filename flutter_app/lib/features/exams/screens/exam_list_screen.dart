@@ -19,10 +19,10 @@ class ExamListScreen extends ConsumerWidget {
           error: (e, _) => Center(child: Text('$e')),
           data: (exams) => TabBarView(
             children: [
-              _ExamTab(exams: exams),
-              _ExamTab(exams: exams.where((e) => e.status == 'draft').toList()),
-              _ExamTab(exams: exams.where((e) => e.status == 'active' || e.status == 'live').toList()),
-              _ExamTab(exams: exams.where((e) => e.status == 'completed').toList()),
+              _ExamTab(exams: exams, onDelete: (id) => _deleteExam(ref, id, context)),
+              _ExamTab(exams: exams.where((e) => e.status == 'draft').toList(), onDelete: (id) => _deleteExam(ref, id, context)),
+              _ExamTab(exams: exams.where((e) => e.status == 'active' || e.status == 'published').toList(), onDelete: (id) => _deleteExam(ref, id, context)),
+              _ExamTab(exams: exams.where((e) => e.status == 'completed').toList(), onDelete: (id) => _deleteExam(ref, id, context)),
             ],
           ),
         ),
@@ -32,12 +32,28 @@ class ExamListScreen extends ConsumerWidget {
   }
 }
 
+void _deleteExam(WidgetRef ref, String examId, BuildContext context) async {
+  final confirm = await showDialog<bool>(context: context, builder: (c) => AlertDialog(title: const Text('Sınavı Sil'), content: const Text('Bu sınav ve tüm soruları kalıcı olarak silinecek. Emin misiniz?'), actions: [
+    TextButton(onPressed: () => Navigator.pop(c, false), child: const Text('İptal')),
+    TextButton(onPressed: () => Navigator.pop(c, true), style: TextButton.styleFrom(foregroundColor: const Color(0xFFDC2626)), child: const Text('Sil')),
+  ]));
+  if (confirm == true) {
+    try {
+      await ref.read(deleteExamProvider(examId).future);
+      if (context.mounted) ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Sınav silindi ✓'), backgroundColor: Color(0xFF059669)));
+    } catch (e) {
+      if (context.mounted) ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Silinemedi: $e'), backgroundColor: const Color(0xFFDC2626)));
+    }
+  }
+}
+
 class _ExamTab extends StatelessWidget {
   final List<ExamModel> exams;
-  const _ExamTab({required this.exams});
+  final void Function(String examId) onDelete;
+  const _ExamTab({required this.exams, required this.onDelete});
 
-  static const _statusColors = {'draft': Color(0xFFD97706), 'active': Color(0xFF0284C7), 'live': Color(0xFF059669), 'completed': Color(0xFF94A3B8)};
-  static const _statusLabels = {'draft': 'Taslak', 'active': 'Aktif', 'live': '● Canlı', 'completed': 'Tamamlandı'};
+  static const _statusColors = {'draft': Color(0xFFD97706), 'published': Color(0xFF0284C7), 'active': Color(0xFF059669), 'completed': Color(0xFF94A3B8)};
+  static const _statusLabels = {'draft': 'Taslak', 'published': 'Yayında', 'active': '● Canlı', 'completed': 'Tamamlandı'};
 
   @override
   Widget build(BuildContext context) {
@@ -53,8 +69,20 @@ class _ExamTab extends StatelessWidget {
           child: ListTile(
             title: Text(e.title, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
             subtitle: Text('${e.groupName ?? "—"} · ${e.questionCount} soru', style: const TextStyle(fontSize: 13, color: Color(0xFF475569))),
-            trailing: Container(padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4), decoration: BoxDecoration(color: color.withAlpha(25), borderRadius: BorderRadius.circular(20)), child: Text(_statusLabels[e.status] ?? '', style: TextStyle(fontSize: 12, color: color, fontWeight: FontWeight.w500))),
-            onTap: () => context.push('/exams/${e.id}/results'),
+            trailing: Row(mainAxisSize: MainAxisSize.min, children: [
+              Container(padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4), decoration: BoxDecoration(color: color.withAlpha(25), borderRadius: BorderRadius.circular(20)), child: Text(_statusLabels[e.status] ?? '', style: TextStyle(fontSize: 12, color: color, fontWeight: FontWeight.w500))),
+              const SizedBox(width: 4),
+              IconButton(icon: const Icon(Icons.delete_outline, size: 20, color: Color(0xFF94A3B8)), onPressed: () => onDelete(e.id)),
+            ]),
+            onTap: () {
+              switch (e.status) {
+                case 'draft': context.push('/exams/${e.id}/share'); break; // draft → edit/continue
+                case 'published': context.push('/exams/${e.id}/live'); break;
+                case 'active': context.push('/exams/${e.id}/live'); break;
+                case 'completed': context.push('/exams/${e.id}/results'); break;
+                default: context.push('/exams/${e.id}/results');
+              }
+            },
           ),
         );
       },

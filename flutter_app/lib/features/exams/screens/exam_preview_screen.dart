@@ -39,6 +39,30 @@ class ExamPreviewScreen extends ConsumerWidget {
       }
     }
 
+    Future<void> saveDraft() async {
+      if (state.examId.isEmpty) return;
+      try {
+        final rtdb = ref.read(rtdbProvider);
+        await rtdb.ref('exams/${state.examId}').update({
+          'mode': state.mode,
+          'settings': {
+            'globalTimerMinutes': state.globalTimer ? state.globalTimerMinutes : null,
+            'shuffleQuestions': state.shuffleQuestions,
+            'shuffleOptions': state.shuffleOptions,
+            'showScore': state.showScore,
+            'showCorrectAnswers': state.showCorrect,
+            'showLeaderboard': state.showLeaderboard,
+          },
+        });
+        if (context.mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Taslak kaydedildi ✓'), backgroundColor: Color(0xFF059669)));
+          context.go('/home');
+        }
+      } catch (e) {
+        if (context.mounted) ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Hata: $e'), backgroundColor: const Color(0xFFDC2626)));
+      }
+    }
+
     return Scaffold(
       appBar: AppBar(title: const Text('Önizleme')),
       body: SingleChildScrollView(padding: const EdgeInsets.all(16), child: Column(children: [
@@ -46,7 +70,13 @@ class ExamPreviewScreen extends ConsumerWidget {
         const SizedBox(height: 16),
         Card(child: Padding(padding: const EdgeInsets.all(24), child: Column(children: [Text(state.title.isEmpty ? 'Sınav Başlığı' : state.title, style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w700), textAlign: TextAlign.center), const SizedBox(height: 4), Text('${state.mode == "scroll" ? "Kaydırma" : "Sıralı"} · ${state.globalTimer ? "${state.globalTimerMinutes} dk" : "Süresiz"}', style: const TextStyle(fontSize: 13, color: Color(0xFF475569)), textAlign: TextAlign.center)]))),
       ])),
-      bottomNavigationBar: SafeArea(child: Padding(padding: const EdgeInsets.all(16), child: Row(children: [Expanded(child: OutlinedButton(onPressed: () => context.pop(), child: const Text('← Düzenle'))), const SizedBox(width: 12), Expanded(child: ElevatedButton(onPressed: publish, child: const Text('Yayınla →')))]))),
+      bottomNavigationBar: SafeArea(child: Padding(padding: const EdgeInsets.all(16), child: Row(children: [
+        Expanded(child: OutlinedButton(onPressed: () => context.pop(), child: const Text('← Düzenle'))),
+        const SizedBox(width: 8),
+        Expanded(child: OutlinedButton(onPressed: saveDraft, style: OutlinedButton.styleFrom(foregroundColor: const Color(0xFFD97706)), child: const Text('Taslak'))),
+        const SizedBox(width: 8),
+        Expanded(child: ElevatedButton(onPressed: publish, child: const Text('Yayınla →'))),
+      ]))),
     );
   }
 }
