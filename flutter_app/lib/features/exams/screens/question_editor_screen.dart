@@ -16,14 +16,14 @@ class _QuestionEditorScreenState extends ConsumerState<QuestionEditorScreen> wit
   bool _saving = false;
 
   final _mcqTextCtrl = TextEditingController();
-  final _mcqOpts = ['', '', '', ''];
+  final _mcqOptCtrls = [TextEditingController(), TextEditingController(), TextEditingController(), TextEditingController()];
   int _mcqCorrect = 0;
   final _tfTextCtrl = TextEditingController();
   bool _tfCorrect = true;
   final _saTextCtrl = TextEditingController(), _saAnswerCtrl = TextEditingController(), _saAltCtrl = TextEditingController();
 
   @override void initState() { super.initState(); _tabCtrl = TabController(length: 3, vsync: this); }
-  @override void dispose() { _tabCtrl.dispose(); _mcqTextCtrl.dispose(); _tfTextCtrl.dispose(); _saTextCtrl.dispose(); _saAnswerCtrl.dispose(); _saAltCtrl.dispose(); super.dispose(); }
+  @override void dispose() { _tabCtrl.dispose(); _mcqTextCtrl.dispose(); _tfTextCtrl.dispose(); _saTextCtrl.dispose(); _saAnswerCtrl.dispose(); _saAltCtrl.dispose(); for (final c in _mcqOptCtrls) c.dispose(); super.dispose(); }
 
   Future<void> _save() async {
     final state = ref.read(createExamStateProvider);
@@ -47,7 +47,7 @@ class _QuestionEditorScreenState extends ConsumerState<QuestionEditorScreen> wit
       final qKey = rtdb.ref('questions/${state.examId}').push().key!;
       final q = <String, dynamic>{
         'text': text, 'type': type, 'points': _points, 'orderIndex': 0,
-        if (type == 'mcq') 'options': _mcqOpts,
+        if (type == 'mcq') 'options': _mcqOptCtrls.map((c) => c.text).toList(),
       };
       final a = <String, dynamic>{'type': type};
       if (type == 'mcq') { a['correctOptionId'] = String.fromCharCode(65 + _mcqCorrect); }
@@ -67,8 +67,11 @@ class _QuestionEditorScreenState extends ConsumerState<QuestionEditorScreen> wit
 
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Soru kaydedildi ✓'), backgroundColor: Color(0xFF059669)));
-        _mcqTextCtrl.clear(); for (int i = 0; i < 4; i++) _mcqOpts[i] = '';
-        _tfTextCtrl.clear(); _saTextCtrl.clear(); _saAnswerCtrl.clear(); _saAltCtrl.clear();
+        // Tüm alanları sıfırla
+        _mcqTextCtrl.clear(); for (final c in _mcqOptCtrls) c.clear(); _mcqCorrect = 0;
+        _tfTextCtrl.clear(); _tfCorrect = true;
+        _saTextCtrl.clear(); _saAnswerCtrl.clear(); _saAltCtrl.clear();
+        _points = 3;
         setState(() {});
       }
     } catch (e) {
@@ -89,7 +92,7 @@ class _QuestionEditorScreenState extends ConsumerState<QuestionEditorScreen> wit
             const SizedBox(height: 16), const Text('Seçenekler', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600)), const SizedBox(height: 8),
             ...List.generate(4, (i) => Padding(padding: const EdgeInsets.only(bottom: 8), child: Row(children: [
               GestureDetector(onTap: () => setState(() => _mcqCorrect = i), child: Container(width: 36, height: 36, decoration: BoxDecoration(shape: BoxShape.circle, color: _mcqCorrect == i ? const Color(0xFF059669) : Colors.grey[200]), child: Center(child: Text(String.fromCharCode(65 + i), style: TextStyle(color: _mcqCorrect == i ? Colors.white : const Color(0xFF475569), fontWeight: FontWeight.w600))))),
-              const SizedBox(width: 12), Expanded(child: TextField(decoration: InputDecoration(hintText: 'Seçenek ${String.fromCharCode(65 + i)}...', filled: true, fillColor: _mcqCorrect == i ? const Color(0xFFD1FAE5) : null), onChanged: (v) { _mcqOpts[i] = v; })),
+              const SizedBox(width: 12), Expanded(child: TextField(controller: _mcqOptCtrls[i], decoration: InputDecoration(hintText: 'Seçenek ${String.fromCharCode(65 + i)}...', filled: true, fillColor: _mcqCorrect == i ? const Color(0xFFD1FAE5) : null))),
             ]))),
           ]),
           ListView(padding: const EdgeInsets.all(16), children: [
