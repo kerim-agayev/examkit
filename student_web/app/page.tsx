@@ -1,36 +1,39 @@
 "use client";
 
-import { useState, useCallback, useEffect, type FormEvent } from "react";
+import { useState, useCallback, type FormEvent } from "react";
+import { ref, get } from "firebase/database";
+import { getRtdb } from "@/lib/firebase";
+
+function db() { return getRtdb()!; }
 
 export default function HomePage() {
   const [code, setCode] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
-  const [fbReady, setFbReady] = useState(false);
-
-  // Firebase'i client-side yükle (SSR-safe)
-  useEffect(() => {
-    import("@/lib/firestore").then(() => setFbReady(true)).catch(() => {});
-  }, []);
 
   const handleSubmit = useCallback(async (e: FormEvent) => {
     e.preventDefault();
     if (code.length < 4) { setError("Geçersiz kod, tekrar deneyin"); return; }
     setLoading(true); setError("");
 
-    // Firebase doğrulama (varsa)
-    if (fbReady) {
-      try {
-        const { getExamByCode } = await import("@/lib/firestore");
-        const exam = await getExamByCode(code);
-        if (exam) { window.location.href = `/join/${code}`; return; }
-        setError("Geçersiz kod, tekrar deneyin");
-      } catch { /* fallback */ }
+    try {
+      // RTDB'de code ile exam ara
+      const snap = await get(ref(db(), "exams"));
+      if (snap.exists()) {
+        const exams = snap.val();
+        for (const key of Object.keys(exams)) {
+          if (exams[key].code === code && exams[key].status !== "draft") {
+            window.location.href = `/join/${code}`;
+            return;
+          }
+        }
+      }
+      setError("Geçersiz kod, tekrar deneyin");
+    } catch {
+      setError("Bağlantı hatası, tekrar deneyin");
     }
-
     setLoading(false);
-    window.location.href = `/join/${code}`;
-  }, [code, fbReady]);
+  }, [code]);
 
   const hc = (e: React.ChangeEvent<HTMLInputElement>) => {
     const v = e.target.value.toUpperCase().replace(/[^A-HJ-NP-Z2-9]/g, "");
@@ -56,7 +59,6 @@ export default function HomePage() {
           </button>
         </form>
         <div className="mt-8 text-center"><p className="text-xs text-text-secondary">⚡ Uygulama indirmeye gerek yok</p></div>
-        {fbReady && <div className="mt-2 text-center"><span className="text-[10px] bg-success-light text-success px-2 py-0.5 rounded-full">● Firebase bağlı</span></div>}
       </div>
     </main>
   );

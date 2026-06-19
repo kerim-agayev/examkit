@@ -56,3 +56,34 @@
 
 ### BUG-012: Student web'de Firebase Analytics
 - **Durum:** `contentscript.js` hataları Chrome eklentilerinden (MetaMask), ExamKit kaynaklı değil.
+
+---
+
+## Audit Bulguları (19 Haziran 2026 — Son Kontrol)
+
+### Mobil (Flutter) — Yeni Bulgular
+
+| # | Severity | Bulgu |
+|---|----------|-------|
+| BUG-013 | **BLOCKER** | `student_detail_screen.dart` tamamen sahte veri. Öğrenci detay sayfası çalışmıyor |
+| BUG-014 | **BLOCKER** | `cloud_firestore: ^5.0.0` pubspec.yaml'da hâlâ bağımlılık olarak duruyor → **BUG-013 ile birlikte düzeltildi** |
+| BUG-015 | HIGH | `group_create_screen.dart` düzenleme modunda (`_isEdit`) bile yeni grup oluşturuyor (`push().key!`), mevcut grubu güncellemiyor |
+| BUG-016 | HIGH | Home "Bugün" istatistik kartı hep `—` gösteriyor, veri kaynağı yok |
+| BUG-017 | HIGH | `group_create_screen` ve `exam_create_screen` kendi provider'larını (`createGroupProvider`, `createExamProvider`) bypass edip inline RTDB yazıyor — kod tekrarı |
+| BUG-018 | MEDIUM | l10n altyapısı var ama hiçbir ekran `AppLocalizations` kullanmıyor, hepsi hardcoded Türkçe string |
+| BUG-019 | MEDIUM | 6 shared widget (`AppCard`, `AppTextField`, `AppButton`, `EmptyState`, `LoadingOverlay`, `ConfirmationDialog`) tanımlı ama hiçbiri kullanılmıyor |
+| BUG-020 | MEDIUM | Question drag-to-reorder handle'ı var ama işlevsel değil |
+| BUG-021 | LOW | `validators.dart`, `edge_case_helpers.dart` tanımlı ama import edilmemiş |
+
+### Web (Next.js) — Yeni Bulgular
+
+| # | Severity | Bulgu |
+|---|----------|-------|
+| BUG-022 | **BLOCKER** | Ana sayfa (`app/page.tsx`) Firestore kullanıyordu → **BUG-022 ile RTDB'ye taşındı** |
+| BUG-023 | HIGH | `hooks/useExamSession.ts` (194 satır) hiçbir sayfa tarafından import edilmiyor — ölü kod |
+| BUG-024 | HIGH | `stores/examStore.ts` (93 satır) sadece ölü kod tarafından kullanılıyor |
+| BUG-025 | MEDIUM | 4/7 component kullanılmıyor: `QuestionCard`, `ConfirmDialog`, `TimerBar`, `ExamKitLogo` |
+| BUG-026 | MEDIUM | `lib/firestore.ts` hâlâ projede, import eden kod var (`useExamSession.ts`) |
+| BUG-027 | MEDIUM | `next.config.ts` ESLint ve TypeScript hatalarını ignore ediyor — gerçek sorunlar gizlenebilir |
+| BUG-028 | LOW | Duplicate i18n: `lib/i18n.ts` ve `i18n/request.ts` aynı işlevi görüyor |
+| BUG-029 | LOW | `getRtdb()!` null assertion — RTDB URL yanlışsa runtime crash |
