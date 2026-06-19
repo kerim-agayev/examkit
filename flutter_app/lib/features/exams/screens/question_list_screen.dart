@@ -14,7 +14,7 @@ class QuestionListScreen extends ConsumerWidget {
     final rtdb = ref.watch(rtdbProvider);
 
     final questionsStream = state.examId.isNotEmpty
-        ? rtdb.ref('questions/${state.examId}').orderByChild('orderIndex').onValue
+        ? rtdb.ref('questions/${state.examId}').orderByChild('orderIndex').onValue.asBroadcastStream()
         : null;
 
     return Scaffold(

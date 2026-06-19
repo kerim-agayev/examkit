@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../providers/create_exam_provider.dart';
 import '../../../../core/firebase/firebase_providers.dart';
+import '../../../../core/utils/exam_code_generator.dart';
 
 class ExamPreviewScreen extends ConsumerWidget {
   const ExamPreviewScreen({super.key});
@@ -18,7 +19,9 @@ class ExamPreviewScreen extends ConsumerWidget {
       }
       try {
         final rtdb = ref.read(rtdbProvider);
+        final code = ExamCodeGenerator.generate();
         await rtdb.ref('exams/${state.examId}').update({
+          'code': code,
           'mode': state.mode,
           'settings': {
             'globalTimerMinutes': state.globalTimer ? state.globalTimerMinutes : null,
