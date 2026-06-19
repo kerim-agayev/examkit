@@ -70,7 +70,7 @@ class _QuestionEditorScreenState extends ConsumerState<QuestionEditorScreen> wit
         if (type == 'mcq') 'options': _mcqOptCtrls.map((c) => c.text).toList(),
       };
       final a = <String, dynamic>{'type': type};
-      if (type == 'mcq') { a['correctOptionId'] = String.fromCharCode(65 + _mcqCorrect); }
+      if (type == 'mcq') { a['correctOptionId'] = _mcqOptCtrls[_mcqCorrect].text; }
       else if (type == 'true_false') { a['correctBool'] = _tfCorrect; }
       else {
         final answers = <String>[];

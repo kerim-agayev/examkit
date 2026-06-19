@@ -97,7 +97,7 @@
         "students": {
           ".read": true,
           "$sessionId": {
-            ".write": "!data.exists() || auth != null || newData.child('status').val() === 'active'",
+            ".write": "!data.exists() || auth != null || newData.child('status').val() === 'active' || newData.child('status').val() === 'completed'",
             "name": {
               ".validate": "newData.isString() && newData.val().length <= 100"
             },
