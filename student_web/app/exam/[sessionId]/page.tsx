@@ -3,7 +3,7 @@
 import { useState, useCallback, useEffect } from "react";
 import { useParams, useSearchParams } from "next/navigation";
 import { Suspense } from "react";
-import { ref, get, update, serverTimestamp } from "firebase/database";
+import { ref, get, update, onValue, serverTimestamp } from "firebase/database";
 import { getRtdb } from "@/lib/firebase";
 
 function db() { return getRtdb()!; }
@@ -25,7 +25,6 @@ function ExamContent() {
   useEffect(() => {
     (async () => {
       try {
-        // Session'dan examId'yi al
         const sessSnap = await get(ref(db(), `sessions/${sid}`));
         if (!sessSnap.exists()) { setLoading(false); return; }
         const sess = sessSnap.val();
@@ -33,7 +32,6 @@ function ExamContent() {
         setExamId(eid);
         setExamTitle(sess.examTitle || "Sınav");
 
-        // Soruları RTDB'den al
         const qSnap = await get(ref(db(), `questions/${eid}`));
         if (qSnap.exists()) {
           const qs = qSnap.val();
@@ -45,6 +43,11 @@ function ExamContent() {
         } else {
           setQuestions(defaultQuestions);
         }
+
+        // Öğretmen sınavı bitirirse → sonuçlara yönlen
+        onValue(ref(db(), `live_exams/${eid}/status`), (snap) => {
+          if (snap.val() === "ended") window.location.href = `/results/${sid}`;
+        });
       } catch { setQuestions(defaultQuestions); }
       setLoading(false);
     })();
