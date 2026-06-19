@@ -2,10 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../../auth/providers/auth_provider.dart';
-
-final appLanguageProvider = StateProvider<String>((ref) => 'az');
-
-class SettingsScreen extends ConsumerWidget {
+import '../../../../app.dart';class SettingsScreen extends ConsumerWidget {
   const SettingsScreen({super.key});
 
   @override

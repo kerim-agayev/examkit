@@ -21,8 +21,18 @@ export default function WaitingPage() {
       const examId = typeof window !== "undefined" ? localStorage.getItem("examkit_examId") || "mock_exam_id" : "mock_exam_id";
       setFbConnected(true);
 
+        // Mode'u RTDB'den al
+        import('firebase/database').then(({ref, get}) => {
+          import('@/lib/firebase').then(({getRtdb}) => {
+            get(ref(getRtdb()!, `exams/${examId}/mode`)).then(snap => {
+              const mode = snap.val() || 'scroll';
+              localStorage.setItem('examkit_mode', mode);
+            });
+          });
+        });
         unsubStatus = subscribeToExamStatus(examId, (status) => {
-          if (status === "active") window.location.href = `/exam/${sid}`;
+          const mode = localStorage.getItem('examkit_mode') || 'scroll';
+          if (status === "active") window.location.href = `/exam/${sid}?mode=${mode}`;
           if (status === "ended") window.location.href = `/results/${sid}`;
         });
 

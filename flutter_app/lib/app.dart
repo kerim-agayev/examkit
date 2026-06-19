@@ -5,12 +5,16 @@ import 'router.dart';
 import 'core/theme/theme.dart';
 import 'l10n/app_localizations.dart';
 
+/// Uygulama dil provider'ı — settings_screen ve app.dart tarafından kullanılır
+final appLanguageProvider = StateProvider<String>((ref) => 'az');
+
 class ExamKitApp extends ConsumerWidget {
   const ExamKitApp({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final router = ref.watch(routerProvider);
+    final lang = ref.watch(appLanguageProvider);
     return MaterialApp.router(
       title: 'ExamKit',
       theme: examKitTheme,
@@ -23,7 +27,7 @@ class ExamKitApp extends ConsumerWidget {
         GlobalCupertinoLocalizations.delegate,
       ],
       supportedLocales: const [Locale('az'), Locale('tr')],
-      locale: const Locale('az'),
+      locale: Locale(lang),
     );
   }
 }

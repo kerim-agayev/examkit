@@ -17,6 +17,10 @@ class HomeScreen extends ConsumerWidget {
 
     final groupCount = groupsAsync.valueOrNull?.length ?? 0;
     final examCount = examsAsync.valueOrNull?.length ?? 0;
+    // Bugün oluşturulan sınav sayısı
+    final today = DateTime.now();
+    final todayStart = DateTime(today.year, today.month, today.day).millisecondsSinceEpoch;
+    final todayCount = examsAsync.valueOrNull?.where((e) => e.createdAt >= todayStart).length ?? 0;
     final recentExams = examsAsync.valueOrNull?.take(3).toList() ?? [];
     return Scaffold(
       backgroundColor: const Color(0xFFF1F5F9),
@@ -43,7 +47,7 @@ class HomeScreen extends ConsumerWidget {
                 const SizedBox(width: 8),
                 _StatCard(icon: Icons.assignment, color: const Color(0xFF059669), value: '$examCount', label: 'Sınav'),
                 const SizedBox(width: 8),
-                _StatCard(icon: Icons.person, color: const Color(0xFFD97706), value: '—', label: 'Bugün'),
+                _StatCard(icon: Icons.person, color: const Color(0xFFD97706), value: '$todayCount', label: 'Bugün'),
               ],
             ),
             const SizedBox(height: 16),
