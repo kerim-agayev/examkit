@@ -53,7 +53,7 @@ function ExamContent() {
           const endAt = snap.val();
           if (endAt) {
             if (timerIv) clearInterval(timerIv);
-            const update = () => {
+            const tick = () => {
               const rem = Math.max(0, endAt - Date.now());
               setTimeLeft(rem);
               if (rem <= 0) {
@@ -64,8 +64,8 @@ function ExamContent() {
                 window.location.href = `/results/${sid}`;
               }
             };
-            update();
-            timerIv = setInterval(update, 1000);
+            tick();
+            timerIv = setInterval(tick, 1000);
           }
         });
 
