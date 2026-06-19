@@ -13,6 +13,7 @@ export default function ResultsPage() {
   const [loading, setLoading] = useState(true);
   const [puanlamadi, setPuanlamadi] = useState(true);
   const [showSettings, setShowSettings] = useState({ showScore: true, showCorrect: true, showLeaderboard: true });
+  const [questionResults, setQuestionResults] = useState<any[]>([]);
 
   useEffect(() => {
     const sid = typeof window !== "undefined" ? window.location.pathname.split("/").pop() || "" : "";
@@ -43,6 +44,34 @@ export default function ResultsPage() {
           }));
           list.sort((a: any, b: any) => a.rank - b.rank);
           setBoard(list);
+        });
+
+        // Soru bazında doğru/yanlış karşılaştırması
+        Promise.all([
+          get(ref(db(), `questions/${examId}`)),
+          get(ref(db(), `exam_answers/${examId}`)),
+        ]).then(([qSnap, aSnap]) => {
+          const questions = qSnap.exists() ? qSnap.val() : {};
+          const correctAnswers = aSnap.exists() ? aSnap.val() : {};
+          const studentAnswers = sess.answers || {};
+          const results: any[] = [];
+          Object.keys(questions).forEach((qid) => {
+            const q = questions[qid] || {};
+            const correct = correctAnswers[qid] || {};
+            const student = studentAnswers[qid] || {};
+            const studentVal = student?.value;
+            let isCorrect = false;
+            if (q.type === "mcq") {
+              isCorrect = studentVal === correct.correctOptionId;
+            } else if (q.type === "true_false") {
+              isCorrect = studentVal === correct.correctAnswer;
+            } else {
+              // short_answer: case-insensitive trim karşılaştırma
+              isCorrect = String(studentVal || "").trim().toLowerCase() === String(correct.correctAnswer || "").trim().toLowerCase();
+            }
+            results.push({ id: qid, text: q.text, type: q.type, options: q.options, studentAnswer: studentVal, correctAnswer: q.type === "mcq" ? correct.correctOptionId : correct.correctAnswer, isCorrect, points: q.points || 0 });
+          });
+          setQuestionResults(results);
         });
       }
     });
@@ -88,6 +117,50 @@ export default function ResultsPage() {
                       <span className="w-7 text-center font-bold text-sm">{e.rank === 1 ? "🥇" : e.rank === 2 ? "🥈" : "🥉"}</span>
                       <span className={`flex-1 text-sm ${e.me ? "font-bold text-primary-dark" : ""}`}>{e.name}</span>
                       <span className="text-sm font-semibold">{e.score} puan</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+            {showSettings.showCorrect && questionResults.length > 0 && (
+              <div>
+                <h2 className="text-base font-semibold mb-2">Soru Detayları</h2>
+                <div className="space-y-3">
+                  {questionResults.map((qr, i) => (
+                    <div key={qr.id} className={`bg-surface rounded-xl p-4 border ${qr.isCorrect ? "border-success/30" : "border-error/30"}`}>
+                      <div className="flex items-start gap-2 mb-2">
+                        <span className={`w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold shrink-0 mt-0.5 ${qr.isCorrect ? "bg-success text-on-primary" : "bg-error text-on-primary"}`}>
+                          {qr.isCorrect ? "✓" : "✗"}
+                        </span>
+                        <div>
+                          <p className="text-sm font-medium">{i + 1}. {qr.text}</p>
+                          {qr.type === "mcq" && qr.options && (
+                            <div className="mt-1 space-y-0.5">
+                              {qr.options.map((o: string, oi: number) => (
+                                <span key={oi} className={`block text-xs pl-1 ${o === qr.correctAnswer ? "text-success font-semibold" : o === qr.studentAnswer && !qr.isCorrect ? "text-error line-through" : "text-text-secondary"}`}>
+                                  {String.fromCharCode(65 + oi)}) {o}
+                                  {o === qr.correctAnswer && " ← Doğru cevap"}
+                                  {o === qr.studentAnswer && !qr.isCorrect && " ← Senin cevabın"}
+                                </span>
+                              ))}
+                            </div>
+                          )}
+                          {qr.type === "true_false" && (
+                            <p className="text-xs mt-1">
+                              <span className="text-text-secondary">Cevabın: </span>
+                              <span className={qr.isCorrect ? "text-success font-semibold" : "text-error"}>{qr.studentAnswer ? "Doğru" : "Yanlış"}</span>
+                              {!qr.isCorrect && <span className="text-text-secondary"> | Doğru: <span className="text-success">{qr.correctAnswer ? "Doğru" : "Yanlış"}</span></span>}
+                            </p>
+                          )}
+                          {qr.type === "short_answer" && (
+                            <p className="text-xs mt-1">
+                              <span className="text-text-secondary">Cevabın: </span>
+                              <span className={qr.isCorrect ? "text-success font-semibold" : "text-error"}>{qr.studentAnswer || "(boş)"}</span>
+                              {!qr.isCorrect && <span className="text-text-secondary"> | Doğru: <span className="text-success">{qr.correctAnswer}</span></span>}
+                            </p>
+                          )}
+                        </div>
+                      </div>
                     </div>
                   ))}
                 </div>

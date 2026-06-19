@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../providers/create_exam_provider.dart';
+import '../../../l10n/app_localizations.dart';
 
 class ExamSettingsScreen extends ConsumerWidget {
   const ExamSettingsScreen({super.key});
@@ -10,10 +11,11 @@ class ExamSettingsScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final state = ref.watch(createExamStateProvider);
     final theme = Theme.of(context);
+    final l10n = AppLocalizations.of(context)!;
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(state.title.isEmpty ? 'Sınav Ayarları' : state.title),
+        title: Text(state.title.isEmpty ? l10n.examSettings : state.title),
         bottom: PreferredSize(preferredSize: const Size.fromHeight(32), child: Padding(padding: const EdgeInsets.only(bottom: 8), child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
           _SC(1, false), _SL(), _SC(2, true), _SL(), _SC(3, false), _SL(), _SC(4, false), _SL(), _SC(5, false),
         ]))),
@@ -21,37 +23,38 @@ class ExamSettingsScreen extends ConsumerWidget {
       body: ListView(
         padding: const EdgeInsets.all(16),
         children: [
-          Text('2/5 Sınav Ayarları', style: theme.textTheme.bodySmall?.copyWith(color: const Color(0xFF475569))),
+          Text('2/5 ${l10n.examSettings}', style: theme.textTheme.bodySmall?.copyWith(color: const Color(0xFF475569))),
           const SizedBox(height: 12),
-          _SectionCard(title: 'Sınav Modu', children: [
-            _RadioTile('Kaydırma Modu', 'Tüm sorular görünür', state.mode == 'scroll', () => ref.read(createExamStateProvider.notifier).state = state.copyWith(mode: 'scroll')),
+          _SectionCard(title: l10n.examMode, children: [
+            _RadioTile(l10n.examModeScroll, l10n.examModeScrollDesc, state.mode == 'scroll', () => ref.read(createExamStateProvider.notifier).state = state.copyWith(mode: 'scroll')),
             const Divider(),
-            _RadioTile('Sıralı Mod', 'Soru soru, geri dönülemez', state.mode == 'sequential', () => ref.read(createExamStateProvider.notifier).state = state.copyWith(mode: 'sequential')),
+            _RadioTile(l10n.examModeSequential, l10n.examModeSequentialDesc, state.mode == 'sequential', () => ref.read(createExamStateProvider.notifier).state = state.copyWith(mode: 'sequential')),
           ]),
           const SizedBox(height: 12),
-          _SectionCard(title: 'Zamanlama', children: [
-            SwitchListTile(title: const Text('Genel Süre Sınırı'), value: state.globalTimer, onChanged: (v) => ref.read(createExamStateProvider.notifier).state = state.copyWith(globalTimer: v)),
+          _SectionCard(title: l10n.examTiming, children: [
+            SwitchListTile(title: Text(l10n.examGlobalTimer), value: state.globalTimer, onChanged: (v) => ref.read(createExamStateProvider.notifier).state = state.copyWith(globalTimer: v)),
             if (state.globalTimer) Padding(padding: const EdgeInsets.symmetric(horizontal: 16), child: Column(children: [Slider(value: state.globalTimerMinutes.toDouble(), min: 1, max: 180, divisions: 179, label: '${state.globalTimerMinutes} dk', onChanged: (v) => ref.read(createExamStateProvider.notifier).state = state.copyWith(globalTimerMinutes: v.round())), Text('${state.globalTimerMinutes} dakika', style: const TextStyle(color: Color(0xFF475569)))]),),
             const Divider(),
-            SwitchListTile(title: const Text('Soru Başına Süre'), value: state.questionTimer, onChanged: (v) => ref.read(createExamStateProvider.notifier).state = state.copyWith(questionTimer: v)),
+            SwitchListTile(title: Text(l10n.examQuestionTimer), value: state.questionTimer, onChanged: (v) => ref.read(createExamStateProvider.notifier).state = state.copyWith(questionTimer: v)),
+            if (state.questionTimer) Padding(padding: const EdgeInsets.symmetric(horizontal: 16), child: Column(children: [Slider(value: state.questionTimerSeconds.toDouble(), min: 10, max: 300, divisions: 29, label: '${state.questionTimerSeconds} sn', onChanged: (v) => ref.read(createExamStateProvider.notifier).state = state.copyWith(questionTimerSeconds: v.round())), Text('${state.questionTimerSeconds} saniye', style: const TextStyle(color: Color(0xFF475569)))]),),
           ]),
           const SizedBox(height: 12),
-          _SectionCard(title: 'Anti-Hile', children: [
-            SwitchListTile(title: const Text('Soru Sırasını Karıştır'), value: state.shuffleQuestions, onChanged: (v) => ref.read(createExamStateProvider.notifier).state = state.copyWith(shuffleQuestions: v)),
+          _SectionCard(title: l10n.examAntiCheat, children: [
+            SwitchListTile(title: Text(l10n.examShuffleQuestions), value: state.shuffleQuestions, onChanged: (v) => ref.read(createExamStateProvider.notifier).state = state.copyWith(shuffleQuestions: v)),
             const Divider(),
-            SwitchListTile(title: const Text('Şık Sırasını Karıştır'), value: state.shuffleOptions, onChanged: (v) => ref.read(createExamStateProvider.notifier).state = state.copyWith(shuffleOptions: v)),
+            SwitchListTile(title: Text(l10n.examShuffleOptions), value: state.shuffleOptions, onChanged: (v) => ref.read(createExamStateProvider.notifier).state = state.copyWith(shuffleOptions: v)),
           ]),
           const SizedBox(height: 12),
-          _SectionCard(title: 'Öğrenciye Göster', children: [
-            SwitchListTile(title: const Text('Puanını göster'), value: state.showScore, onChanged: (v) => ref.read(createExamStateProvider.notifier).state = state.copyWith(showScore: v)),
+          _SectionCard(title: l10n.examShowStudent, children: [
+            SwitchListTile(title: Text(l10n.examShowScore), value: state.showScore, onChanged: (v) => ref.read(createExamStateProvider.notifier).state = state.copyWith(showScore: v)),
             const Divider(),
-            SwitchListTile(title: const Text('Doğru cevapları göster'), value: state.showCorrect, onChanged: (v) => ref.read(createExamStateProvider.notifier).state = state.copyWith(showCorrect: v)),
+            SwitchListTile(title: Text(l10n.examShowCorrect), value: state.showCorrect, onChanged: (v) => ref.read(createExamStateProvider.notifier).state = state.copyWith(showCorrect: v)),
             const Divider(),
-            SwitchListTile(title: const Text('Sıralamayı göster'), value: state.showLeaderboard, onChanged: (v) => ref.read(createExamStateProvider.notifier).state = state.copyWith(showLeaderboard: v)),
+            SwitchListTile(title: Text(l10n.examShowLeaderboard), value: state.showLeaderboard, onChanged: (v) => ref.read(createExamStateProvider.notifier).state = state.copyWith(showLeaderboard: v)),
           ]),
         ],
       ),
-      bottomNavigationBar: SafeArea(child: Padding(padding: const EdgeInsets.all(16), child: SizedBox(width: double.infinity, height: 56, child: ElevatedButton(onPressed: () => context.push('/exams/create/questions'), child: const Text('Devam Et →'))))),
+      bottomNavigationBar: SafeArea(child: Padding(padding: const EdgeInsets.all(16), child: SizedBox(width: double.infinity, height: 56, child: ElevatedButton(onPressed: () => context.push('/exams/create/questions'), child: Text(l10n.examContinue))))),
     );
   }
 }

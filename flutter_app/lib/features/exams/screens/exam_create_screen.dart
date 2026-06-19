@@ -45,6 +45,7 @@ class _ExamCreateScreenState extends ConsumerState<ExamCreateScreen> {
         },
         'exams_by_teacher/${user?.uid ?? ''}/$eKey': now,
         'groups/${_selectedGroup ?? ''}/examCount': ServerValue.increment(1),
+        'groups_by_teacher/${user?.uid ?? ''}/${_selectedGroup ?? ''}': now,
       });
 
       ref.read(createExamStateProvider.notifier).state = state.copyWith(

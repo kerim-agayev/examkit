@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import '../../auth/providers/auth_provider.dart';
 import '../../groups/providers/group_provider.dart';
 import '../../exams/providers/exam_provider.dart';
+import '../../../l10n/app_localizations.dart';
 
 class HomeScreen extends ConsumerWidget {
   const HomeScreen({super.key});
@@ -15,6 +16,7 @@ class HomeScreen extends ConsumerWidget {
     final examsAsync = ref.watch(watchExamsProvider);
     final theme = Theme.of(context);
 
+    final l10n = AppLocalizations.of(context)!;
     final groupCount = groupsAsync.valueOrNull?.length ?? 0;
     final examCount = examsAsync.valueOrNull?.length ?? 0;
     // Bugün oluşturulan sınav sayısı
@@ -27,7 +29,7 @@ class HomeScreen extends ConsumerWidget {
       appBar: AppBar(
         backgroundColor: Colors.white,
         elevation: 0,
-        title: Text('Merhaba, ${user?.displayName?.split(' ').first ?? 'Öğretmen'} 👋', style: const TextStyle(fontSize: 18)),
+        title: Text(l10n.homeGreeting(user?.displayName?.split(' ').first ?? '...'), style: const TextStyle(fontSize: 18)),
         actions: [
           Padding(
             padding: const EdgeInsets.only(right: 16),
@@ -43,31 +45,31 @@ class HomeScreen extends ConsumerWidget {
             // Stats Row
             Row(
               children: [
-                _StatCard(icon: Icons.people, color: const Color(0xFF2563EB), value: '$groupCount', label: 'Grup'),
+                _StatCard(icon: Icons.people, color: const Color(0xFF2563EB), value: '$groupCount', label: l10n.homeGroups),
                 const SizedBox(width: 8),
-                _StatCard(icon: Icons.assignment, color: const Color(0xFF059669), value: '$examCount', label: 'Sınav'),
+                _StatCard(icon: Icons.assignment, color: const Color(0xFF059669), value: '$examCount', label: l10n.homeExams),
                 const SizedBox(width: 8),
-                _StatCard(icon: Icons.person, color: const Color(0xFFD97706), value: '$todayCount', label: 'Bugün'),
+                _StatCard(icon: Icons.person, color: const Color(0xFFD97706), value: '$todayCount', label: l10n.homeToday),
               ],
             ),
             const SizedBox(height: 16),
             // Quick Actions
-            SizedBox(width: double.infinity, height: 64, child: ElevatedButton.icon(onPressed: () => context.push('/groups/create'), icon: const Icon(Icons.group_add), label: const Text('Yeni Grup Oluştur'), style: ElevatedButton.styleFrom(backgroundColor: const Color(0xFF2563EB), foregroundColor: Colors.white))),
+            SizedBox(width: double.infinity, height: 64, child: ElevatedButton.icon(onPressed: () => context.push('/groups/create'), icon: const Icon(Icons.group_add), label: Text(l10n.homeNewGroup), style: ElevatedButton.styleFrom(backgroundColor: const Color(0xFF2563EB), foregroundColor: Colors.white))),
             const SizedBox(height: 8),
-            SizedBox(width: double.infinity, height: 64, child: ElevatedButton.icon(onPressed: () => context.push('/exams/create'), icon: const Icon(Icons.add_circle), label: const Text('Yeni Sınav Oluştur'), style: ElevatedButton.styleFrom(backgroundColor: const Color(0xFF059669), foregroundColor: Colors.white))),
+            SizedBox(width: double.infinity, height: 64, child: ElevatedButton.icon(onPressed: () => context.push('/exams/create'), icon: const Icon(Icons.add_circle), label: Text(l10n.homeNewExam), style: ElevatedButton.styleFrom(backgroundColor: const Color(0xFF059669), foregroundColor: Colors.white))),
             const SizedBox(height: 24),
             // Recent Exams
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text('Son Sınavlar', style: theme.textTheme.titleMedium?.copyWith(fontWeight: FontWeight.w600)),
-                TextButton(onPressed: () => context.push('/exams'), child: const Text('Tümünü Gör')),
+                Text(l10n.homeRecentExams, style: theme.textTheme.titleMedium?.copyWith(fontWeight: FontWeight.w600)),
+                TextButton(onPressed: () => context.push('/exams'), child: Text(l10n.homeSeeAll)),
               ],
             ),
             if (recentExams.isEmpty)
-              const Padding(padding: EdgeInsets.all(16), child: Text('Henüz sınav yok', style: TextStyle(color: Color(0xFF94A3B8))))
+              Padding(padding: const EdgeInsets.all(16), child: Text(l10n.examsEmpty, style: const TextStyle(color: Color(0xFF94A3B8))))
             else
-              ...recentExams.map((e) => Padding(padding: const EdgeInsets.only(bottom: 8), child: _ExamCard(title: e.title, subtitle: e.groupName ?? '', status: e.status == 'active' ? '● Canlı' : e.status == 'draft' ? 'Taslak' : 'Tamamlandı', color: e.status == 'active' ? const Color(0xFF059669) : e.status == 'draft' ? const Color(0xFFD97706) : const Color(0xFF94A3B8)))),
+              ...recentExams.map((e) => Padding(padding: const EdgeInsets.only(bottom: 8), child: _ExamCard(title: e.title, subtitle: e.groupName ?? '', status: e.status == 'active' ? l10n.statusLive : e.status == 'draft' ? l10n.statusDraft : l10n.statusCompleted, color: e.status == 'active' ? const Color(0xFF059669) : e.status == 'draft' ? const Color(0xFFD97706) : const Color(0xFF94A3B8)))),
           ],
         ),
       ),
@@ -81,11 +83,11 @@ class HomeScreen extends ConsumerWidget {
             case 3: context.push('/settings');
           }
         },
-        destinations: const [
-          NavigationDestination(icon: Icon(Icons.home), label: 'Ana Sayfa'),
-          NavigationDestination(icon: Icon(Icons.group), label: 'Gruplar'),
-          NavigationDestination(icon: Icon(Icons.assignment), label: 'Sınavlar'),
-          NavigationDestination(icon: Icon(Icons.settings), label: 'Ayarlar'),
+        destinations: [
+          NavigationDestination(icon: const Icon(Icons.home), label: l10n.homeToday),
+          NavigationDestination(icon: const Icon(Icons.group), label: l10n.homeGroups),
+          NavigationDestination(icon: const Icon(Icons.assignment), label: l10n.homeExams),
+          NavigationDestination(icon: const Icon(Icons.settings), label: l10n.settingsTitle),
         ],
       ),
     );

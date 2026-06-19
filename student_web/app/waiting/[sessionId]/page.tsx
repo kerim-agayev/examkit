@@ -3,6 +3,10 @@
 import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import Link from "next/link";
+import { ref, get } from "firebase/database";
+import { getRtdb } from "@/lib/firebase";
+
+function db() { return getRtdb()!; }
 
 export default function WaitingPage() {
   const params = useParams<{ sessionId: string }>();
@@ -11,39 +15,71 @@ export default function WaitingPage() {
   const [examTitle, setExamTitle] = useState("...");
   const [count, setCount] = useState(0);
   const [fbConnected, setFbConnected] = useState(false);
+  const [error, setError] = useState("");
 
   useEffect(() => {
     let unsubStatus: (() => void) | undefined;
     let unsubStudents: (() => void) | undefined;
 
-    import("@/lib/realtime").then(({ subscribeToExamStatus, subscribeToStudents }) => {
-      // RTDB'den gerçek öğrenci sayısı
-      const examId = typeof window !== "undefined" ? localStorage.getItem("examkit_examId") || "mock_exam_id" : "mock_exam_id";
-      setFbConnected(true);
+    (async () => {
+      try {
+        // 1. Session'dan examId'yi al (localStorage'a güvenme)
+        const sessSnap = await get(ref(db(), `sessions/${sid}`));
+        if (!sessSnap.exists()) {
+          setError("Oturum bulunamadı. Lütfen tekrar katılmayı deneyin.");
+          return;
+        }
+        const sess = sessSnap.val();
+        const examId: string = sess.examId || "";
+        if (!examId) {
+          setError("Sınav bilgisi bulunamadı.");
+          return;
+        }
+        setExamTitle(sess.examTitle || "Sınav");
+        // examId'yi localStorage'a da yaz (exam sayfası için)
+        if (typeof window !== "undefined") {
+          localStorage.setItem("examkit_examId", examId);
+        }
 
-        // Mode'u RTDB'den al
-        import('firebase/database').then(({ref, get}) => {
-          import('@/lib/firebase').then(({getRtdb}) => {
-            get(ref(getRtdb()!, `exams/${examId}/mode`)).then(snap => {
-              const mode = snap.val() || 'scroll';
-              localStorage.setItem('examkit_mode', mode);
-            });
-          });
-        });
+        setFbConnected(true);
+
+        // 2. Mode'u RTDB'den al
+        const modeSnap = await get(ref(db(), `exams/${examId}/mode`));
+        const mode = modeSnap.val() || "scroll";
+        if (typeof window !== "undefined") {
+          localStorage.setItem("examkit_mode", mode);
+        }
+
+        // 3. Dinleyicileri başlat
+        const { subscribeToExamStatus, subscribeToStudents } = await import("@/lib/realtime");
         unsubStatus = subscribeToExamStatus(examId, (status) => {
-          const mode = localStorage.getItem('examkit_mode') || 'scroll';
-          if (status === "active") window.location.href = `/exam/${sid}?mode=${mode}`;
+          const m = localStorage.getItem("examkit_mode") || "scroll";
+          if (status === "active") window.location.href = `/exam/${sid}?mode=${m}`;
           if (status === "ended") window.location.href = `/results/${sid}`;
         });
 
-      unsubStudents = subscribeToStudents(examId, (students) => {
-        const names = Object.values(students);
-        setCount(names.length);
-      });
-    }).catch(() => {});
+        unsubStudents = subscribeToStudents(examId, (students) => {
+          const names = Object.values(students);
+          setCount(names.length);
+        });
+      } catch (e) {
+        setError("Bağlantı hatası. Lütfen internet bağlantınızı kontrol edin.");
+      }
+    })();
 
     return () => { unsubStatus?.(); unsubStudents?.(); };
   }, [sid]);
+
+  if (error) {
+    return (
+      <main className="min-h-screen flex flex-col items-center justify-center bg-background p-4">
+        <div className="w-full max-w-[480px] text-center space-y-6">
+          <p className="text-error font-semibold">{error}</p>
+          <Link href="/" className="text-primary underline">← Ana sayfaya dön</Link>
+        </div>
+      </main>
+    );
+  }
 
   return (
     <main className="min-h-screen flex flex-col items-center justify-center bg-background p-4">

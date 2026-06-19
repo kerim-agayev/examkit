@@ -25,6 +25,7 @@ class ExamPreviewScreen extends ConsumerWidget {
           'mode': state.mode,
           'settings': {
             'globalTimerMinutes': state.globalTimer ? state.globalTimerMinutes : null,
+            'questionTimerSeconds': state.questionTimer ? state.questionTimerSeconds : null,
             'shuffleQuestions': state.shuffleQuestions,
             'shuffleOptions': state.shuffleOptions,
             'showScore': state.showScore,
@@ -50,6 +51,7 @@ class ExamPreviewScreen extends ConsumerWidget {
           'mode': state.mode,
           'settings': {
             'globalTimerMinutes': state.globalTimer ? state.globalTimerMinutes : null,
+            'questionTimerSeconds': state.questionTimer ? state.questionTimerSeconds : null,
             'shuffleQuestions': state.shuffleQuestions,
             'shuffleOptions': state.shuffleOptions,
             'showScore': state.showScore,

@@ -54,6 +54,7 @@ final createExamProvider = FutureProvider.autoDispose.family<String, ({String ti
     'exams/$eKey': {'title': params.title, 'groupId': params.groupId, 'groupName': params.groupName, 'ownerTeacherId': user.uid, 'status': 'draft', 'mode': 'scroll', 'questionCount': 0, 'settings': {}, 'createdAt': now},
     'exams_by_teacher/${user.uid}/$eKey': now,
     'groups/${params.groupId}/examCount': ServerValue.increment(1),
+    'groups_by_teacher/${user.uid}/${params.groupId}': now, // trigger group list refresh
   });
   return eKey;
 });
@@ -73,6 +74,7 @@ final deleteExamProvider = FutureProvider.autoDispose.family<void, String>((ref,
       'sessions_by_exam/$examId': null,
       'leaderboards/$examId': null,
       if (groupId.isNotEmpty) 'groups/$groupId/examCount': ServerValue.increment(-1),
+      if (groupId.isNotEmpty && teacherId.isNotEmpty) 'groups_by_teacher/$teacherId/$groupId': ServerValue.timestamp,
     });
   }
 });

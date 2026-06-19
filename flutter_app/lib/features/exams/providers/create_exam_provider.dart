@@ -10,6 +10,7 @@ class CreateExamState {
   final bool globalTimer;
   final int globalTimerMinutes;
   final bool questionTimer;
+  final int questionTimerSeconds;
   final bool shuffleQuestions;
   final bool shuffleOptions;
   final bool showScore;
@@ -25,6 +26,7 @@ class CreateExamState {
     this.globalTimer = true,
     this.globalTimerMinutes = 45,
     this.questionTimer = false,
+    this.questionTimerSeconds = 60,
     this.shuffleQuestions = false,
     this.shuffleOptions = false,
     this.showScore = true,
@@ -41,6 +43,7 @@ class CreateExamState {
     bool? globalTimer,
     int? globalTimerMinutes,
     bool? questionTimer,
+    int? questionTimerSeconds,
     bool? shuffleQuestions,
     bool? shuffleOptions,
     bool? showScore,
@@ -56,6 +59,7 @@ class CreateExamState {
       globalTimer: globalTimer ?? this.globalTimer,
       globalTimerMinutes: globalTimerMinutes ?? this.globalTimerMinutes,
       questionTimer: questionTimer ?? this.questionTimer,
+      questionTimerSeconds: questionTimerSeconds ?? this.questionTimerSeconds,
       shuffleQuestions: shuffleQuestions ?? this.shuffleQuestions,
       shuffleOptions: shuffleOptions ?? this.shuffleOptions,
       showScore: showScore ?? this.showScore,

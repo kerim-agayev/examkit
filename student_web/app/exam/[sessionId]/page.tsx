@@ -23,6 +23,8 @@ function ExamContent() {
   const [done, setDone] = useState(false);
   const [loading, setLoading] = useState(true);
   const [timeLeft, setTimeLeft] = useState<number | null>(null);
+  const [saving, setSaving] = useState(false);
+  const [saveError, setSaveError] = useState("");
 
   useEffect(() => {
     (async () => {
@@ -82,20 +84,33 @@ function ExamContent() {
 
   const select = useCallback(async (qId: string, v: any) => {
     setAnswers(a => ({ ...a, [qId]: v }));
-    try { await update(ref(db(), `sessions/${sid}/answers`), { [qId]: { value: v, timestamp: serverTimestamp() } }); } catch {}
+    setSaving(true);
+    setSaveError("");
+    try {
+      await update(ref(db(), `sessions/${sid}/answers`), { [qId]: { value: v, timestamp: serverTimestamp() } });
+    } catch {
+      setSaveError("Cevap kaydedilemedi, lütfen tekrar deneyin.");
+    } finally {
+      setSaving(false);
+    }
   }, [sid]);
 
   const finish = useCallback(async () => {
-    setDone(true);
+    setSaving(true);
     try {
       await update(ref(db(), `sessions/${sid}`), { status: "completed", completedAt: serverTimestamp() });
       const { markCompleted } = await import("@/lib/realtime");
       await markCompleted(examId, sid);
-    } catch {}
-    setTimeout(() => { window.location.href = `/results/${sid}`; }, 1500);
+      setDone(true);
+      setTimeout(() => { window.location.href = `/results/${sid}`; }, 1500);
+    } catch {
+      setSaveError("Sınav tamamlanırken hata oluştu. Lütfen tekrar deneyin.");
+    } finally {
+      setSaving(false);
+    }
   }, [sid, examId]);
 
-  const advance = () => { if (isLast) finish(); else setIdx(i => i + 1); };
+  const advance = async () => { if (isLast) await finish(); else setIdx(i => i + 1); };
   const timerText = timeLeft ? `${Math.floor(timeLeft / 60000)}:${String(Math.floor((timeLeft % 60000) / 1000)).padStart(2, "0")}` : null;
 
   if (loading) return <div className="min-h-screen flex items-center justify-center bg-background"><div className="text-center"><div className="inline-block w-8 h-8 border-[3px] border-primary border-t-transparent rounded-full animate-spin"/><p className="text-text-secondary text-sm mt-3">Sınav yükleniyor...</p></div></div>;
@@ -136,8 +151,18 @@ function ExamContent() {
           ))}
         </div>
       </div>
-      {mode === "sequential" && <div className="sticky bottom-0 bg-surface border-t border-border p-4"><button className={`w-full h-[56px] rounded-xl font-semibold text-lg ${hasAnswer ? "bg-primary text-on-primary" : "bg-text-disabled text-on-primary cursor-not-allowed"}`} disabled={!hasAnswer} onClick={advance}>{isLast ? "✓ Sınavı Tamamla" : "İlerle →"}</button></div>}
-      {mode === "scroll" && <div className="sticky bottom-0 bg-surface border-t border-border p-4"><button className="w-full h-[56px] rounded-xl bg-success text-on-primary font-semibold text-lg" onClick={finish}>Sınavı Gönder</button></div>}
+      {mode === "sequential" && <div className="sticky bottom-0 bg-surface border-t border-border p-4">
+        {saveError && <p className="text-error text-xs text-center mb-2">{saveError}</p>}
+        <button className={`w-full h-[56px] rounded-xl font-semibold text-lg ${hasAnswer && !saving ? "bg-primary text-on-primary" : "bg-text-disabled text-on-primary cursor-not-allowed"}`} disabled={!hasAnswer || saving} onClick={advance}>
+          {saving ? "Kaydediliyor..." : isLast ? "✓ Sınavı Tamamla" : "İlerle →"}
+        </button>
+      </div>}
+      {mode === "scroll" && <div className="sticky bottom-0 bg-surface border-t border-border p-4">
+        {saveError && <p className="text-error text-xs text-center mb-2">{saveError}</p>}
+        <button className={`w-full h-[56px] rounded-xl font-semibold text-lg ${saving ? "bg-text-disabled text-on-primary" : "bg-success text-on-primary"}`} disabled={saving} onClick={finish}>
+          {saving ? "Gönderiliyor..." : "Sınavı Gönder"}
+        </button>
+      </div>}
     </main>
   );
 }
