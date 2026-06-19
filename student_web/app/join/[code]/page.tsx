@@ -3,9 +3,10 @@
 import { useState, useCallback, useEffect, type FormEvent } from "react";
 import { useParams } from "next/navigation";
 import Link from "next/link";
-import { getDatabase, ref, get, push, set, update, serverTimestamp, query, orderByChild, equalTo } from "firebase/database";
+import { ref, get, push, set, update, serverTimestamp } from "firebase/database";
+import { getRtdb } from "@/lib/firebase";
 
-function rtdb() { return getDatabase(); }
+function db() { return getRtdb()!; }
 
 export default function JoinPage() {
   const params = useParams<{ code: string }>();
@@ -22,7 +23,7 @@ export default function JoinPage() {
     if (!code) return;
     (async () => {
       try {
-        const examsRef = ref(rtdb(), "exams");
+        const examsRef = ref(db(), "exams");
         const snap = await get(examsRef);
         if (snap.exists()) {
           const exams = snap.val();
@@ -47,7 +48,7 @@ export default function JoinPage() {
 
     try {
       // RTDB'de session oluştur
-      const sessionRef = push(ref(rtdb(), "sessions"));
+      const sessionRef = push(ref(db(), "sessions"));
       const sid = sessionRef.key!;
       const now = serverTimestamp();
       await set(sessionRef, {
@@ -60,11 +61,11 @@ export default function JoinPage() {
         startedAt: now,
       });
       // Index: sessions_by_exam
-      await update(ref(rtdb(), "/"), {
+      await update(ref(db(), "/"), {
         [`sessions_by_exam/${exam.id}/${sid}`]: now,
       });
       // Bekleme odasına katıl
-      await set(ref(rtdb(), `live_exams/${exam.id}/students/${sid}`), {
+      await set(ref(db(), `live_exams/${exam.id}/students/${sid}`), {
         name,
         joinedAt: now,
         progress: 0,

@@ -2,9 +2,10 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import { getDatabase, ref, get } from "firebase/database";
+import { ref, get } from "firebase/database";
+import { getRtdb } from "@/lib/firebase";
 
-function rtdb() { return getDatabase(); }
+function db() { return getRtdb()!; }
 
 export default function ResultsPage() {
   const [r, setR] = useState({ score: 0, total: 50, pct: 0, rank: 0 });
@@ -15,7 +16,7 @@ export default function ResultsPage() {
     const sid = typeof window !== "undefined" ? window.location.pathname.split("/").pop() || "" : "";
     (async () => {
       try {
-        const sessSnap = await get(ref(rtdb(), `sessions/${sid}`));
+        const sessSnap = await get(ref(db(), `sessions/${sid}`));
         if (!sessSnap.exists()) { setLoading(false); return; }
         const sess = sessSnap.val();
         const examId = sess.examId || "";
@@ -23,7 +24,7 @@ export default function ResultsPage() {
         if (sess.scoreCalculatedAt) {
           setR({ score: sess.score ?? 0, total: sess.totalPoints ?? 50, pct: sess.percentage ?? 0, rank: sess.rank ?? 0 });
           if (examId) {
-            const lbSnap = await get(ref(rtdb(), `leaderboards/${examId}`));
+            const lbSnap = await get(ref(db(), `leaderboards/${examId}`));
             if (lbSnap.exists()) {
               const lb = lbSnap.val();
               const list = Object.entries(lb).map(([_, val]: [string, any]) => ({

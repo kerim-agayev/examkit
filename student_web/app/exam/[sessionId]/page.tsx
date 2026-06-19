@@ -3,9 +3,10 @@
 import { useState, useCallback, useEffect } from "react";
 import { useParams, useSearchParams } from "next/navigation";
 import { Suspense } from "react";
-import { getDatabase, ref, get, update, serverTimestamp } from "firebase/database";
+import { ref, get, update, serverTimestamp } from "firebase/database";
+import { getRtdb } from "@/lib/firebase";
 
-function rtdb() { return getDatabase(); }
+function db() { return getRtdb()!; }
 
 function ExamContent() {
   const params = useParams<{ sessionId: string }>();
@@ -25,7 +26,7 @@ function ExamContent() {
     (async () => {
       try {
         // Session'dan examId'yi al
-        const sessSnap = await get(ref(rtdb(), `sessions/${sid}`));
+        const sessSnap = await get(ref(db(), `sessions/${sid}`));
         if (!sessSnap.exists()) { setLoading(false); return; }
         const sess = sessSnap.val();
         const eid = sess.examId || "";
@@ -33,7 +34,7 @@ function ExamContent() {
         setExamTitle(sess.examTitle || "Sınav");
 
         // Soruları RTDB'den al
-        const qSnap = await get(ref(rtdb(), `questions/${eid}`));
+        const qSnap = await get(ref(db(), `questions/${eid}`));
         if (qSnap.exists()) {
           const qs = qSnap.val();
           const list = Object.entries(qs).map(([key, val]: [string, any]) => ({
@@ -56,7 +57,7 @@ function ExamContent() {
   const select = useCallback(async (qId: string, v: any) => {
     setAnswers(a => ({ ...a, [qId]: v }));
     try {
-      await update(ref(rtdb(), `sessions/${sid}/answers`), {
+      await update(ref(db(), `sessions/${sid}/answers`), {
         [qId]: { value: v, timestamp: serverTimestamp() },
       });
     } catch {}
@@ -65,7 +66,7 @@ function ExamContent() {
   const finish = useCallback(async () => {
     setDone(true);
     try {
-      await update(ref(rtdb(), `sessions/${sid}`), {
+      await update(ref(db(), `sessions/${sid}`), {
         status: "completed",
         completedAt: serverTimestamp(),
       });
