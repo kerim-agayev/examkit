@@ -13,23 +13,36 @@ class ShareScreen extends ConsumerStatefulWidget {
 }
 
 class _ShareScreenState extends ConsumerState<ShareScreen> {
-  late final String _code, _webLink;
+  String _code = '';
+  String _webLink = '';
   bool _isDraft = false;
 
   @override void initState() {
     super.initState();
-    _code = ExamCodeGenerator.generate();
-    _webLink = 'https://examkit-beta.vercel.app/join/$_code';
-
-    // Exam status kontrol et — draft ise yayınla butonu göster
+    // Önce RTDB'den mevcut code'u oku, yoksa yeni üret
     Future.microtask(() async {
       try {
-        final snap = await ref.read(rtdbProvider).ref('exams/${widget.examId}/status').get();
-        if (snap.exists && snap.value == 'draft') {
-          if (mounted) setState(() => _isDraft = true);
+        final snap = await ref.read(rtdbProvider).ref('exams/${widget.examId}').get();
+        if (snap.exists) {
+          final data = snap.value as Map;
+          if (data['code'] != null && data['code'].toString().isNotEmpty) {
+            _setCode(data['code'].toString());
+          } else {
+            _setCode(ExamCodeGenerator.generate());
+          }
+          if (data['status'] == 'draft') {
+            if (mounted) setState(() => _isDraft = true);
+          }
         }
-      } catch (_) {}
+      } catch (_) {
+        _setCode(ExamCodeGenerator.generate());
+      }
     });
+  }
+
+  void _setCode(String c) {
+    _code = c;
+    _webLink = 'https://examkit-beta.vercel.app/join/$_code';
   }
 
   Future<void> _publish() async {
