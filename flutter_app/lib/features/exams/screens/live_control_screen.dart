@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../providers/live_exam_provider.dart';
 import '../../auth/providers/auth_provider.dart';
+import '../../results/services/score_calculator.dart';
 
 class LiveControlScreen extends ConsumerWidget {
   final String examId;
@@ -20,14 +21,9 @@ class LiveControlScreen extends ConsumerWidget {
         final started = live.status == 'active';
         final students = live.students.values.toList();
         final completedCount = students.where((s) => s.status == 'completed').length;
-        final waitingCount = students.where((s) => s.status == 'waiting').length;
-        final activeCount = students.where((s) => s.status == 'active').length;
 
         return Scaffold(
-          appBar: AppBar(
-            title: const Text('Canlı Kontrol', style: TextStyle(fontSize: 18)),
-            actions: [const Icon(Icons.wifi, color: Color(0xFF059669)), const SizedBox(width: 16)],
-          ),
+          appBar: AppBar(title: const Text('Canlı Kontrol'), actions: [const Icon(Icons.wifi, color: Color(0xFF059669)), const SizedBox(width: 16)]),
           body: SingleChildScrollView(padding: const EdgeInsets.all(16), child: Column(children: [
             Card(child: Padding(padding: const EdgeInsets.all(16), child: Row(children: [
               Text(started ? '⏱ Devam Ediyor' : '⏳ Başlamadı', style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 15)),
@@ -57,10 +53,13 @@ class LiveControlScreen extends ConsumerWidget {
             ? SizedBox(width: double.infinity, height: 56, child: OutlinedButton(onPressed: () async {
                 try {
                   await ref.read(endExamProvider(examId).future);
+                  // Puanlamayı tetikle
+                  ref.read(scoreCalculatorProvider).calculateAllScores(examId);
+                  if (context.mounted) context.push('/exams/$examId/results');
                 } catch (e) {
                   if (context.mounted) ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Hata: $e')));
                 }
-              }, style: OutlinedButton.styleFrom(foregroundColor: const Color(0xFFDC2626)), child: const Text('Sınavı Bitir')))
+              }, style: OutlinedButton.styleFrom(foregroundColor: const Color(0xFFDC2626)), child: const Text('Sınavı Bitir ve Sonuçları Gör')))
             : SizedBox(width: double.infinity, height: 64, child: ElevatedButton(onPressed: () async {
                 try {
                   await ref.read(startExamProvider((examId: examId, teacherId: user?.uid ?? '', globalTimerMinutes: null)).future);

@@ -21,9 +21,10 @@ export default function WaitingPage() {
       const examId = typeof window !== "undefined" ? localStorage.getItem("examkit_examId") || "mock_exam_id" : "mock_exam_id";
       setFbConnected(true);
 
-      unsubStatus = subscribeToExamStatus(examId, (status) => {
-        if (status === "active") window.location.href = `/exam/${sid}`;
-      });
+        unsubStatus = subscribeToExamStatus(examId, (status) => {
+          if (status === "active") window.location.href = `/exam/${sid}`;
+          if (status === "ended") window.location.href = `/results/${sid}`;
+        });
 
       unsubStudents = subscribeToStudents(examId, (students) => {
         const names = Object.values(students);

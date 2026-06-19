@@ -44,7 +44,7 @@ class ScoreCalculator {
     for (final sid in sessionIds) {
       final sSnap = await _db.ref('sessions/$sid').get();
       if (!sSnap.exists) continue;
-      final d = Map<dynamic, dynamic>.from(sSnap.value);
+      final d = Map<dynamic, dynamic>.from(sSnap.value as Map);
       final answers = d['answers'] as Map<dynamic, dynamic>? ?? {};
       int score = 0;
 
@@ -91,7 +91,7 @@ class ScoreCalculator {
     for (final sid in sids) {
       final sSnap = await _db.ref('sessions/$sid').get();
       if (!sSnap.exists) continue;
-      final d = Map<dynamic, dynamic>.from(sSnap.value);
+      final d = Map<dynamic, dynamic>.from(sSnap.value as Map);
       sessions.add(_RankData(
         sid: sid,
         score: scores[sid] ?? 0,

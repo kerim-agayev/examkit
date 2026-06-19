@@ -70,9 +70,11 @@ function ExamContent() {
         status: "completed",
         completedAt: serverTimestamp(),
       });
+      const { markCompleted } = await import("@/lib/realtime");
+      await markCompleted(examId, sid);
     } catch {}
     setTimeout(() => { window.location.href = `/results/${sid}`; }, 1500);
-  }, [sid]);
+  }, [sid, examId]);
 
   const advance = () => { if (isLast) finish(); else setIdx(i => i + 1); };
 
