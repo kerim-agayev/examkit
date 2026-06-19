@@ -64,7 +64,7 @@ final createExamProvider = FutureProvider.autoDispose.family<String, ({String ti
   final rtdb = ref.read(rtdbProvider);
   final eKey = rtdb.ref('exams').push().key!;
   final now = ServerValue.timestamp;
-  await rtdb.ref('/').update({
+      await rtdb.ref('/').update({
     'exams/$eKey': {
       'title': params.title,
       'groupId': params.groupId,
@@ -77,6 +77,7 @@ final createExamProvider = FutureProvider.autoDispose.family<String, ({String ti
       'createdAt': now,
     },
     'exams_by_teacher/${user.uid}/$eKey': now,
+    'groups/${params.groupId}/examCount': ServerValue.increment(1),
   });
   return eKey;
 });
