@@ -14,16 +14,34 @@ class ShareScreen extends ConsumerStatefulWidget {
 
 class _ShareScreenState extends ConsumerState<ShareScreen> {
   late final String _code, _webLink;
+  bool _isDraft = false;
 
   @override void initState() {
     super.initState();
     _code = ExamCodeGenerator.generate();
     _webLink = 'https://examkit-beta.vercel.app/join/$_code';
+
+    // Exam status kontrol et — draft ise yayınla butonu göster
     Future.microtask(() async {
       try {
-        await ref.read(rtdbProvider).ref('exams/${widget.examId}').update({'code': _code});
-      } catch (e) { debugPrint('ShareScreen: $e'); }
+        final snap = await ref.read(rtdbProvider).ref('exams/${widget.examId}/status').get();
+        if (snap.exists && snap.value == 'draft') {
+          if (mounted) setState(() => _isDraft = true);
+        }
+      } catch (_) {}
     });
+  }
+
+  Future<void> _publish() async {
+    try {
+      await ref.read(rtdbProvider).ref('exams/${widget.examId}').update({'code': _code, 'status': 'published'});
+      if (mounted) {
+        setState(() => _isDraft = false);
+        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Sınav yayınlandı! Linki öğrencilerle paylaşabilirsiniz ✓'), backgroundColor: Color(0xFF059669)));
+      }
+    } catch (e) {
+      if (mounted) ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Yayınlanamadı: $e'), backgroundColor: const Color(0xFFDC2626)));
+    }
   }
 
   Future<void> _shareWhatsApp() async {
@@ -59,7 +77,9 @@ class _ShareScreenState extends ConsumerState<ShareScreen> {
           _Card(Icons.more_horiz, const Color(0xFF7C3AED), 'Diğer', 'Tüm yollar', () { Clipboard.setData(ClipboardData(text: '$_webLink')); if (mounted) ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Link kopyalandı ✓'))); }),
         ]),
       ])),
-      bottomNavigationBar: SafeArea(child: Padding(padding: const EdgeInsets.all(16), child: SizedBox(width: double.infinity, height: 56, child: ElevatedButton.icon(onPressed: () => context.push('/exams/${widget.examId}/live'), icon: const Icon(Icons.play_circle), label: const Text('Canlı Kontrole Geç →'), style: ElevatedButton.styleFrom(backgroundColor: const Color(0xFF059669), foregroundColor: Colors.white))))),
+      bottomNavigationBar: SafeArea(child: Padding(padding: const EdgeInsets.all(16), child: _isDraft
+        ? SizedBox(width: double.infinity, height: 56, child: ElevatedButton.icon(onPressed: _publish, icon: const Icon(Icons.publish), label: const Text('Sınavı Yayınla →'), style: ElevatedButton.styleFrom(backgroundColor: const Color(0xFF059669), foregroundColor: Colors.white)))
+        : SizedBox(width: double.infinity, height: 56, child: ElevatedButton.icon(onPressed: () => context.push('/exams/${widget.examId}/live'), icon: const Icon(Icons.play_circle), label: const Text('Canlı Kontrole Geç →'), style: ElevatedButton.styleFrom(backgroundColor: const Color(0xFF059669), foregroundColor: Colors.white))))),
     );
   }
 }

@@ -66,6 +66,7 @@
     "sessions_by_exam": {
       "$examId": {
         ".read": true,
+        ".write": "auth != null",
         "$sessionId": {
           ".write": true
         }

@@ -49,7 +49,7 @@ function ExamContent() {
         onValue(ref(db(), `live_exams/${eid}/globalTimerEndsAt`), (snap) => {
           const endAt = snap.val();
           if (endAt) {
-            const update = () => { const rem = Math.max(0, endAt - Date.now()); setTimeLeft(rem); if (rem <= 0) window.location.href = `/results/${sid}`; };
+            const update = () => { const rem = Math.max(0, endAt - Date.now()); setTimeLeft(rem); if (rem <= 0) { alert("⏰ Süreniz doldu! Sınavınız otomatik olarak gönderiliyor."); window.location.href = `/results/${sid}`; } };
             update(); const iv = setInterval(update, 1000);
             return () => clearInterval(iv);
           }

@@ -72,7 +72,11 @@ final startExamProvider = FutureProvider.autoDispose.family<void, ({String examI
 /// Sınavı bitir
 final endExamProvider = FutureProvider.autoDispose.family<void, String>((ref, examId) async {
   final rtdb = ref.watch(rtdbProvider);
-  await rtdb.ref('live_exams/$examId').update({'status': 'ended'});
+  // Hem live_exams hem exams status güncelle
+  await rtdb.ref('/').update({
+    'live_exams/$examId/status': 'ended',
+    'exams/$examId/status': 'completed',
+  });
 });
 
 /// Öğrenci sayısı
