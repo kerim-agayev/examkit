@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import { ref, get } from "firebase/database";
+import { ref, get, onValue } from "firebase/database";
 import { getRtdb } from "@/lib/firebase";
 
 function db() { return getRtdb()!; }
@@ -11,33 +11,48 @@ export default function ResultsPage() {
   const [r, setR] = useState({ score: 0, total: 50, pct: 0, rank: 0 });
   const [board, setBoard] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
+  const [puanlamadi, setPuanlamadi] = useState(true);
 
   useEffect(() => {
     const sid = typeof window !== "undefined" ? window.location.pathname.split("/").pop() || "" : "";
-    (async () => {
-      try {
-        const sessSnap = await get(ref(db(), `sessions/${sid}`));
-        if (!sessSnap.exists()) { setLoading(false); return; }
-        const sess = sessSnap.val();
-        const examId = sess.examId || "";
 
+    // Realtime listener: puanlama bitince otomatik güncelle
+    const unsub = onValue(ref(db(), `sessions/${sid}`), (snap) => {
+      if (!snap.exists()) return;
+      const sess = snap.val();
+      if (!sess.scoreCalculatedAt) return;
+
+      const examId = sess.examId || "";
+      setR({ score: sess.score ?? 0, total: sess.totalPoints ?? 50, pct: sess.percentage ?? 0, rank: sess.rank ?? 0 });
+      setPuanlamadi(false);
+
+      // Leaderboard'u da al
+      if (examId) {
+        get(ref(db(), `leaderboards/${examId}`)).then((lbSnap) => {
+          if (!lbSnap.exists()) return;
+          const lb = lbSnap.val();
+          const list = Object.entries(lb).map(([_, val]: [string, any]) => ({
+            rank: val.rank, name: val.studentName, score: val.score, me: val.studentName === (sess.studentName || ""),
+          }));
+          list.sort((a: any, b: any) => a.rank - b.rank);
+          setBoard(list);
+        });
+      }
+    });
+
+    // İlk yükleme kontrolü
+    get(ref(db(), `sessions/${sid}`)).then((sessSnap) => {
+      if (sessSnap.exists()) {
+        const sess = sessSnap.val();
         if (sess.scoreCalculatedAt) {
           setR({ score: sess.score ?? 0, total: sess.totalPoints ?? 50, pct: sess.percentage ?? 0, rank: sess.rank ?? 0 });
-          if (examId) {
-            const lbSnap = await get(ref(db(), `leaderboards/${examId}`));
-            if (lbSnap.exists()) {
-              const lb = lbSnap.val();
-              const list = Object.entries(lb).map(([_, val]: [string, any]) => ({
-                rank: val.rank, name: val.studentName, score: val.score, me: val.studentName === (sess.studentName || ""),
-              }));
-              list.sort((a: any, b: any) => a.rank - b.rank);
-              setBoard(list);
-            }
-          }
+          setPuanlamadi(false);
         }
-      } catch {}
+      }
       setLoading(false);
-    })();
+    });
+
+    return () => unsub();
   }, []);
 
   return (
@@ -49,7 +64,7 @@ export default function ResultsPage() {
       <div className="max-w-[640px] mx-auto p-4 space-y-4">
         {loading ? (
           <div className="text-center py-12"><div className="inline-block w-8 h-8 border-[3px] border-primary border-t-transparent rounded-full animate-spin"/></div>
-        ) : r.score > 0 ? (
+        ) : !puanlamadi ? (
           <>
             <div className="bg-surface rounded-2xl p-7 border text-center space-y-3">
               <p className="text-sm text-text-secondary">Puanınız</p>
@@ -74,7 +89,8 @@ export default function ResultsPage() {
           </>
         ) : (
           <div className="text-center py-12 space-y-4">
-            <p className="text-text-secondary">Öğretmen henüz puanlamadı veya sonuç bulunamadı</p>
+            <div className="inline-block w-8 h-8 border-[3px] border-primary border-t-transparent rounded-full animate-spin"/>
+            <p className="text-text-secondary">Öğretmen puanlama yapıyor, bekleyin...</p>
           </div>
         )}
         <div className="text-center pt-4"><Link href="/" className="text-primary underline">← Ana sayfaya dön</Link></div>
